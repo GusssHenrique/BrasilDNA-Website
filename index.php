@@ -82,7 +82,7 @@ function esc_url_safe($path) {
 
     <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
       <a href="<?= esc_url_safe('/about-us') ?>">About Us</a>
-      <a href="<?= esc_url_safe('/news') ?>">News</a>
+      <a href="news.php">News</a>
       <a href="#destinos" class="nav-cta">Explore Brazil</a>
     </nav>
 
@@ -374,7 +374,7 @@ function esc_url_safe($path) {
     </div>
 
     <div class="section-cta" data-reveal>
-      <a href="https://brasildna.com/news/" class="btn btn-outline" target="_blank" rel="noopener">See All Publications</a>
+      <a href="news.php" class="btn btn-outline">See All Publications</a>
     </div>
   </div>
 </section>
@@ -424,7 +424,7 @@ function esc_url_safe($path) {
     <nav class="footer-nav">
       <h4>Navigate</h4>
       <a href="<?= esc_url_safe('/about-us') ?>">About Us</a>
-      <a href="<?= esc_url_safe('/news') ?>">News</a>
+      <a href="news.php">News</a>
       <a href="#destinos">Destinations</a>
     </nav>
 
@@ -444,8 +444,9 @@ function esc_url_safe($path) {
   </div>
 
   <div class="footer-bottom">
-    <div class="container">
+    <div class="container painel">
       <p>&copy; <?= date('Y') ?> Brasil DNA. All rights reserved.</p>
+      <a href="./admin/login.php">Painel Administrativo</a>
     </div>
   </div>
 </footer>
