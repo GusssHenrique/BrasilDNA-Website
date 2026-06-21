@@ -6,6 +6,15 @@
 function esc_url_safe($path) {
     return htmlspecialchars($path, ENT_QUOTES, 'UTF-8');
 }
+
+$banners_parceiros = [];
+try {
+    require_once __DIR__ . '/admin/includes/conexao.php';
+    $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
+    $banners_parceiros = $stmt->fetchAll();
+} catch (\Throwable $e) {
+    $banners_parceiros = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -19,7 +28,7 @@ function esc_url_safe($path) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=2">
 </head>
 <body>
 
@@ -378,6 +387,53 @@ function esc_url_safe($path) {
     </div>
   </div>
 </section>
+
+<!-- ===== PARTNER BANNERS ===== -->
+<?php if (!empty($banners_parceiros)): ?>
+<section class="partner-banners" id="partner-banners">
+  <div class="container">
+    <span class="label-tag" data-reveal>Partner Spotlight</span>
+    <div class="banner-list">
+      <?php foreach ($banners_parceiros as $b):
+        $link     = htmlspecialchars($b['link_url']     ?? '#',         ENT_QUOTES, 'UTF-8');
+        $logoUrl  = htmlspecialchars($b['logo_url']     ?? '',          ENT_QUOTES, 'UTF-8');
+        $bgUrl    = htmlspecialchars($b['imagem_url']   ?? '',          ENT_QUOTES, 'UTF-8');
+        $titulo   = htmlspecialchars($b['titulo']       ?? '');
+        $subtexto = htmlspecialchars($b['subtexto']     ?? '');
+        $btnTxt   = htmlspecialchars($b['botao_texto']  ?? 'Learn More');
+        $partner  = htmlspecialchars($b['nome_parceiro']);
+      ?>
+      <a href="<?= $link ?>" class="partner-banner" target="_blank" rel="noopener noreferrer">
+        <?php if ($bgUrl): ?>
+          <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
+        <?php endif; ?>
+        <div class="partner-banner__overlay"></div>
+
+        <div class="partner-banner__left">
+          <?php if ($logoUrl): ?>
+            <img class="partner-banner__logo" src="<?= $logoUrl ?>" alt="<?= $partner ?>" loading="lazy">
+          <?php else: ?>
+            <span class="partner-banner__logo-text"><?= $partner ?></span>
+          <?php endif; ?>
+          <?php if ($subtexto): ?>
+            <p class="partner-banner__sub"><?= $subtexto ?></p>
+          <?php endif; ?>
+        </div>
+
+        <div class="partner-banner__right">
+          <?php if ($titulo): ?>
+            <p class="partner-banner__title"><?= $titulo ?></p>
+          <?php endif; ?>
+          <?php if ($btnTxt): ?>
+            <span class="partner-banner__btn"><?= $btnTxt ?></span>
+          <?php endif; ?>
+        </div>
+      </a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <!-- ===== NEWSLETTER ===== -->
 <section class="newsletter" id="newsletter">
