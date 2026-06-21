@@ -12,6 +12,10 @@ try {
     require_once __DIR__ . '/admin/includes/conexao.php';
     $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
     $banners_parceiros = $stmt->fetchAll();
+    if (!empty($banners_parceiros)) {
+        $ids = implode(',', array_map('intval', array_column($banners_parceiros, 'id')));
+        $pdo->exec("UPDATE banners SET visualizacoes = visualizacoes + 1 WHERE id IN ($ids)");
+    }
 } catch (\Throwable $e) {
     $banners_parceiros = [];
 }
@@ -28,7 +32,7 @@ try {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/style.css?v=2">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 
@@ -393,43 +397,59 @@ try {
 <section class="partner-banners" id="partner-banners">
   <div class="container">
     <span class="label-tag" data-reveal>Partner Spotlight</span>
-    <div class="banner-list">
-      <?php foreach ($banners_parceiros as $b):
-        $link     = htmlspecialchars($b['link_url']     ?? '#',         ENT_QUOTES, 'UTF-8');
-        $logoUrl  = htmlspecialchars($b['logo_url']     ?? '',          ENT_QUOTES, 'UTF-8');
-        $bgUrl    = htmlspecialchars($b['imagem_url']   ?? '',          ENT_QUOTES, 'UTF-8');
-        $titulo   = htmlspecialchars($b['titulo']       ?? '');
-        $subtexto = htmlspecialchars($b['subtexto']     ?? '');
-        $btnTxt   = htmlspecialchars($b['botao_texto']  ?? 'Learn More');
-        $partner  = htmlspecialchars($b['nome_parceiro']);
-      ?>
-      <a href="<?= $link ?>" class="partner-banner" target="_blank" rel="noopener noreferrer">
-        <?php if ($bgUrl): ?>
-          <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
-        <?php endif; ?>
-        <div class="partner-banner__overlay"></div>
+    <div class="banner-carousel" id="bannerCarousel">
+      <div class="banner-track">
+        <?php foreach ($banners_parceiros as $idx => $b):
+          $logoUrl  = htmlspecialchars($b['logo_url']     ?? '',          ENT_QUOTES, 'UTF-8');
+          $bgUrl    = htmlspecialchars($b['imagem_url']   ?? '',          ENT_QUOTES, 'UTF-8');
+          $titulo   = htmlspecialchars($b['titulo']       ?? '');
+          $subtexto = htmlspecialchars($b['subtexto']     ?? '');
+          $btnTxt   = htmlspecialchars($b['botao_texto']  ?? 'Learn More');
+          $partner  = htmlspecialchars($b['nome_parceiro']);
+          $activeClass = $idx === 0 ? ' is-active' : '';
+        ?>
+        <a href="banner-click.php?id=<?= (int)$b['id'] ?>" class="partner-banner<?= $activeClass ?>" target="_blank" rel="noopener noreferrer" tabindex="<?= $idx === 0 ? '0' : '-1' ?>">
+          <?php if ($bgUrl): ?>
+            <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
+          <?php endif; ?>
+          <div class="partner-banner__overlay"></div>
 
-        <div class="partner-banner__left">
-          <?php if ($logoUrl): ?>
-            <img class="partner-banner__logo" src="<?= $logoUrl ?>" alt="<?= $partner ?>" loading="lazy">
-          <?php else: ?>
-            <span class="partner-banner__logo-text"><?= $partner ?></span>
-          <?php endif; ?>
-          <?php if ($subtexto): ?>
-            <p class="partner-banner__sub"><?= $subtexto ?></p>
-          <?php endif; ?>
-        </div>
+          <div class="partner-banner__left">
+            <?php if ($logoUrl): ?>
+              <img class="partner-banner__logo" src="<?= $logoUrl ?>" alt="<?= $partner ?>" loading="lazy">
+            <?php else: ?>
+              <span class="partner-banner__logo-text"><?= $partner ?></span>
+            <?php endif; ?>
+            <?php if ($subtexto): ?>
+              <p class="partner-banner__sub"><?= $subtexto ?></p>
+            <?php endif; ?>
+          </div>
 
-        <div class="partner-banner__right">
-          <?php if ($titulo): ?>
-            <p class="partner-banner__title"><?= $titulo ?></p>
-          <?php endif; ?>
-          <?php if ($btnTxt): ?>
-            <span class="partner-banner__btn"><?= $btnTxt ?></span>
-          <?php endif; ?>
-        </div>
-      </a>
-      <?php endforeach; ?>
+          <div class="partner-banner__right">
+            <?php if ($titulo): ?>
+              <p class="partner-banner__title"><?= $titulo ?></p>
+            <?php endif; ?>
+            <?php if ($btnTxt): ?>
+              <span class="partner-banner__btn"><?= $btnTxt ?></span>
+            <?php endif; ?>
+          </div>
+        </a>
+        <?php endforeach; ?>
+      </div>
+
+      <?php if (count($banners_parceiros) > 1): ?>
+      <button class="carousel-btn carousel-btn--prev" aria-label="Banner anterior">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn--next" aria-label="Próximo banner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="carousel-dots" role="tablist" aria-label="Banners de parceiros">
+        <?php foreach ($banners_parceiros as $i => $b): ?>
+        <button class="carousel-dot<?= $i === 0 ? ' is-active' : '' ?>" role="tab" aria-label="Banner <?= $i + 1 ?>" aria-selected="<?= $i === 0 ? 'true' : 'false' ?>"></button>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>
@@ -507,6 +527,6 @@ try {
   </div>
 </footer>
 
-<script src="assets/main.js" defer></script>
+<script src="assets/main.js?v=3" defer></script>
 </body>
 </html>
