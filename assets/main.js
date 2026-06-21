@@ -765,6 +765,89 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    );
 })();
 
+/* ─────────────────────────────────────────────────────────── *
+ * 17 — PARTNER BANNER CAROUSEL
+ * ─────────────────────────────────────────────────────────── */
+(function initBannerCarousel() {
+   const carousel = $("#bannerCarousel");
+   if (!carousel) return;
+
+   const track   = $(".banner-track",      carousel);
+   const slides  = $$(".partner-banner",   carousel);
+   const dots    = $$(".carousel-dot",     carousel);
+   const btnPrev = carousel.querySelector(".carousel-btn--prev");
+   const btnNext = carousel.querySelector(".carousel-btn--next");
+
+   if (!track || slides.length < 2) {
+      slides.forEach(s => s.removeAttribute("tabindex"));
+      return;
+   }
+
+   let current   = 0;
+   let autoTimer = null;
+   const INTERVAL = 5000;
+
+   /* Troca o slide ativo apenas por classe — sem cálculo de posição */
+   function goTo(index) {
+      current = ((index % slides.length) + slides.length) % slides.length;
+
+      slides.forEach((s, i) => {
+         const on = i === current;
+         s.classList.toggle("is-active", on);
+         s.setAttribute("tabindex", on ? "0" : "-1");
+         s.setAttribute("aria-hidden", String(!on));
+      });
+
+      dots.forEach((d, i) => {
+         const on = i === current;
+         d.classList.toggle("is-active", on);
+         d.setAttribute("aria-selected", String(on));
+      });
+   }
+
+   /* Autoplay sempre ativo */
+   function startAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current + 1), INTERVAL);
+   }
+   function stopAuto() { clearInterval(autoTimer); }
+
+   /* Init — primeiro slide já tem is-active no PHP, só sincroniza o JS */
+   goTo(0);
+   startAuto();
+
+   /* Prev / Next */
+   btnPrev && btnPrev.addEventListener("click", () => { goTo(current - 1); startAuto(); });
+   btnNext && btnNext.addEventListener("click", () => { goTo(current + 1); startAuto(); });
+
+   /* Dots */
+   dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => { goTo(i); startAuto(); });
+   });
+
+   /* Pause on hover */
+   carousel.addEventListener("mouseenter", stopAuto);
+   carousel.addEventListener("mouseleave", startAuto);
+
+   /* Keyboard ← → */
+   carousel.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft")  { goTo(current - 1); startAuto(); }
+      if (e.key === "ArrowRight") { goTo(current + 1); startAuto(); }
+   });
+
+   /* Touch / swipe */
+   let touchStartX = 0;
+   carousel.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+      stopAuto();
+   }, { passive: true });
+   carousel.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+      startAuto();
+   }, { passive: true });
+})();
+
 /* ─── HELPER: deduped style injection ───────────────────────*/
 function injectStyle(id, css) {
    if (document.getElementById("bdna-style-" + id)) return;

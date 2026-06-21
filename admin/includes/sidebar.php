@@ -2,6 +2,14 @@
 $paginaAtiva = $paginaAtiva ?? '';
 $userName    = $_SESSION['admin_nome']  ?? 'Admin';
 $userEmail   = $_SESSION['admin_email'] ?? '';
+
+$pendentes = 0;
+try {
+    $stmtPend  = $pdo->query("SELECT COUNT(*) FROM parceiros WHERE status = 'pendente'");
+    $pendentes = (int) $stmtPend->fetchColumn();
+} catch (\Throwable $e) {
+    $pendentes = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -75,11 +83,14 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
         Destinos
       </a>
 
-      <a href="#" class="adm-sidebar__link <?= $paginaAtiva === 'parceiros' ? 'is-active' : '' ?>">
+      <a href="parceiros.php" class="adm-sidebar__link <?= $paginaAtiva === 'parceiros' ? 'is-active' : '' ?>">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
         Parceiros
+        <?php if ($pendentes > 0): ?>
+          <span class="sb-badge"><?= $pendentes ?></span>
+        <?php endif; ?>
       </a>
 
       <a href="banners.php" class="adm-sidebar__link <?= $paginaAtiva === 'banners' ? 'is-active' : '' ?>">
