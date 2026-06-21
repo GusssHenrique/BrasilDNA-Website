@@ -17,7 +17,7 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
   <!-- Sidebar -->
   <aside class="adm-sidebar">
     <div class="adm-sidebar__logo">
-      <div class="adm-sidebar__logo-name">Brasil DNA</div>
+      <img src="../assets/images/logo_brasilDNA.svg" alt="Brasil DNA" class="adm-sidebar__logo-img">
       <div class="adm-sidebar__logo-tag">Painel administrativo</div>
     </div>
 
