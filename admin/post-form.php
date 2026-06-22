@@ -198,18 +198,6 @@ require_once __DIR__ . '/includes/sidebar.php';
       </div>
 
       <div class="post-side-section">
-        <label class="post-side-label" for="regiao">Região</label>
-        <select class="adm-form__select" id="regiao" name="regiao">
-          <option value="">Selecione a região</option>
-          <option value="Norte"        <?= $vRegiao === 'Norte'        ? 'selected' : '' ?>>Norte</option>
-          <option value="Nordeste"     <?= $vRegiao === 'Nordeste'     ? 'selected' : '' ?>>Nordeste</option>
-          <option value="Centro-Oeste" <?= $vRegiao === 'Centro-Oeste' ? 'selected' : '' ?>>Centro-Oeste</option>
-          <option value="Sudeste"      <?= $vRegiao === 'Sudeste'      ? 'selected' : '' ?>>Sudeste</option>
-          <option value="Sul"          <?= $vRegiao === 'Sul'          ? 'selected' : '' ?>>Sul</option>
-        </select>
-      </div>
-
-      <div class="post-side-section">
         <div class="post-side-label">Imagem destacada</div>
         <?php if ($vImagem): ?>
           <img id="img-preview" src="<?= htmlspecialchars($vImagem, ENT_QUOTES, 'UTF-8') ?>"
