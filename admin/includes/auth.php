@@ -12,15 +12,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/**
- * Verifica se existe um admin logado na sessão atual.
- */
 function estaLogado(): bool
 {
-    return isset($_SESSION['admin_id']);
+    return isset($_SESSION['admin_id']) && ($_SESSION['admin_tipo'] ?? '') === 'admin';
 }
 
-// proteger a pagina atual
 function exigirLogin(): void
 {
     if (!estaLogado()) {

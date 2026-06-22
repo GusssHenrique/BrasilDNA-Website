@@ -18,6 +18,12 @@ if (isset($_GET['rejeitar']) && ctype_digit($_GET['rejeitar'])) {
     exit;
 }
 
+if (isset($_GET['excluir']) && ctype_digit($_GET['excluir'])) {
+    $pdo->prepare('DELETE FROM parceiros WHERE id = :id')
+        ->execute([':id' => (int) $_GET['excluir']]);
+    header('Location: parceiros.php');
+    exit;
+}
 
 $stmt = $pdo->query(
     'SELECT p.*, COUNT(b.id) AS total_banners
@@ -98,6 +104,11 @@ require_once __DIR__ . '/includes/sidebar.php';
                 <?php else: ?>
                   <a href="parceiros.php?aprovar=<?= $pid ?>" class="a-edit">Aprovar</a>
                 <?php endif; ?>
+                <a href="parceiros.php?excluir=<?= $pid ?>"
+                   class="a-del"
+                   onclick="return confirm('Excluir parceiro <?= addslashes($p['nome_empresa']) ?>? Os banners associados ficarão sem dono.')">
+                  Excluir
+                </a>
               </div>
             </td>
           </tr>
@@ -108,4 +119,3 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
-

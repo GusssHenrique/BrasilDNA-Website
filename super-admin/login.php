@@ -21,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin = $stmt->fetch();
 
         if ($admin && password_verify($senha, $admin['senha'])) {
-            if ($admin['tipo'] !== 'admin') {
-                $erro = 'Acesso negado. Use o painel de Super Admin.';
+            if ($admin['tipo'] !== 'super_admin') {
+                $erro = 'Acesso negado. Use o painel de Admin.';
             } else {
                 $_SESSION['admin_id']    = $admin['id'];
                 $_SESSION['admin_nome']  = $admin['nome'];
@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrar — Brasil DNA Admin</title>
-  <link rel="stylesheet" href="assets/admin.css">
+  <title>Entrar — Brasil DNA Super Admin</title>
+  <link rel="stylesheet" href="../admin/assets/admin.css">
 </head>
 <body>
 
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="adm-auth__card">
 
     <div class="adm-auth__logo"><?php include __DIR__ . '/../includes/brasildna-logo.php'; ?></div>
-    <div class="adm-auth__sub">Painel Administrativo</div>
+    <div class="adm-auth__sub">Super Admin</div>
 
     <h1 class="adm-auth__title">Entrar</h1>
 
@@ -92,13 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button type="submit" class="btn btn-primary" style="margin-top:4px;">Entrar</button>
     </form>
 
-    <div class="adm-auth__footer">
-      <a href="esqueci-senha.php">Esqueci minha senha</a>
-    </div>
-
   </div>
 </div>
 
 </body>
 </html>
-

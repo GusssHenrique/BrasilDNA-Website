@@ -17,9 +17,13 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `nome`       VARCHAR(120)     NOT NULL,
   `email`      VARCHAR(180)     NOT NULL,
   `senha`      VARCHAR(255)     NOT NULL,
+  `tipo`       ENUM('admin','super_admin') NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_admins_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Para bancos já existentes:
+-- ALTER TABLE `admins` ADD COLUMN IF NOT EXISTS `tipo` ENUM('admin','super_admin') NOT NULL DEFAULT 'admin';
 
 -- ------------------------------------------------------------
 --  Tabela: parceiros

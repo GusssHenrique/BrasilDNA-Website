@@ -19,11 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $senha = $_POST['senha'] ?? '';
 
+    $tipoAdmin = in_array($_POST['tipo_admin'] ?? '', ['admin', 'super_admin']) ? $_POST['tipo_admin'] : 'admin';
+
     if (!$nome || !$email || !$senha) {
         $mensagem = 'Preencha todos os campos.';
         $tipo = 'err';
     } else {
-        // Verifica se email já existe
         $check = $pdo->prepare('SELECT id FROM admins WHERE email = :email');
         $check->execute([':email' => $email]);
         if ($check->fetch()) {
@@ -31,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tipo = 'warn';
         } else {
             $hash = password_hash($senha, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('INSERT INTO admins (nome, email, senha) VALUES (:nome, :email, :senha)');
-            $stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $hash]);
-            $mensagem = "Admin criado com sucesso! Email: {$email} — Senha: {$_POST['senha']}. Agora apague este arquivo.";
+            $stmt = $pdo->prepare('INSERT INTO admins (nome, email, senha, tipo) VALUES (:nome, :email, :senha, :tipo)');
+            $stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $hash, ':tipo' => $tipoAdmin]);
+            $mensagem = "Admin ({$tipoAdmin}) criado com sucesso! Email: {$email} — Senha: {$_POST['senha']}. Agora apague este arquivo.";
             $tipo = 'ok';
         }
     }
@@ -82,6 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label class="adm-form__label">Senha</label>
         <input class="adm-form__input" type="text" name="senha"
                value="<?= htmlspecialchars($_POST['senha'] ?? 'brasildna123') ?>" required>
+      </div>
+      <div class="adm-form__group">
+        <label class="adm-form__label">Tipo</label>
+        <select class="adm-form__input" name="tipo_admin">
+          <option value="admin" <?= ($_POST['tipo_admin'] ?? '') === 'admin' ? 'selected' : '' ?>>Admin</option>
+          <option value="super_admin" <?= ($_POST['tipo_admin'] ?? '') === 'super_admin' ? 'selected' : '' ?>>Super Admin</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-primary" style="margin-top:4px;">Criar Admin</button>
     </form>

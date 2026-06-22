@@ -1,10 +1,15 @@
-
 <?php
 require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
 
+if (isset($_GET['excluir']) && ctype_digit($_GET['excluir'])) {
+    $stmt = $pdo->prepare('DELETE FROM banners WHERE id = :id');
+    $stmt->execute([':id' => (int) $_GET['excluir']]);
+    header('Location: banners.php');
+    exit;
+}
 
 $filtroParceiro = null;
 $nomeFiltro     = '';
@@ -76,6 +81,9 @@ require_once __DIR__ . '/includes/sidebar.php';
             <td>
               <div class="adm-table__actions">
                 <a href="banner-form.php?id=<?= (int) $b['id'] ?>" class="a-edit">Editar</a>
+                <a href="banners.php?excluir=<?= (int) $b['id'] ?>"
+                   class="a-del"
+                   onclick="return confirm('Excluir este banner?')">Excluir</a>
               </div>
             </td>
           </tr>
@@ -86,4 +94,3 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
-

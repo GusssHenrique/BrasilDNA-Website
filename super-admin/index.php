@@ -4,11 +4,17 @@ require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
 
+if (isset($_GET['excluir']) && ctype_digit($_GET['excluir'])) {
+    $stmt = $pdo->prepare('DELETE FROM posts WHERE id = :id');
+    $stmt->execute([':id' => (int) $_GET['excluir']]);
+    header('Location: index.php');
+    exit;
+}
 
 $stmt  = $pdo->query('SELECT * FROM posts ORDER BY criado_em DESC');
 $posts = $stmt->fetchAll();
 
-$pageTitle  = 'Posts';
+$pageTitle   = 'Posts';
 $paginaAtiva = 'posts';
 require_once __DIR__ . '/includes/sidebar.php';
 ?>
@@ -70,6 +76,9 @@ require_once __DIR__ . '/includes/sidebar.php';
             <td>
               <div class="adm-table__actions">
                 <a href="post-form.php?id=<?= (int) $post['id'] ?>" class="a-edit">Editar</a>
+                <a href="index.php?excluir=<?= (int) $post['id'] ?>"
+                   class="a-del"
+                   onclick="return confirm('Excluir este post?')">Excluir</a>
               </div>
             </td>
           </tr>
@@ -80,4 +89,3 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
-

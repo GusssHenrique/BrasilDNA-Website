@@ -1,6 +1,6 @@
 <?php
 $paginaAtiva = $paginaAtiva ?? '';
-$userName    = $_SESSION['admin_nome']  ?? 'Admin';
+$userName    = $_SESSION['admin_nome']  ?? 'Super Admin';
 $userEmail   = $_SESSION['admin_email'] ?? '';
 
 $pendentes = 0;
@@ -16,8 +16,8 @@ try {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= htmlspecialchars($pageTitle ?? 'Admin') ?> — Brasil DNA</title>
-  <link rel="stylesheet" href="assets/admin.css">
+  <title><?= htmlspecialchars($pageTitle ?? 'Super Admin') ?> — Brasil DNA</title>
+  <link rel="stylesheet" href="../admin/assets/admin.css">
 </head>
 <body>
 <div class="adm-shell">
@@ -55,7 +55,7 @@ try {
         <text class="sb-cls-5" transform="translate(712.59 274.13)"><tspan x="0" y="0">BRASI</tspan><tspan class="sb-cls-1" x="934.2" y="0">L</tspan></text>
         <text class="sb-cls-5" transform="translate(710.64 552.69)"><tspan x="0" y="0">dn</tspan><tspan class="sb-cls-3" x="405.55" y="0">a</tspan></text>
       </svg>
-      <div class="adm-sidebar__logo-tag">Painel administrativo</div>
+      <div class="adm-sidebar__logo-tag">Super Admin</div>
     </div>
 
     <div class="adm-sidebar__user">
@@ -102,6 +102,15 @@ try {
       </a>
     </nav>
 
+    <nav class="adm-sidebar__nav" style="margin-top:8px;">
+      <div class="adm-sidebar__label">Sistema</div>
+      <a href="admins.php" class="adm-sidebar__link <?= $paginaAtiva === 'admins' ? 'is-active' : '' ?>">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Admins
+      </a>
+    </nav>
 
     <div class="adm-sidebar__bottom">
       <a href="logout.php" class="adm-sidebar__sair">
