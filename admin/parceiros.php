@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
@@ -125,3 +125,4 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
+

@@ -3,7 +3,7 @@
  * Script temporário para criar o primeiro admin.
  * DELETE este arquivo após usar!
  */
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 
 // ── Defina os dados do admin aqui ──────────────────────────
 $nome  = 'Admin';
@@ -93,3 +93,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
+

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../admin/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth-parceiro.php';
 
 $status = 'pendente';
@@ -70,3 +70,4 @@ $rejeitado = ($status === 'rejeitado');
 </div>
 </body>
 </html>
+

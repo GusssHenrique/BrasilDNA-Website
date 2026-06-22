@@ -9,7 +9,7 @@ function esc_url_safe($path) {
 
 $banners_parceiros = [];
 try {
-    require_once __DIR__ . '/admin/includes/conexao.php';
+    require_once __DIR__ . '/includes/conexao.php';
     $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
     $banners_parceiros = $stmt->fetchAll();
     if (!empty($banners_parceiros)) {

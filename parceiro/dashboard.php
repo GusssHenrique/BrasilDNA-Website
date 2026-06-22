@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../admin/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth-parceiro.php';
 
 exigirLoginParceiro();
@@ -150,3 +150,4 @@ $nomeEmpresa = htmlspecialchars($_SESSION['parceiro_nome'] ?? '');
 </div>
 </body>
 </html>
+

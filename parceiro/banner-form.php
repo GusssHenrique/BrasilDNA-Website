@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../admin/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth-parceiro.php';
 
 exigirLoginParceiro();
@@ -310,3 +310,4 @@ bindUploadPreview('bg-upload',   'bg-preview',   'bg-label');
 </script>
 </body>
 </html>
+

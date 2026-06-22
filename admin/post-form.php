@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
@@ -299,3 +299,4 @@ document.getElementById('imagem-upload').addEventListener('change', function() {
 </script>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
+

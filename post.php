@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/admin/includes/conexao.php';
+require_once __DIR__ . '/includes/conexao.php';
 
 $id   = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
 $post = null;
@@ -103,3 +103,4 @@ require_once __DIR__ . '/includes/site-header.php';
 </section>
 
 <?php require_once __DIR__ . '/includes/site-footer.php'; ?>
+

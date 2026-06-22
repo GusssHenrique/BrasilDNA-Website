@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/admin/includes/conexao.php';
+require_once __DIR__ . '/includes/conexao.php';
 
 $posts = [];
 try {
@@ -148,3 +148,4 @@ require_once __DIR__ . '/includes/site-header.php';
 </script>
 
 <?php require_once __DIR__ . '/includes/site-footer.php'; ?>
+

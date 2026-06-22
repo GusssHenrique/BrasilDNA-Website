@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
@@ -273,3 +273,4 @@ bindUploadPreview('bg-upload',   'bg-preview',   'bg-label');
 </script>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
+

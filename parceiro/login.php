@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../admin/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth-parceiro.php';
 
 if (estaLogadoParceiro()) {
@@ -85,3 +85,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
+

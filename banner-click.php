@@ -1,5 +1,5 @@
-<?php
-require_once __DIR__ . '/admin/includes/conexao.php';
+﻿<?php
+require_once __DIR__ . '/includes/conexao.php';
 
 $id = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
 
@@ -22,3 +22,4 @@ $pdo->prepare('UPDATE banners SET cliques = cliques + 1 WHERE id = :id')
 
 header('Location: ' . $banner['link_url']);
 exit;
+
