@@ -94,7 +94,7 @@ try {
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
-      <a href="<?= esc_url_safe('/about-us') ?>">About Us</a>
+      <a href="<?= esc_url_safe('about-us.php') ?>">About Us</a>
       <a href="news.php">News</a>
       <a href="#destinos" class="nav-cta">Explore Brazil</a>
     </nav>
@@ -499,7 +499,7 @@ try {
 
     <nav class="footer-nav">
       <h4>Navigate</h4>
-      <a href="<?= esc_url_safe('/about-us') ?>">About Us</a>
+      <a href="<?= esc_url_safe('about-us.php') ?>">About Us</a>
       <a href="news.php">News</a>
       <a href="#destinos">Destinations</a>
       <a href="parceiro/login.php" class="footer-partner-link">Be Our Partner</a>
