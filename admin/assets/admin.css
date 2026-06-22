@@ -357,10 +357,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 .adm-auth__logo {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--sb-bg);
   margin-bottom: 4px;
+}
+.adm-auth__logo .brasildna-logo {
+  display: block;
+  width: 140px;
+  height: auto;
 }
 
 .adm-auth__sub {

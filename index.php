@@ -502,6 +502,7 @@ try {
       <a href="<?= esc_url_safe('/about-us') ?>">About Us</a>
       <a href="news.php">News</a>
       <a href="#destinos">Destinations</a>
+      <a href="parceiro/login.php" class="footer-partner-link">Be Our Partner</a>
     </nav>
 
     <div class="footer-presented">
@@ -522,7 +523,7 @@ try {
   <div class="footer-bottom">
     <div class="container painel">
       <p>&copy; <?= date('Y') ?> Brasil DNA. All rights reserved.</p>
-      <a href="./admin/login.php">Painel Administrativo</a>
+      <a href="./admin/login.php">administrative panel</a>
     </div>
   </div>
 </footer>

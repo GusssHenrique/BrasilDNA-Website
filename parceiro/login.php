@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="par-auth">
   <div class="par-auth__card">
-    <div class="par-auth__brand">Brasil DNA</div>
+    <div class="par-auth__brand"><?php include __DIR__ . '/../includes/brasildna-logo.php'; ?></div>
     <div class="par-auth__sub">Painel do Parceiro</div>
 
     <hr class="par-auth__divider">

@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="adm-auth">
   <div class="adm-auth__card">
 
-    <div class="adm-auth__logo">Brasil DNA</div>
+    <div class="adm-auth__logo"><?php include __DIR__ . '/../includes/brasildna-logo.php'; ?></div>
     <div class="adm-auth__sub">Painel Administrativo</div>
 
     <h1 class="adm-auth__title">Entrar</h1>

@@ -30,6 +30,8 @@ $rejeitado = ($status === 'rejeitado');
 <div class="par-auth">
   <div class="par-auth__card" style="text-align:center;">
 
+    <div class="par-auth__brand"><?php include __DIR__ . '/../includes/brasildna-logo.php'; ?></div>
+
     <div class="par-auth__icon <?= $rejeitado ? 'par-auth__icon-err' : '' ?>">
       <?php if ($rejeitado): ?>
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

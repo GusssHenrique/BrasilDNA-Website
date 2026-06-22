@@ -49,7 +49,7 @@ $nomeEmpresa = htmlspecialchars($_SESSION['parceiro_nome'] ?? '');
   <!-- Sidebar -->
   <aside class="par-sidebar">
     <div class="par-sidebar__logo">
-      <div class="par-sidebar__brand">Brasil DNA</div>
+      <?php include __DIR__ . '/../includes/brasildna-logo.php'; ?>
       <div class="par-sidebar__tag">Painel do Parceiro</div>
     </div>
 

@@ -1089,6 +1089,15 @@ strong {
    color: var(--gold-light);
    padding-left: 4px;
 }
+.footer-partner-link {
+   margin-top: 10px;
+   color: var(--gold-light) !important;
+   font-weight: 600;
+   letter-spacing: 0.03em;
+}
+.footer-partner-link:hover {
+   opacity: 0.8;
+}
 .footer-presented img {
    height: 34px;
    opacity: 0.8;
@@ -1130,7 +1139,10 @@ strong {
 
 .painel{
    display: flex;
+   justify-content: center;
+   align-items: center;
 }
+
 
 /* ============================================================
    SCROLL REVEAL
@@ -1915,7 +1927,6 @@ strong {
    width: auto;
    max-width: 190px;
    object-fit: contain;
-   filter: brightness(0) invert(1);
    display: block;
 }
 

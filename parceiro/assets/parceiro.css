@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700&display=swap');
 
 /* ── Tokens ─────────────────────────────────────────── */
 :root {
@@ -87,7 +87,8 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 4px 24px rgba(1,42,21,0.08);
 }
 
-.par-auth__brand { font-size: 22px; font-weight: 700; color: var(--p-green); margin-bottom: 2px; }
+.par-auth__brand { margin-bottom: 2px; }
+.par-auth__brand .brasildna-logo { display: block; width: 130px; height: auto; margin: 0 auto; }
 .par-auth__sub   { font-size: 13px; color: var(--p-text-sec); margin-bottom: 28px; }
 .par-auth__title { font-size: 22px; font-weight: 700; color: var(--p-text); margin-bottom: 8px; }
 .par-auth__desc  { font-size: 14px; color: var(--p-text-sec); margin-bottom: 28px; }
@@ -166,8 +167,8 @@ a { color: inherit; text-decoration: none; }
   padding: 24px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.par-sidebar__brand { color: var(--p-sb-text); font-size: 18px; font-weight: 700; }
-.par-sidebar__tag   { color: rgba(253,248,240,0.45); font-size: 11px; margin-top: 2px; }
+.par-sidebar__logo .brasildna-logo { display: block; width: 140px; height: auto; }
+.par-sidebar__tag   { color: rgba(253,248,240,0.45); font-size: 11px; margin-top: 6px; }
 
 .par-sidebar__user {
   padding: 14px 20px;

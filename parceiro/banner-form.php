@@ -125,7 +125,7 @@ $pageTitle = $id !== null ? 'Editar Banner' : 'Novo Banner';
   <!-- Sidebar -->
   <aside class="par-sidebar">
     <div class="par-sidebar__logo">
-      <div class="par-sidebar__brand">Brasil DNA</div>
+      <?php include __DIR__ . '/../includes/brasildna-logo.php'; ?>
       <div class="par-sidebar__tag">Painel do Parceiro</div>
     </div>
 
@@ -248,6 +248,9 @@ $pageTitle = $id !== null ? 'Editar Banner' : 'Novo Banner';
             </label>
             <input type="file" id="logo-upload" name="logo_file" accept="image/*" style="display:none;">
             <small style="color:var(--p-text-sec);font-size:11px;">JPG, PNG, WebP. Máx 2 MB.</small>
+            <small style="color:var(--p-text-sec);font-size:11px;margin-top:4px;display:block;">
+              Tamanho ideal: <strong>400 × 120 px</strong>. Use fundo transparente (PNG ou WebP) para melhor resultado.
+            </small>
           </div>
 
           <div class="par-side-section">
@@ -269,6 +272,9 @@ $pageTitle = $id !== null ? 'Editar Banner' : 'Novo Banner';
             </label>
             <input type="file" id="bg-upload" name="bg_file" accept="image/*" style="display:none;">
             <small style="color:var(--p-text-sec);font-size:11px;">JPG, PNG, WebP. Máx 5 MB.</small>
+            <small style="color:var(--p-text-sec);font-size:11px;margin-top:4px;display:block;">
+              Tamanho ideal: <strong>1440 × 300 px</strong> (paisagem). Imagens muito estreitas ou verticais podem cortar.
+            </small>
           </div>
 
           <div class="par-side-actions">
