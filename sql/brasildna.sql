@@ -73,3 +73,22 @@ CREATE TABLE IF NOT EXISTS `posts` (
   PRIMARY KEY (`id`),
   KEY `idx_posts_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------
+--  Tabela: clientes
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `clientes` (
+  `id`          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  `titulo`      VARCHAR(200)  NOT NULL,
+  `logo`        VARCHAR(500)      NULL,
+  `descricao`   TEXT              NULL,
+  `iframe`      TEXT              NULL,
+  `facebook`    VARCHAR(500)      NULL,
+  `instagram`   VARCHAR(500)      NULL,
+  `linkedin`    VARCHAR(500)      NULL,
+  `site`        VARCHAR(500)      NULL,
+  `youtube`     VARCHAR(500)      NULL,
+  `link_guia`   VARCHAR(500)      NULL,
+  `criado_em`   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

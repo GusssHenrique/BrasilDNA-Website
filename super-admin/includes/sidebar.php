@@ -1,5 +1,6 @@
 <?php
 $paginaAtiva = $paginaAtiva ?? '';
+$adminBase   = $adminBase   ?? '';
 $userName    = $_SESSION['admin_nome']  ?? 'Super Admin';
 $userEmail   = $_SESSION['admin_email'] ?? '';
 
@@ -10,7 +11,7 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($pageTitle ?? 'Super Admin') ?> — Brasil DNA</title>
-  <link rel="stylesheet" href="../admin/assets/admin.css">
+  <link rel="stylesheet" href="<?= $adminBase ?>../admin/assets/admin.css">
 </head>
 <body>
 <div class="adm-shell">
@@ -61,25 +62,32 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
     <nav class="adm-sidebar__nav">
       <div class="adm-sidebar__label">Conteúdo</div>
 
-      <a href="index.php" class="adm-sidebar__link <?= $paginaAtiva === 'posts' ? 'is-active' : '' ?>">
+      <a href="<?= $adminBase ?>index.php" class="adm-sidebar__link <?= $paginaAtiva === 'posts' ? 'is-active' : '' ?>">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
         Posts
       </a>
 
-      <a href="banners.php" class="adm-sidebar__link <?= $paginaAtiva === 'banners' ? 'is-active' : '' ?>">
+      <a href="<?= $adminBase ?>banners.php" class="adm-sidebar__link <?= $paginaAtiva === 'banners' ? 'is-active' : '' ?>">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <rect x="2" y="7" width="20" height="10" rx="2"/>
           <path d="M6 11h4M6 13h2"/>
         </svg>
         Banners
       </a>
+
+      <a href="../clientes/" class="adm-sidebar__link <?= $paginaAtiva === 'clientes' ? 'is-active' : '' ?>">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        Clientes
+      </a>
     </nav>
 
     <nav class="adm-sidebar__nav" style="margin-top:8px;">
       <div class="adm-sidebar__label">Sistema</div>
-      <a href="admins.php" class="adm-sidebar__link <?= $paginaAtiva === 'admins' ? 'is-active' : '' ?>">
+      <a href="<?= $adminBase ?>admins.php" class="adm-sidebar__link <?= $paginaAtiva === 'admins' ? 'is-active' : '' ?>">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
@@ -88,7 +96,7 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
     </nav>
 
     <div class="adm-sidebar__bottom">
-      <a href="logout.php" class="adm-sidebar__sair">
+      <a href="<?= $adminBase ?>logout.php" class="adm-sidebar__sair">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
         </svg>
