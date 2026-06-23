@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `banners` (
 CREATE TABLE IF NOT EXISTS `posts` (
   `id`               INT UNSIGNED     NOT NULL AUTO_INCREMENT,
   `titulo`           VARCHAR(250)     NOT NULL,
+  `slug`             VARCHAR(250)         NULL,
   `resumo`           TEXT                 NULL,
   `conteudo`         LONGTEXT             NULL,
   `regiao`           ENUM('Norte','Nordeste','Centro-Oeste','Sudeste','Sul') NULL,
@@ -71,8 +72,12 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `imagem`           VARCHAR(500)         NULL,
   `criado_em`        TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_posts_slug` (`slug`),
   KEY `idx_posts_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Para bancos já existentes:
+-- ALTER TABLE `posts` ADD COLUMN `slug` VARCHAR(250) NULL AFTER `titulo`, ADD UNIQUE KEY `uniq_posts_slug` (`slug`);
 
 -- ------------------------------------------------------------
 --  Tabela: clientes
