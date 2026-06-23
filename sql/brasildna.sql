@@ -13,31 +13,23 @@ USE `brasildna`;
 --  Tabela: admins
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `admins` (
-  `id`         INT UNSIGNED     NOT NULL AUTO_INCREMENT,
-  `nome`       VARCHAR(120)     NOT NULL,
-  `email`      VARCHAR(180)     NOT NULL,
-  `senha`      VARCHAR(255)     NOT NULL,
-  `tipo`       ENUM('admin','super_admin') NOT NULL DEFAULT 'admin',
+  `id`                      INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+  `nome`                    VARCHAR(120)     NOT NULL,
+  `email`                   VARCHAR(180)     NOT NULL,
+  `senha`                   VARCHAR(255)     NOT NULL,
+  `tipo`                    ENUM('admin','super_admin') NOT NULL DEFAULT 'admin',
+  `reset_token`             VARCHAR(64)          NULL DEFAULT NULL,
+  `reset_token_expires_at`  DATETIME             NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_admins_email` (`email`)
+  UNIQUE KEY `uq_admins_email`       (`email`),
+  UNIQUE KEY `uq_admins_reset_token` (`reset_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Para bancos já existentes:
 -- ALTER TABLE `admins` ADD COLUMN IF NOT EXISTS `tipo` ENUM('admin','super_admin') NOT NULL DEFAULT 'admin';
-
--- ------------------------------------------------------------
---  Tabela: parceiros
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `parceiros` (
-  `id`           INT UNSIGNED     NOT NULL AUTO_INCREMENT,
-  `nome_empresa` VARCHAR(150)     NOT NULL,
-  `email`        VARCHAR(180)     NOT NULL,
-  `senha`        VARCHAR(255)     NOT NULL,
-  `status`       ENUM('pendente','aprovado','rejeitado') NOT NULL DEFAULT 'pendente',
-  `criado_em`    TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_parceiros_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- ALTER TABLE `admins` ADD COLUMN IF NOT EXISTS `reset_token` VARCHAR(64) NULL DEFAULT NULL;
+-- ALTER TABLE `admins` ADD COLUMN IF NOT EXISTS `reset_token_expires_at` DATETIME NULL DEFAULT NULL;
+-- ALTER TABLE `admins` ADD UNIQUE KEY `uq_admins_reset_token` (`reset_token`);
 
 -- ------------------------------------------------------------
 --  Tabela: banners

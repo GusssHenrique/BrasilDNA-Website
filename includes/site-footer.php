@@ -24,8 +24,7 @@
 <footer class="site-footer">
   <div class="container footer-top">
     <div class="footer-brand">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/LOGO-BRASIL-DNA-COLORIDO-e1746120427382.png"
-           alt="Brasil DNA" class="footer-logo" height="40" loading="lazy">
+      <?php include __DIR__ . '/brasildna-logo.php'; ?>
       <p>Experience the Essence of Brazil.</p>
       <div class="social-links">
         <a href="https://www.facebook.com/brasildna" target="_blank" rel="noopener" aria-label="Facebook">
