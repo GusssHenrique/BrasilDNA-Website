@@ -48,16 +48,19 @@
 
     <div class="footer-presented">
       <h4>Initiative presented by</h4>
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/GVA-LOGO-COLORIDO-PREENCHIDO-WHITE-1024x308.png"
+      <img src="assets/images/globalvisioaccess.svg"
            alt="GVA — Global Vision Access" loading="lazy">
     </div>
   </div>
 
   <div class="footer-partners-bar">
     <div class="container footer-partners-row">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/Brasil.png" alt="Marca Brasil" loading="lazy">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/Logo-Embratur-2023-Cinza-1024x157-copiar.png" alt="Embratur" loading="lazy">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/ministerio-do-turismo.png" alt="Ministério do Turismo" loading="lazy">
+      <img src="assets/images/Logotipo_Brasil.png" alt="Marca Brasil" loading="lazy">
+      <div class="logo-embratur">
+        <img src="assets/images/embratur.png" alt="" loading="lazy">
+        <span class="embratur-wordmark">Embratur</span>
+      </div>
+      <img src="assets/images/Logotipo_Ministerio.png" alt="Ministério do Turismo" loading="lazy">
     </div>
   </div>
 

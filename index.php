@@ -45,57 +45,7 @@ try {
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a href="<?= esc_url_safe('/') ?>" class="logo" aria-label="Brasil DNA — Home">
-<svg class="logo-img" aria-label="Brasil DNA" role="img" id="Camada_1" data-name="Camada 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1847.11 800.51">
-  <defs>
-    <style>
-      .cls-1 {
-        letter-spacing: 0em;
-      }
-
-      .cls-2 {
-        fill: #11723d;
-      }
-
-      .cls-3 {
-        letter-spacing: 0em;
-      }
-
-      .cls-4 {
-        fill: #c9423f;
-      }
-
-      .cls-5 {
-        fill: #f1ab18;
-        font-family: Bungee, sans-serif;
-        font-size: 270.55px;
-      }
-
-      .cls-6 {
-        stroke: #fff;
-        stroke-miterlimit: 10;
-        stroke-width: 6px;
-      }
-    </style>
-  </defs>
-  <g>
-    <path class="cls-4" d="M623.34,455.11c4.83-.02,7.58,3.94,7.99,7.29.45,3.64-1.94,8.79-6.52,9.01-24.36,1.17-47.42-7.47-65.8-23.26-10.39-8.92-19.37-18.4-27.22-29.56l-22.28-31.65c-17.19-24.42-37.33-53.2-67.36-60.51-.5-.23-1.01-.47-1.51-.7-19.52-5.48-41.57-3.91-59.95,6.29-20.39,11.32-34.49,28.89-47.7,47.78l-23.76,33.98c-9.36,13.39-19.85,25.23-32.35,35.67-18.61,15.55-41.14,22.77-65.36,22.24-45.91-1.01-72.57-29.99-97.19-65.05l-25.74-36.66-9.47-11.18c-1.04-1.33-2.07-2.66-3.11-3.99-17.3-19.76-38.9-32.22-65.92-32.11-4.68.02-7.92-3.35-8.33-7.39-.35-3.51,1.76-8.74,6.46-8.95,23.61-1.02,45.97,7.21,64.18,22.1,33.37,27.29,49.72,67.21,79.39,98.4,9.28,9.76,19.59,17.53,32.69,22.84,3.96,1.23,7.92,2.46,11.88,3.69,11.96,2.21,23.97,2.24,35.89-.02,3.99-1.21,7.98-2.42,11.97-3.62,14.75-6.19,26.33-15.62,36.1-26.6,1.54-1.85,3.07-3.7,4.61-5.55l3.09-4.54,5.05-5.04,24.08-34.59c24.4-35.05,50.21-64.81,95.81-67.24,46.35-2.47,76.6,23.29,101.86,59.42l25.3,36.18c20.55,29.38,45,53.52,83.25,53.33Z"/>
-    <path class="cls-4" d="M424.68,454.89c18.13-.9,34.37-8.36,48.36-20.21,12.28-10.78,21.74-23.23,31.88-37.08l10.09,14.38c-23.92,33.28-50.95,59.14-94.44,59.73-45.35.62-73.11-24.75-98.06-59.82l9.99-14.36,17.74,22.94c17.48,20.08,35.54,31.74,62.53,34.61,3.97-.07,7.94-.13,11.9-.2Z"/>
-    <path class="cls-4" d="M276.53,350.38c-28.02-29.2-69.26-36.84-104.62-16.02l-1.17,1.05-12.35,8.89c-11.3,10.89-20.75,22.51-30.22,35.93l-10.08-14.35c25.19-35.82,54.78-61.81,101.02-59.76,41.99,1.86,68.17,27.16,91.47,59.77l-10.1,14.4c-7.68-10.93-15.27-20.45-23.95-29.9Z"/>
-    <path class="cls-4" d="M569.91,342.77c3.11-2.41,6.23-4.83,9.34-7.24l-13.52,10.36c-11.07,10.15-19.68,21.97-28.84,34.37l-9.97-14.44c9.92-13.76,20.37-26.6,33.58-37.48,18.22-15.01,40.66-23.12,64.34-22,4.59.22,6.96,5.61,6.51,8.92-.66,4.84-4.35,6.97-9.34,7.47l-16.91,1.7c-3.96,1.24-7.92,2.47-11.88,3.71-4.3,2.2-8.6,4.41-12.89,6.61"/>
-  </g>
-  <path class="cls-4" d="M61.5,433.84c-3.11,2.41-6.23,4.83-9.34,7.24l13.52-10.36c11.07-10.15,19.68-21.97,28.84-34.37l9.97,14.44c-9.92,13.76-20.37,26.6-33.58,37.48-18.22,15.01-40.66,23.12-64.34,22-4.59-.22-6.96-5.61-6.51-8.92.66-4.84,4.35-6.97,9.34-7.47l16.91-1.7c3.96-1.24,7.92-2.47,11.88-3.71,4.3-2.2,8.6-4.41,12.89-6.61"/>
-  <path class="cls-4" d="M88.89,477.83c-3.11,2.41-6.23,4.83-9.34,7.24l13.52-10.36c11.07-10.15,19.68-21.97,28.84-34.37l9.97,14.44c-9.92,13.76-20.37,26.6-33.58,37.48-18.22,15.01-40.66,23.12-64.34,22-4.59-.22-6.96-5.61-6.51-8.92.66-4.84,4.35-6.97,9.34-7.47l16.91-1.7c3.96-1.24,7.92-2.47,11.88-3.71,4.3-2.2,8.6-4.41,12.89-6.61"/>
-  <path class="cls-4" d="M543.94,483c3.11,2.41,6.23,4.83,9.34,7.24l-13.52-10.36c-11.07-10.15-19.68-21.97-28.84-34.37l-9.97,14.44c9.92,13.76,20.37,26.6,33.58,37.48,18.22,15.01,40.66,23.12,64.34,22,4.59-.22,6.96-5.61,6.51-8.92-.66-4.84-4.35-6.97-9.34-7.47l-16.91-1.7c-3.96-1.24-7.92-2.47-11.88-3.71-4.3-2.2-8.6-4.41-12.89-6.61"/>
-  <ellipse class="cls-4" cx="268.06" cy="268.05" rx="22.51" ry="23.2"/>
-  <ellipse class="cls-4" cx="369.68" cy="268.24" rx="22.51" ry="23.2"/>
-  <path class="cls-6" d="M148.28,387.03c10.83,26.44,36.15,44.11,64.37,44.96,29.62.89,57.03-16.91,68.57-44.64-14.65-28.43-44.57-45-74.72-41.73-38.7,4.2-56.93,38.84-58.22,41.4Z"/>
-  <path class="cls-6" d="M354.48,387.6c10.83,26.44,36.15,44.11,64.37,44.96,29.62.89,57.03-16.91,68.57-44.64-14.65-28.43-44.57-45-74.72-41.73-38.7,4.2-56.93,38.84-58.22,41.4Z"/>
-  <path class="cls-2" d="M45.5,128.67c13.2,2.92,26.4,5.85,39.6,8.77,22.31,4.1,43.08,12.05,62.35,23.74,15,9.1,26.15,21.6,32.43,38.03,7.36,15.82,10.22,32.63,9.52,50.18-.37,9.27.33,17.5,3.07,26.82-36.6,3.79-83.53-3.23-106.75-30.61-12.95-15.27-20.63-33.68-24.96-53.25-3.7-16.7-10.78-43.62-16.39-54.19-.64-1.21-4.58-8.4-3.25-9.41.15-.12.34-.13.45-.12l3.94.03Z"/>
-  <path class="cls-2" d="M587.5,129.95c-13.2,2.92-26.4,5.85-39.6,8.77-22.31,4.1-43.08,12.05-62.35,23.74-15,9.1-26.15,21.6-32.43,38.03-7.36,15.82-10.22,32.63-9.52,50.18.37,9.27-.33,17.5-3.07,26.82,36.6,3.79,83.53-3.23,106.75-30.61,12.95-15.27,20.63-33.68,24.96-53.25,3.7-16.7,10.78-43.62,16.39-54.19.64-1.21,4.58-8.4,3.25-9.41-.15-.12-.34-.13-.45-.12l-3.94.03Z"/>
-  <path class="cls-2" d="M316.59,3.05c7.27,11.4,14.53,22.8,21.8,34.2,12.88,18.67,21.94,38.98,27.3,60.87,4.17,17.04,3.22,33.77-3.96,49.82-5.98,16.39-15.85,30.3-28.75,42.22-6.81,6.29-12.14,12.6-16.79,21.14-28.56-23.2-56.78-61.35-53.84-97.13,1.64-19.96,9.23-38.41,20-55.3,9.2-14.43,23.22-38.46,26.72-49.91.4-1.31,2.7-9.17,4.35-8.95.19.03.33.15.41.24l2.76,2.81Z"/>
-  <text class="cls-5" transform="translate(712.59 274.13)"><tspan x="0" y="0">BRASI</tspan><tspan class="cls-1" x="934.2" y="0">L</tspan></text>
-  <text class="cls-5" transform="translate(710.64 552.69)"><tspan x="0" y="0">dn</tspan><tspan class="cls-3" x="405.55" y="0">a</tspan></text>
-</svg>
+<img src="assets/images/logo_brasilDNA_preto.webp" alt="Brasil DNA" class="logo-img" height="50" loading="eager">
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
@@ -150,11 +100,11 @@ try {
   </div>
 
   <div class="hero-partners" data-reveal data-reveal-delay="520">
-    <img src="https://brasildna.com/wp-content/uploads/2025/09/Brasil.png"
+    <img src="assets/images/Logotipo_Brasil.png"
          alt="Marca Brasil" loading="lazy">
-    <img src="https://brasildna.com/wp-content/uploads/2025/09/Logo-Embratur-2023-Cinza-1024x157-copiar.png"
+    <img src="assets/images/embratur.png"
          alt="Embratur" loading="lazy">
-    <img src="https://brasildna.com/wp-content/uploads/2025/09/ministerio-do-turismo.png"
+    <img src="assets/images/ministerio-do-turismo.png"
          alt="Ministério do Turismo" loading="lazy">
   </div>
 
@@ -171,7 +121,7 @@ try {
     <div class="why-video" data-reveal>
       <div class="video-wrap">
         <iframe
-          src="https://www.youtube.com/watch?v=K7XSoVAnq8E"
+          src="https://www.youtube.com/embed/9tVQt1GnIHs"
           title="Brasil DNA — What do people who visit Brazil have to say?"
           loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -249,7 +199,7 @@ try {
     <div class="feel-video" data-reveal data-reveal-delay="120">
       <div class="video-wrap">
         <iframe
-          src="https://www.youtube.com/watch?v=ywZe6LAa0oY"
+          src="https://www.youtube.com/embed/ywZe6LAa0oY"
           title="Feel Brasil — Vitrine Brasil"
           loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -269,9 +219,27 @@ try {
 
     <!-- Destination: Bahia -->
     <article class="dest-card" data-reveal>
-      <div class="dest-media">
-        <img src="https://images.unsplash.com/photo-1583531352515-8884af319dc1?w=1400&q=80"
-             alt="Bahia — Salvador" loading="lazy">
+      <div class="dest-media dest-media--video" style="background: linear-gradient(160deg, #0d5c2e 0%, #1a3a2a 40%, #f3ebda 100%);">
+        <div class="dest-video-wrap">
+          <iframe title="vimeo-player" src="https://player.vimeo.com/video/1115523494?h=08d4240a02" width="640" height="360" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"   allowfullscreen></iframe>
+        </div>
+        <div class="dest-social">
+          <img src="assets/images/Logo-Bahia.png" alt="Logo Bahia" class="dest-logo" loading="lazy">
+          <div class="dest-social__icons-row">
+          <a href="https://www.linkedin.com/company/global-vision-access/" target="_blank" rel="noopener" aria-label="LinkedIn" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.3 9.5H5.7V18h2.6V9.5zM7 8.4a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 9.6h-2.6v-4.1c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V18H10v-8.5h2.5v1.2h.1c.4-.7 1.3-1.4 2.6-1.4 2.8 0 3.3 1.8 3.3 4.2V18z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/brasildna" target="_blank" rel="noopener" aria-label="Facebook" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22 12a10 10 0 10-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.5h-1.2c-1.2 0-1.5.7-1.5 1.5v1.8H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/dnabrasil_official" target="_blank" rel="noopener" aria-label="Instagram" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2 0 2 .2 2.6.5.7.2 1.2.6 1.7 1.1.5.5.8 1 1.1 1.7.2.6.4 1.4.5 2.6 0 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.2-.2 2-.5 2.6-.2.7-.6 1.2-1.1 1.7-.5.5-1 .8-1.7 1.1-.6.2-1.4.4-2.6.5-1.2 0-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2 0-2-.2-2.6-.5-.7-.2-1.2-.6-1.7-1.1-.5-.5-.8-1-1.1-1.7-.2-.6-.4-1.4-.5-2.6 0-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c0-1.2.2-2 .5-2.6.2-.7.6-1.2 1.1-1.7.5-.5 1-.8 1.7-1.1.6-.2 1.4-.4 2.6-.5C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1 0-1.6.2-1.9.3-.5.2-.8.4-1.2.7-.3.4-.5.7-.7 1.2-.1.3-.3.9-.3 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c0 1 .2 1.6.3 1.9.2.5.4.8.7 1.2.4.3.7.5 1.2.7.3.1.9.3 1.9.3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1 0 1.6-.2 1.9-.3.5-.2.8-.4 1.2-.7.3-.4.5-.7.7-1.2.1-.3.3-.9.3-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1-.2-1.6-.3-1.9-.2-.5-.4-.8-.7-1.2-.4-.3-.7-.5-1.2-.7-.3-.1-.9-.3-1.9-.3-1.2-.1-1.6-.1-4.7-.1zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.4-3.4a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@brasildna" target="_blank" rel="noopener" aria-label="YouTube" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.7-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.9C6.8 19 12 19 12 19s4.8 0 7-.1c.4 0 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/></svg>
+          </a>
+          </div>
+        </div>
       </div>
       <div class="dest-info">
         <span class="dest-region">Nordeste</span>
@@ -287,9 +255,27 @@ try {
 
     <!-- Destination: Mato Grosso do Sul -->
     <article class="dest-card dest-card--flip" data-reveal>
-      <div class="dest-media">
-        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1400&q=80"
-             alt="Pantanal — Mato Grosso do Sul" loading="lazy">
+      <div class="dest-media dest-media--video" style="background: linear-gradient(160deg, #0a4a6e 0%, #0d2a3a 40%, #1a6e3a 100%);">
+        <div class="dest-video-wrap">
+          <iframe width="615" height="346" src="https://www.youtube.com/embed/8LDzOc7fUmA" title="Documentário: Mato Grosso do Sul: Expoente do Ecoturismo para o Mundo - Trailer Versão Estendida" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div class="dest-social">
+          <img src="assets/images/Logo-MS.png" alt="Logo Mato Grosso do Sul" class="dest-logo dest-logo--ms" loading="lazy">
+          <div class="dest-social__icons-row">
+          <a href="https://www.linkedin.com/company/global-vision-access/" target="_blank" rel="noopener" aria-label="LinkedIn" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.3 9.5H5.7V18h2.6V9.5zM7 8.4a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 9.6h-2.6v-4.1c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V18H10v-8.5h2.5v1.2h.1c.4-.7 1.3-1.4 2.6-1.4 2.8 0 3.3 1.8 3.3 4.2V18z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/brasildna" target="_blank" rel="noopener" aria-label="Facebook" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22 12a10 10 0 10-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.5h-1.2c-1.2 0-1.5.7-1.5 1.5v1.8H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/dnabrasil_official" target="_blank" rel="noopener" aria-label="Instagram" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2 0 2 .2 2.6.5.7.2 1.2.6 1.7 1.1.5.5.8 1 1.1 1.7.2.6.4 1.4.5 2.6 0 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.2-.2 2-.5 2.6-.2.7-.6 1.2-1.1 1.7-.5.5-1 .8-1.7 1.1-.6.2-1.4.4-2.6.5-1.2 0-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2 0-2-.2-2.6-.5-.7-.2-1.2-.6-1.7-1.1-.5-.5-.8-1-1.1-1.7-.2-.6-.4-1.4-.5-2.6 0-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c0-1.2.2-2 .5-2.6.2-.7.6-1.2 1.1-1.7.5-.5 1-.8 1.7-1.1.6-.2 1.4-.4 2.6-.5C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1 0-1.6.2-1.9.3-.5.2-.8.4-1.2.7-.3.4-.5.7-.7 1.2-.1.3-.3.9-.3 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c0 1 .2 1.6.3 1.9.2.5.4.8.7 1.2.4.3.7.5 1.2.7.3.1.9.3 1.9.3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1 0 1.6-.2 1.9-.3.5-.2.8-.4 1.2-.7.3-.4.5-.7.7-1.2.1-.3.3-.9.3-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1-.2-1.6-.3-1.9-.2-.5-.4-.8-.7-1.2-.4-.3-.7-.5-1.2-.7-.3-.1-.9-.3-1.9-.3-1.2-.1-1.6-.1-4.7-.1zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.4-3.4a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@brasildna" target="_blank" rel="noopener" aria-label="YouTube" class="dest-social__btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.7-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.9C6.8 19 12 19 12 19s4.8 0 7-.1c.4 0 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/></svg>
+          </a>
+          </div>
+        </div>
       </div>
       <div class="dest-info">
         <span class="dest-region">Centro-Oeste</span>
@@ -657,7 +643,7 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
 <footer class="site-footer">
   <div class="container footer-top">
     <div class="footer-brand">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/LOGO-BRASIL-DNA-COLORIDO-e1746120427382.png"
+      <img src="assets/images/logo_brasilDNA_branco.png"
            alt="Brasil DNA" class="footer-logo" height="40" loading="lazy">
       <p>Experience the Essence of Brazil.</p>
       <div class="social-links">
@@ -678,21 +664,21 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
       <a href="<?= esc_url_safe('about-us.php') ?>">About Us</a>
       <a href="news.php">News</a>
       <a href="#destinos">Destinations</a>
-      <a href="parceiro/login.php" class="footer-partner-link">Be Our Partner</a>
+      <!-- <a href="parceiro/login.php" class="footer-partner-link">Be Our Partner</a> -->
     </nav>
 
     <div class="footer-presented">
       <h4>Initiative presented by</h4>
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/GVA-LOGO-COLORIDO-PREENCHIDO-WHITE-1024x308.png"
+      <img src="assets/images/globalvisioaccess.svg"
            alt="GVA — Global Vision Access" loading="lazy">
     </div>
   </div>
 
   <div class="footer-partners-bar">
     <div class="container footer-partners-row">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/Brasil.png" alt="Marca Brasil" loading="lazy">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/Logo-Embratur-2023-Cinza-1024x157-copiar.png" alt="Embratur" loading="lazy">
-      <img src="https://brasildna.com/wp-content/uploads/2025/09/ministerio-do-turismo.png" alt="Ministério do Turismo" loading="lazy">
+      <img src="assets/images/Logotipo_Brasil.png" alt="Marca Brasil" loading="lazy">
+      <img src="assets/images/embratur.png" alt="Embratur" loading="lazy">
+      <img src="assets/images/ministerio-do-turismo.png" alt="Ministério do Turismo" loading="lazy">
     </div>
   </div>
 

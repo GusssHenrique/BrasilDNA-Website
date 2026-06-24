@@ -509,12 +509,29 @@ strong {
 .hero-partners img {
    height: 32px;
    object-fit: contain;
-   filter: brightness(0) invert(1);
-   opacity: 0.75;
-   transition: opacity 0.3s;
+   filter: none !important;
+   opacity: 1 !important;
+   transition: none !important;
 }
-.hero-partners img:hover {
-   opacity: 1;
+/* No hover effects for partner logos */
+
+/* Embratur square + wordmark */
+.logo-embratur {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+}
+.logo-embratur img {
+   height: 32px;
+   width: auto;
+   display: block;
+}
+.logo-embratur .embratur-wordmark {
+   color: #fff;
+   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+   font-weight: 700;
+   font-size: 20px;
+   line-height: 1;
 }
 
 /* Scroll arrow */
@@ -752,6 +769,74 @@ strong {
 }
 .dest-card:hover .dest-media img {
    transform: scale(1.06);
+}
+
+/* Video variant for destination cards */
+.dest-media--video {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   justify-content: center;
+   padding: 32px 28px 28px;
+   gap: 20px;
+}
+.dest-video-wrap {
+   position: relative;
+   width: 100%;
+   padding-bottom: 56.25%;
+   border-radius: 12px;
+   overflow: hidden;
+   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+   flex-shrink: 0;
+}
+.dest-video-wrap iframe {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   border: none;
+   border-radius: 12px;
+}
+.dest-social {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 16px;
+   margin-top: 4px;
+}
+.dest-logo {
+   height: 80px;
+   max-width: 180px;
+   object-fit: contain;
+   opacity: 0.95;
+}
+.dest-logo--ms {
+   height: 110px;
+   max-width: 220px;
+}
+.dest-social__icons-row {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+}
+.dest-social__btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   background: rgba(255, 255, 255, 0.15);
+   color: #fff;
+   transition:
+      background 0.25s,
+      transform 0.2s;
+   backdrop-filter: blur(4px);
+}
+.dest-social__btn:hover {
+   background: rgba(255, 255, 255, 0.3);
+   transform: scale(1.1);
 }
 
 .dest-info {
@@ -1547,8 +1632,9 @@ strong {
 }
 .footer-presented img {
    height: 34px;
-   opacity: 0.8;
-   filter: brightness(0) invert(1);
+   opacity: 1 !important;
+   filter: none !important;
+   transition: none !important;
 }
 
 /* Partners bar */
@@ -1566,12 +1652,17 @@ strong {
 .footer-partners-row img {
    height: 26px;
    object-fit: contain;
-   filter: brightness(0) invert(1);
-   opacity: 0.5;
-   transition: opacity 0.3s;
+   filter: none !important;
+   opacity: 1 !important;
+   transition: none !important;
 }
-.footer-partners-row img:hover {
-   opacity: 0.85;
+/* No hover effects for footer partner logos */
+
+.footer-partners-row .logo-embratur img {
+   height: 26px;
+}
+.footer-partners-row .logo-embratur .embratur-wordmark {
+   font-size: 16px;
 }
 
 .footer-bottom {
