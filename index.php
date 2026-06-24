@@ -8,6 +8,7 @@ function esc_url_safe($path) {
 }
 
 $banners_parceiros = [];
+$clientes_home = [];
 try {
     require_once __DIR__ . '/includes/conexao.php';
     $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
@@ -16,8 +17,12 @@ try {
         $ids = implode(',', array_map('intval', array_column($banners_parceiros, 'id')));
         $pdo->exec("UPDATE banners SET visualizacoes = visualizacoes + 1 WHERE id IN ($ids)");
     }
+    $_raw = $pdo->query("SELECT id, titulo, logo, descricao, iframe, video, site, link_guia FROM clientes ORDER BY criado_em ASC")->fetchAll();
+    shuffle($_raw);
+    $clientes_home = $_raw;
 } catch (\Throwable $e) {
     $banners_parceiros = [];
+    $clientes_home = [];
 }
 ?>
 <!DOCTYPE html>
@@ -332,6 +337,177 @@ try {
   </div>
 </section>
 
+<!-- ===== CLIENTS ===== -->
+<?php
+$_staticClients = [
+  [
+    'nome' => 'Embratur',
+    'img'  => 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=900&q=80',
+    'yt'   => 'VF8ULR5dkgw',
+    'logo' => 'https://brasildna.com/wp-content/uploads/2025/09/Logo-Embratur-2023-Cinza-1024x157-copiar.png',
+    'link' => 'https://www.embratur.com.br',
+    'desc' => "Brazil's official international tourism promotion agency, driving global awareness of Brazilian destinations.",
+  ],
+  [
+    'nome' => 'Marca Brasil',
+    'img'  => 'https://images.unsplash.com/photo-1583531352515-8884af319dc1?w=700&q=80',
+    'yt'   => 'dUgCHXzQg6U',
+    'logo' => 'https://brasildna.com/wp-content/uploads/2025/09/Brasil.png',
+    'link' => '',
+    'desc' => "Official brand of Brazilian tourism, promoting the country's cultural diversity and natural beauty worldwide.",
+  ],
+  [
+    'nome' => 'Ministério do Turismo',
+    'img'  => 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=700&q=80',
+    'yt'   => 'yIXW9VQLkkg',
+    'logo' => 'https://brasildna.com/wp-content/uploads/2025/09/ministerio-do-turismo.png',
+    'link' => '',
+    'desc' => 'Brazilian government body responsible for the national tourism policy and development of the tourism sector.',
+  ],
+];
+$_sizePool = ['tall','wide','normal','normal','normal','tall','normal','wide','normal'];
+shuffle($_sizePool);
+$_si = 0;
+$_totalPartners = count($clientes_home) + count($_staticClients);
+?>
+<section class="section clients" id="clients">
+
+  <!-- Painel esquerdo: vídeo vertical -->
+  <div class="clients-video-panel">
+    <video autoplay muted loop playsinline preload="none" aria-hidden="true">
+      <source src="assets/video/video-horizzo.mp4" type="video/mp4">
+    </video>
+    <div class="clients-video-panel__overlay"></div>
+  </div>
+
+  <!-- Painel direito: conteúdo -->
+  <div class="clients-left">
+    <div class="clients-left-inner">
+
+      <div class="clients-intro" data-reveal>
+        <span class="label-tag label-tag--light">Our Clients</span>
+        <h2>Companies that <em>trust Brasil DNA</em></h2>
+        <p class="clients-intro__desc">Brasil DNA proudly collaborates with a curated selection of Brazilian tourism companies, offering authentic experiences, exceptional services, and unique opportunities to showcase the best of Brazil.</p>
+        <div class="clients-counter-pill">
+          <strong><?= $_totalPartners ?>+</strong>
+          <span>strategic partners</span>
+        </div>
+      </div>
+
+      <!-- Mosaico de parceiros -->
+      <div class="clients-mosaic">
+
+        <?php
+        $sc0 = $_staticClients[0];
+        $yt0 = $sc0['yt'] ?? '';
+        ?>
+        <div class="client-card client-card--mosaic client-card--featured-mosaic"
+             role="button" tabindex="0"
+             data-modal-trigger
+             data-name="<?= htmlspecialchars($sc0['nome']) ?>"
+             data-logo="<?= htmlspecialchars($sc0['logo'], ENT_QUOTES, 'UTF-8') ?>"
+             data-desc="<?= htmlspecialchars($sc0['desc'], ENT_QUOTES, 'UTF-8') ?>"
+             data-site="<?= htmlspecialchars($sc0['link'], ENT_QUOTES, 'UTF-8') ?>">
+          <?php if ($yt0): ?>
+            <div class="client-card__video-wrap" aria-hidden="true">
+              <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($yt0, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($yt0, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
+                frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>
+            </div>
+          <?php else: ?>
+            <img class="client-card__bg" src="<?= htmlspecialchars($sc0['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
+          <?php endif; ?>
+          <div class="client-card__overlay"></div>
+          <span class="client-card__plus" aria-hidden="true">+</span>
+          <div class="client-card__body">
+            <img class="client-card__logo-img" src="<?= htmlspecialchars($sc0['logo'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($sc0['nome']) ?>">
+            <span class="client-card__name"><?= htmlspecialchars($sc0['nome']) ?></span>
+          </div>
+        </div>
+
+        <?php foreach (array_slice($_staticClients, 1) as $sc):
+          $sz  = $_sizePool[$_si % count($_sizePool)]; $_si++;
+          $syt = $sc['yt'] ?? '';
+        ?>
+        <div class="client-card client-card--mosaic client-card--<?= $sz ?>"
+             role="button" tabindex="0"
+             data-modal-trigger
+             data-name="<?= htmlspecialchars($sc['nome']) ?>"
+             data-logo="<?= htmlspecialchars($sc['logo'], ENT_QUOTES, 'UTF-8') ?>"
+             data-desc="<?= htmlspecialchars($sc['desc'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+             data-site="<?= htmlspecialchars($sc['link'], ENT_QUOTES, 'UTF-8') ?>">
+          <?php if ($syt): ?>
+            <div class="client-card__video-wrap" aria-hidden="true">
+              <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($syt, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($syt, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
+                frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>
+            </div>
+          <?php else: ?>
+            <img class="client-card__bg" src="<?= htmlspecialchars($sc['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
+          <?php endif; ?>
+          <div class="client-card__overlay"></div>
+          <span class="client-card__plus" aria-hidden="true">+</span>
+          <div class="client-card__body">
+            <img class="client-card__logo-img" src="<?= htmlspecialchars($sc['logo'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($sc['nome']) ?>">
+            <span class="client-card__name"><?= htmlspecialchars($sc['nome']) ?></span>
+          </div>
+        </div>
+        <?php endforeach; ?>
+
+        <?php
+        function _ytId(string $html): ?string {
+            if (preg_match('#(?:youtube\.com[^\'"]*(?:embed/|v=)|youtu\.be/)([a-zA-Z0-9_-]{11})#', $html, $m)) {
+                return $m[1];
+            }
+            return null;
+        }
+        foreach ($clientes_home as $c):
+          $sz     = $_sizePool[$_si % count($_sizePool)]; $_si++;
+          $ytId   = !empty($c['iframe']) ? _ytId($c['iframe']) : null;
+          $hasVid = !empty($c['video']);
+          $solid  = $ytId === null && !$hasVid;
+        ?>
+        <div class="client-card client-card--mosaic<?= $solid ? ' client-card--solid' : '' ?> client-card--<?= $sz ?>"
+             role="button" tabindex="0"
+             data-modal-trigger
+             data-name="<?= htmlspecialchars($c['titulo']) ?>"
+             data-logo="<?= htmlspecialchars($c['logo'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+             data-desc="<?= htmlspecialchars($c['descricao'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+             data-site="<?= htmlspecialchars($c['link_guia'] ?: $c['site'] ?: '', ENT_QUOTES, 'UTF-8') ?>">
+          <?php if ($ytId): ?>
+            <div class="client-card__video-wrap" aria-hidden="true">
+              <iframe
+                src="https://www.youtube.com/embed/<?= htmlspecialchars($ytId, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($ytId, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                loading="lazy">
+              </iframe>
+            </div>
+          <?php elseif ($hasVid): ?>
+            <div class="client-card__video-wrap" aria-hidden="true">
+              <video autoplay muted loop playsinline>
+                <source src="<?= htmlspecialchars($c['video'], ENT_QUOTES, 'UTF-8') ?>" type="video/<?= htmlspecialchars(pathinfo($c['video'], PATHINFO_EXTENSION), ENT_QUOTES, 'UTF-8') ?>">
+              </video>
+            </div>
+          <?php endif; ?>
+          <div class="client-card__overlay"></div>
+          <span class="client-card__plus" aria-hidden="true">+</span>
+          <div class="client-card__body">
+            <?php if ($c['logo']): ?>
+              <img class="client-card__logo-upload" src="<?= htmlspecialchars($c['logo'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($c['titulo']) ?>" loading="lazy">
+            <?php else: ?>
+              <div class="client-logo-initials"><?= htmlspecialchars(mb_strtoupper(mb_substr($c['titulo'], 0, 2, 'UTF-8'), 'UTF-8')) ?></div>
+            <?php endif; ?>
+            <span class="client-card__name"><?= htmlspecialchars($c['titulo']) ?></span>
+          </div>
+        </div>
+        <?php endforeach; ?>
+
+      </div><!-- /.clients-mosaic -->
+    </div><!-- /.clients-left-inner -->
+  </div><!-- /.clients-left -->
+
+
+</section>
+
 <!-- ===== NEWS ===== -->
 <section class="section news" id="news">
   <div class="container">
@@ -528,6 +704,23 @@ try {
   </div>
 </footer>
 
-<script src="assets/main.js?v=3" defer></script>
+<!-- ===== CLIENT MODAL ===== -->
+<div id="clientModal" class="client-modal" role="dialog" aria-modal="true"
+     aria-labelledby="clientModalName" hidden>
+  <div class="client-modal__backdrop"></div>
+  <div class="client-modal__panel">
+    <button class="client-modal__close" aria-label="Fechar">&#x2715;</button>
+    <div class="client-modal__logo-wrap">
+      <img id="clientModalLogo" src="" alt="" class="client-modal__logo" hidden>
+      <div id="clientModalInitials" class="client-modal__initials" hidden></div>
+    </div>
+    <span id="clientModalName" class="client-modal__name"></span>
+    <p id="clientModalDesc" class="client-modal__desc"></p>
+    <a id="clientModalLink" href="#" target="_blank" rel="noopener"
+       class="btn btn-primary client-modal__btn">Visitar site</a>
+  </div>
+</div>
+
+<script src="assets/main.js?v=4" defer></script>
 </body>
 </html>

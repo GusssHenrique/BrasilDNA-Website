@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `logo`        VARCHAR(500)      NULL,
   `descricao`   TEXT              NULL,
   `iframe`      TEXT              NULL,
+  `video`       VARCHAR(500)      NULL,
   `facebook`    VARCHAR(500)      NULL,
   `instagram`   VARCHAR(500)      NULL,
   `linkedin`    VARCHAR(500)      NULL,

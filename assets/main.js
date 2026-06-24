@@ -848,6 +848,71 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    }, { passive: true });
 })();
 
+/* ─────────────────────────────────────────────────────────── *
+ * 18 — CLIENT CARDS MODAL
+ * ─────────────────────────────────────────────────────────── */
+(function initClientModal() {
+   const modal    = document.getElementById("clientModal");
+   if (!modal) return;
+   const backdrop = modal.querySelector(".client-modal__backdrop");
+   const closeBtn = modal.querySelector(".client-modal__close");
+   const logoEl   = document.getElementById("clientModalLogo");
+   const initials = document.getElementById("clientModalInitials");
+   const nameEl   = document.getElementById("clientModalName");
+   const descEl   = document.getElementById("clientModalDesc");
+   const linkEl   = document.getElementById("clientModalLink");
+   let lastFocused = null;
+
+   function openModal(card) {
+      const name = card.dataset.name || "";
+      const logo = card.dataset.logo || "";
+      const desc = card.dataset.desc || "";
+      const site = card.dataset.site || "";
+      nameEl.textContent = name;
+      descEl.textContent = desc || "Parceiro estratégico do Brasil DNA.";
+      if (logo) {
+         logoEl.src = logo;
+         logoEl.alt = name;
+         logoEl.hidden = false;
+         initials.hidden = true;
+      } else {
+         logoEl.hidden = true;
+         initials.textContent = name.substring(0, 2).toUpperCase();
+         initials.hidden = false;
+      }
+      linkEl.href = site || "#";
+      lastFocused = document.activeElement;
+      modal.removeAttribute("hidden");
+      modal.offsetHeight; // força reflow para transição CSS
+      modal.classList.add("is-open");
+      closeBtn.focus();
+      document.body.style.overflow = "hidden";
+   }
+
+   function closeModal() {
+      modal.classList.remove("is-open");
+      setTimeout(() => {
+         modal.setAttribute("hidden", "");
+         document.body.style.overflow = "";
+         lastFocused && lastFocused.focus();
+      }, 350);
+   }
+
+   document.addEventListener("click", (e) => {
+      const card = e.target.closest("[data-modal-trigger]");
+      if (card) openModal(card);
+   });
+   document.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.closest("[data-modal-trigger]")) {
+         e.preventDefault();
+         openModal(e.target.closest("[data-modal-trigger]"));
+      }
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+   });
+   closeBtn && closeBtn.addEventListener("click", closeModal);
+   backdrop && backdrop.addEventListener("click", closeModal);
+})();
+
 /* ─── HELPER: deduped style injection ───────────────────────*/
 function injectStyle(id, css) {
    if (document.getElementById("bdna-style-" + id)) return;
