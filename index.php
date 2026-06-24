@@ -14,12 +14,22 @@ try {
     $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
     $banners_parceiros = $stmt->fetchAll();
     if (!empty($banners_parceiros)) {
-        $ids = implode(',', array_map('intval', array_column($banners_parceiros, 'id')));
-        $pdo->exec("UPDATE banners SET visualizacoes = visualizacoes + 1 WHERE id IN ($ids)");
+        require_once __DIR__ . '/includes/stats.php';
+        $upd = $pdo->prepare('UPDATE banners SET visualizacoes = visualizacoes + 1 WHERE id = :id');
+        foreach ($banners_parceiros as $b) {
+            $upd->execute([':id' => (int) $b['id']]);
+            registrarStat($pdo, 'banner', (int) $b['id'], 'visualizacoes');
+        }
     }
-    $_raw = $pdo->query("SELECT id, titulo, logo, descricao, iframe, video, site, link_guia FROM clientes ORDER BY criado_em ASC")->fetchAll();
+    $_raw = $pdo->query("SELECT id, titulo, logo, descricao, iframe, imagem_fundo, site, link_guia FROM clientes ORDER BY criado_em ASC")->fetchAll();
     shuffle($_raw);
     $clientes_home = $_raw;
+    if (!empty($clientes_home)) {
+        require_once __DIR__ . '/includes/stats.php';
+        foreach ($clientes_home as $c) {
+            registrarStat($pdo, 'cliente', (int) $c['id'], 'visualizacoes');
+        }
+    }
 } catch (\Throwable $e) {
     $banners_parceiros = [];
     $clientes_home = [];
@@ -37,7 +47,7 @@ try {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/style.css?v=8">
 </head>
 <body>
 
@@ -447,9 +457,9 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
         }
         foreach ($clientes_home as $c):
           $sz     = $_sizePool[$_si % count($_sizePool)]; $_si++;
-          $ytId   = !empty($c['iframe']) ? _ytId($c['iframe']) : null;
-          $hasVid = !empty($c['video']);
-          $solid  = $ytId === null && !$hasVid;
+          $ytId    = !empty($c['iframe']) ? _ytId($c['iframe']) : null;
+          $hasFundo = !empty($c['imagem_fundo']);
+          $solid   = $ytId === null && !$hasFundo;
         ?>
         <div class="client-card client-card--mosaic<?= $solid ? ' client-card--solid' : '' ?> client-card--<?= $sz ?>"
              role="button" tabindex="0"
@@ -467,12 +477,8 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
                 loading="lazy">
               </iframe>
             </div>
-          <?php elseif ($hasVid): ?>
-            <div class="client-card__video-wrap" aria-hidden="true">
-              <video autoplay muted loop playsinline>
-                <source src="<?= htmlspecialchars($c['video'], ENT_QUOTES, 'UTF-8') ?>" type="video/<?= htmlspecialchars(pathinfo($c['video'], PATHINFO_EXTENSION), ENT_QUOTES, 'UTF-8') ?>">
-              </video>
-            </div>
+          <?php elseif ($hasFundo): ?>
+            <img class="client-card__bg" src="<?= htmlspecialchars($c['imagem_fundo'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
           <?php endif; ?>
           <div class="client-card__overlay"></div>
           <span class="client-card__plus" aria-hidden="true">+</span>

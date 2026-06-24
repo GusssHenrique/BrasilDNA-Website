@@ -10,29 +10,35 @@ if (estaLogado()) {
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
-
-    if ($email === '' || $senha === '') {
-        $erro = 'Preencha email e senha.';
+    if (!validarCSRF($_POST['csrf_token'] ?? '')) {
+        $erro = 'Requisição inválida. Tente novamente.';
     } else {
-        $stmt = $pdo->prepare('SELECT * FROM admins WHERE email = :email');
-        $stmt->execute([':email' => $email]);
-        $admin = $stmt->fetch();
+        $email = trim($_POST['email'] ?? '');
+        $senha = $_POST['senha'] ?? '';
 
-        if ($admin && password_verify($senha, $admin['senha'])) {
-            if ($admin['tipo'] !== 'admin') {
-                $erro = 'Acesso negado. Use o painel de Super Admin.';
-            } else {
-                $_SESSION['admin_id']    = $admin['id'];
-                $_SESSION['admin_nome']  = $admin['nome'];
-                $_SESSION['admin_email'] = $admin['email'];
-                $_SESSION['admin_tipo']  = $admin['tipo'];
-                header('Location: index.php');
-                exit;
-            }
+        if ($email === '' || $senha === '') {
+            $erro = 'Preencha email e senha.';
         } else {
-            $erro = 'Email ou senha incorretos. Tente novamente.';
+            $stmt = $pdo->prepare('SELECT * FROM admins WHERE email = :email');
+            $stmt->execute([':email' => $email]);
+            $admin = $stmt->fetch();
+
+            if ($admin && password_verify($senha, $admin['senha'])) {
+                if ($admin['tipo'] !== 'admin') {
+                    $erro = 'Acesso negado. Use o painel de Super Admin.';
+                } else {
+                    session_regenerate_id(true);
+                    $_SESSION['admin_id']      = $admin['id'];
+                    $_SESSION['admin_nome']    = $admin['nome'];
+                    $_SESSION['admin_email']   = $admin['email'];
+                    $_SESSION['admin_tipo']    = $admin['tipo'];
+                    $_SESSION['last_activity'] = time();
+                    header('Location: index.php');
+                    exit;
+                }
+            } else {
+                $erro = 'Email ou senha incorretos. Tente novamente.';
+            }
         }
     }
 }
@@ -62,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="POST" action="login.php" class="adm-form">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
       <div class="adm-form__group">
         <label class="adm-form__label" for="email">Email</label>
         <input

@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `logo`        VARCHAR(500)      NULL,
   `descricao`   TEXT              NULL,
   `iframe`      TEXT              NULL,
-  `video`       VARCHAR(500)      NULL,
+  `imagem_fundo` VARCHAR(500)     NULL,
   `facebook`    VARCHAR(500)      NULL,
   `instagram`   VARCHAR(500)      NULL,
   `linkedin`    VARCHAR(500)      NULL,
@@ -98,3 +98,21 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `criado_em`   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Para bancos já existentes (renomear video → imagem_fundo):
+-- ALTER TABLE `clientes` CHANGE `video` `imagem_fundo` VARCHAR(500) NULL;
+
+-- ------------------------------------------------------------
+--  Tabela: stats_diario  (analytics diário de banners e clientes)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `stats_diario` (
+  `tipo`          ENUM('banner','cliente') NOT NULL,
+  `referencia_id` INT UNSIGNED             NOT NULL,
+  `data`          DATE                     NOT NULL,
+  `visualizacoes` INT UNSIGNED             NOT NULL DEFAULT 0,
+  `cliques`       INT UNSIGNED             NOT NULL DEFAULT 0,
+  PRIMARY KEY (`tipo`, `referencia_id`, `data`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Para bancos já existentes:
+-- CREATE TABLE IF NOT EXISTS `stats_diario` ...  (execute o bloco acima)

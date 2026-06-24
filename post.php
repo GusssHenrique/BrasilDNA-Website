@@ -9,6 +9,10 @@ if ($id > 0) {
         $stmt = $pdo->prepare('SELECT * FROM posts WHERE id = :id AND status = "publicado"');
         $stmt->execute([':id' => $id]);
         $post = $stmt->fetch();
+        if ($post) {
+            require_once __DIR__ . '/includes/stats.php';
+            registrarStat($pdo, 'post', $id, 'cliques');
+        }
     } catch (\PDOException $e) {
         $post = null;
     }

@@ -870,15 +870,17 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
       const site = card.dataset.site || "";
       nameEl.textContent = name;
       descEl.textContent = desc || "Parceiro estratégico do Brasil DNA.";
+      const logoWrap = logoEl.closest(".client-modal__logo-wrap");
       if (logo) {
          logoEl.src = logo;
          logoEl.alt = name;
          logoEl.hidden = false;
          initials.hidden = true;
+         if (logoWrap) logoWrap.hidden = false;
       } else {
          logoEl.hidden = true;
-         initials.textContent = name.substring(0, 2).toUpperCase();
-         initials.hidden = false;
+         initials.hidden = true;
+         if (logoWrap) logoWrap.hidden = true;
       }
       linkEl.href = site || "#";
       lastFocused = document.activeElement;

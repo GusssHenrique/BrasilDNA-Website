@@ -16,6 +16,10 @@ if ($id !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validarCSRF($_POST['csrf_token'] ?? '')) {
+        die('Requisição inválida. Recarregue a página e tente novamente.');
+    }
+
     $nome     = trim($_POST['nome_parceiro'] ?? '');
     $titulo   = trim($_POST['titulo']        ?? '');
     $subtexto = trim($_POST['subtexto']      ?? '');
@@ -26,12 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $logo     = $banner['logo_url']   ?? null;
     $imagem   = $banner['imagem_url'] ?? null;
 
-    $uploadDir = __DIR__ . '/../uploads/';
-    $allowed   = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $uploadDir    = __DIR__ . '/../uploads/';
+    $allowedExts  = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
     if (!empty($_FILES['logo_file']['tmp_name'])) {
-        $ext = strtolower(pathinfo($_FILES['logo_file']['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, $allowed)) {
+        $ext   = strtolower(pathinfo($_FILES['logo_file']['name'], PATHINFO_EXTENSION));
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = finfo_file($finfo, $_FILES['logo_file']['tmp_name']);
+        finfo_close($finfo);
+        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
             $erro = 'Logo: formato inválido. Use JPG, PNG ou WebP.';
         } elseif ($_FILES['logo_file']['size'] > 2 * 1024 * 1024) {
             $erro = 'Logo muito grande. Máximo 2 MB.';
@@ -46,8 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erro) && !empty($_FILES['bg_file']['tmp_name'])) {
-        $ext = strtolower(pathinfo($_FILES['bg_file']['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, $allowed)) {
+        $ext   = strtolower(pathinfo($_FILES['bg_file']['name'], PATHINFO_EXTENSION));
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = finfo_file($finfo, $_FILES['bg_file']['tmp_name']);
+        finfo_close($finfo);
+        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
             $erro = 'Background: formato inválido. Use JPG, PNG ou WebP.';
         } elseif ($_FILES['bg_file']['size'] > 5 * 1024 * 1024) {
             $erro = 'Imagem de fundo muito grande. Máximo 5 MB.';
@@ -91,7 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
         } catch (\PDOException $e) {
-            $erro = 'Erro ao salvar: ' . $e->getMessage();
+            error_log('[BrasilDNA] super banner-form: ' . $e->getMessage());
+            $erro = 'Erro ao salvar. Tente novamente.';
         }
         if (empty($erro)) {
             header('Location: banners.php');
@@ -137,6 +149,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <form method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
 
   <div class="post-form-layout">
 

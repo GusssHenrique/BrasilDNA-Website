@@ -16,9 +16,13 @@ if ($id !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validarCSRF($_POST['csrf_token'] ?? '')) {
+        die('Requisição inválida. Recarregue a página e tente novamente.');
+    }
+
     $titulo          = trim($_POST['titulo']          ?? '');
     $resumo          = trim($_POST['resumo']          ?? '');
-    $conteudo        = $_POST['conteudo']              ?? '';
+    $conteudo        = strip_tags($_POST['conteudo'] ?? '', '<p><br><strong><em><b><i><ul><ol><li><h2><h3><blockquote><a><img><span>');
     $regiao          = trim($_POST['regiao']          ?? '');
     $status          = in_array($_POST['status'] ?? '', ['rascunho', 'publicado'])
                          ? $_POST['status'] : 'rascunho';
@@ -26,10 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagem = $post['imagem'] ?? null;
 
     if (!empty($_FILES['imagem_file']['tmp_name'])) {
-        $uploadDir = __DIR__ . '/../uploads/';
-        $ext       = strtolower(pathinfo($_FILES['imagem_file']['name'], PATHINFO_EXTENSION));
-        $allowed   = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        if (!in_array($ext, $allowed)) {
+        $uploadDir    = __DIR__ . '/../uploads/';
+        $ext          = strtolower(pathinfo($_FILES['imagem_file']['name'], PATHINFO_EXTENSION));
+        $allowedExts  = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $finfo        = finfo_open(FILEINFO_MIME_TYPE);
+        $mime         = finfo_file($finfo, $_FILES['imagem_file']['tmp_name']);
+        finfo_close($finfo);
+        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
             $erro = 'Formato inválido. Use JPG, PNG, GIF ou WebP.';
         } elseif ($_FILES['imagem_file']['size'] > 5 * 1024 * 1024) {
             $erro = 'Imagem muito grande. Máximo 5 MB.';
@@ -74,7 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
         } catch (\PDOException $e) {
-            $erro = 'Erro ao salvar: ' . $e->getMessage();
+            error_log('[BrasilDNA] super post-form: ' . $e->getMessage());
+            $erro = 'Erro ao salvar. Tente novamente.';
         }
         if (empty($erro)) {
             header('Location: index.php');
@@ -118,6 +127,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php endif; ?>
 
 <form id="post-form" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
   <input type="hidden" name="status"   id="status-field"   value="<?= htmlspecialchars($vStatus) ?>">
   <input type="hidden" name="conteudo" id="conteudo-field" value="">
 

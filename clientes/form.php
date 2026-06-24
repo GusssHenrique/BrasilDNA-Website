@@ -1,6 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../includes/conexao.php';
+
+// Carrega auth do tipo correto para ter acesso às funções CSRF/sessão
+if (!empty($_SESSION['admin_tipo']) && $_SESSION['admin_tipo'] === 'super_admin') {
+    require_once __DIR__ . '/../super-admin/includes/auth.php';
+} else {
+    require_once __DIR__ . '/../admin/includes/auth.php';
+}
 
 if (empty($_SESSION['admin_id'])) {
     header('Location: ../admin/login.php');
@@ -19,23 +28,27 @@ if ($id !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validarCSRF($_POST['csrf_token'] ?? '')) {
+        die('Requisição inválida. Recarregue a página e tente novamente.');
+    }
+
     $titulo    = trim($_POST['titulo']     ?? '');
     $descricao = trim($_POST['descricao']  ?? '');
     $iframe    = trim($_POST['iframe']     ?? '');
-    $video_tipo = trim($_POST['video_tipo'] ?? 'iframe');
+    $midia_tipo = trim($_POST['midia_tipo'] ?? 'iframe');
     $facebook  = trim($_POST['facebook']   ?? '');
     $instagram = trim($_POST['instagram']  ?? '');
     $linkedin  = trim($_POST['linkedin']   ?? '');
     $site      = trim($_POST['site']       ?? '');
     $youtube   = trim($_POST['youtube']    ?? '');
     $link_guia = trim($_POST['link_guia']  ?? '');
-    $logo      = $cliente['logo']  ?? null;
-    $video     = $cliente['video'] ?? null;
+    $logo         = $cliente['logo']         ?? null;
+    $imagem_fundo = $cliente['imagem_fundo'] ?? null;
 
-    if ($video_tipo === 'upload') {
+    if ($midia_tipo === 'imagem') {
         $iframe = '';
-    } elseif ($video_tipo === 'iframe') {
-        $video = null;
+    } elseif ($midia_tipo === 'iframe') {
+        $imagem_fundo = null;
     }
 
     if ($titulo === '') {
@@ -43,9 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erro) && !empty($_FILES['logo_file']['tmp_name'])) {
-        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
-        $ext     = strtolower(pathinfo($_FILES['logo_file']['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, $allowed)) {
+        $allowedExts  = ['jpg', 'jpeg', 'png', 'webp'];
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+        $ext          = strtolower(pathinfo($_FILES['logo_file']['name'], PATHINFO_EXTENSION));
+        $finfo        = finfo_open(FILEINFO_MIME_TYPE);
+        $mime         = finfo_file($finfo, $_FILES['logo_file']['tmp_name']);
+        finfo_close($finfo);
+        $allowed = $allowedExts; // mantém compatibilidade abaixo
+        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
             $erro = 'Logo: formato inválido. Use JPG, PNG ou WebP.';
         } elseif ($_FILES['logo_file']['size'] > 2 * 1024 * 1024) {
             $erro = 'Logo muito grande. Máximo 2 MB.';
@@ -60,23 +78,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (empty($erro) && !empty($_FILES['video_file']['tmp_name'])) {
-        $allowedVid = ['mp4', 'webm', 'ogg', 'mov'];
-        $extV = strtolower(pathinfo($_FILES['video_file']['name'], PATHINFO_EXTENSION));
-        if (!in_array($extV, $allowedVid)) {
-            $erro = 'Vídeo: formato inválido. Use MP4, WebM, OGG ou MOV.';
-        } elseif ($_FILES['video_file']['size'] > 200 * 1024 * 1024) {
-            $erro = 'Vídeo muito grande. Máximo 200 MB.';
+    if (empty($erro) && !empty($_FILES['imagem_fundo_file']['tmp_name'])) {
+        $allowedExtsF  = ['jpg', 'jpeg', 'png', 'webp'];
+        $allowedMimesF = ['image/jpeg', 'image/png', 'image/webp'];
+        $extF = strtolower(pathinfo($_FILES['imagem_fundo_file']['name'], PATHINFO_EXTENSION));
+        $finfoF = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeF  = finfo_file($finfoF, $_FILES['imagem_fundo_file']['tmp_name']);
+        finfo_close($finfoF);
+        if (!in_array($extF, $allowedExtsF) || !in_array($mimeF, $allowedMimesF)) {
+            $erro = 'Imagem de fundo: formato inválido. Use JPG, PNG ou WebP.';
+        } elseif ($_FILES['imagem_fundo_file']['size'] > 5 * 1024 * 1024) {
+            $erro = 'Imagem de fundo muito grande. Máximo 5 MB.';
         } else {
-            $vfilename = uniqid('video_') . '.' . $extV;
+            $fFilename = uniqid('fundo_') . '.' . $extF;
             $uploadDir = __DIR__ . '/../uploads/';
-            if (move_uploaded_file($_FILES['video_file']['tmp_name'], $uploadDir . $vfilename)) {
-                if ($video && file_exists(__DIR__ . '/../' . $video)) {
-                    @unlink(__DIR__ . '/../' . $video);
+            if (move_uploaded_file($_FILES['imagem_fundo_file']['tmp_name'], $uploadDir . $fFilename)) {
+                if ($imagem_fundo && file_exists(__DIR__ . '/../' . $imagem_fundo)) {
+                    @unlink(__DIR__ . '/../' . $imagem_fundo);
                 }
-                $video = 'uploads/' . $vfilename;
+                $imagem_fundo = 'uploads/' . $fFilename;
             } else {
-                $erro = 'Falha ao salvar o vídeo.';
+                $erro = 'Falha ao salvar a imagem de fundo.';
             }
         }
     }
@@ -86,34 +108,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id !== null) {
                 $stmt = $pdo->prepare(
                     'UPDATE clientes SET titulo=:titulo, logo=:logo, descricao=:descricao,
-                     iframe=:iframe, video=:video, facebook=:facebook, instagram=:instagram,
+                     iframe=:iframe, imagem_fundo=:imagem_fundo, facebook=:facebook, instagram=:instagram,
                      linkedin=:linkedin, site=:site, youtube=:youtube, link_guia=:link_guia
                      WHERE id=:id'
                 );
                 $stmt->execute([
                     ':titulo' => $titulo, ':logo' => $logo, ':descricao' => $descricao,
-                    ':iframe' => $iframe, ':video' => $video,
+                    ':iframe' => $iframe, ':imagem_fundo' => $imagem_fundo,
                     ':facebook' => $facebook, ':instagram' => $instagram,
                     ':linkedin' => $linkedin, ':site' => $site, ':youtube' => $youtube,
                     ':link_guia' => $link_guia, ':id' => $id,
                 ]);
             } else {
                 $stmt = $pdo->prepare(
-                    'INSERT INTO clientes (titulo, logo, descricao, iframe, video, facebook, instagram,
+                    'INSERT INTO clientes (titulo, logo, descricao, iframe, imagem_fundo, facebook, instagram,
                      linkedin, site, youtube, link_guia)
-                     VALUES (:titulo, :logo, :descricao, :iframe, :video, :facebook, :instagram,
+                     VALUES (:titulo, :logo, :descricao, :iframe, :imagem_fundo, :facebook, :instagram,
                      :linkedin, :site, :youtube, :link_guia)'
                 );
                 $stmt->execute([
                     ':titulo' => $titulo, ':logo' => $logo, ':descricao' => $descricao,
-                    ':iframe' => $iframe, ':video' => $video,
+                    ':iframe' => $iframe, ':imagem_fundo' => $imagem_fundo,
                     ':facebook' => $facebook, ':instagram' => $instagram,
                     ':linkedin' => $linkedin, ':site' => $site, ':youtube' => $youtube,
                     ':link_guia' => $link_guia,
                 ]);
             }
         } catch (\PDOException $e) {
-            $erro = 'Erro ao salvar: ' . $e->getMessage();
+            error_log('[BrasilDNA] clientes/form: ' . $e->getMessage());
+            $erro = 'Erro ao salvar. Tente novamente.';
         }
         if (empty($erro)) {
             header('Location: index.php');
@@ -131,9 +154,9 @@ $vLinkedin  = $_POST['linkedin']   ?? ($cliente['linkedin']   ?? '');
 $vSite      = $_POST['site']       ?? ($cliente['site']       ?? '');
 $vYoutube   = $_POST['youtube']    ?? ($cliente['youtube']    ?? '');
 $vLinkGuia  = $_POST['link_guia']  ?? ($cliente['link_guia']  ?? '');
-$vLogo      = $cliente['logo']     ?? '';
-$vVideo     = $cliente['video']    ?? '';
-$showUpload = !empty($vVideo) && empty($vIframe);
+$vLogo        = $cliente['logo']         ?? '';
+$vImagemFundo = $cliente['imagem_fundo'] ?? '';
+$showImagem   = !empty($vImagemFundo) && empty($vIframe);
 
 $pageTitle   = $id !== null ? 'Editar Cliente' : 'Novo Cliente';
 $paginaAtiva = 'clientes';
@@ -163,6 +186,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
 <?php endif; ?>
 
 <form method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
 
   <div class="post-form-layout">
 
@@ -184,47 +208,47 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
                   rows="5" placeholder="Descreva o cliente..."><?= htmlspecialchars($vDescricao) ?></textarea>
       </div>
 
-      <!-- Vídeo de fundo: toggle iframe / upload -->
+      <!-- Mídia de fundo do card: toggle iframe / imagem -->
       <div class="adm-form__group">
-        <label class="adm-form__label">Vídeo de fundo do card</label>
+        <label class="adm-form__label">Mídia de fundo do card</label>
 
-        <input type="hidden" name="video_tipo" id="video-tipo" value="<?= $showUpload ? 'upload' : 'iframe' ?>">
+        <input type="hidden" name="midia_tipo" id="midia-tipo" value="<?= $showImagem ? 'imagem' : 'iframe' ?>">
         <div class="vid-toggle" id="vidToggle">
-          <button type="button" class="vid-toggle__btn<?= !$showUpload ? ' is-active' : '' ?>" data-target="vid-iframe-panel" data-tipo="iframe">
+          <button type="button" class="vid-toggle__btn<?= !$showImagem ? ' is-active' : '' ?>" data-target="vid-iframe-panel" data-tipo="iframe">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.07A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
             Iframe / Link
           </button>
-          <button type="button" class="vid-toggle__btn<?= $showUpload ? ' is-active' : '' ?>" data-target="vid-upload-panel" data-tipo="upload">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-            Upload de Vídeo
+          <button type="button" class="vid-toggle__btn<?= $showImagem ? ' is-active' : '' ?>" data-target="vid-imagem-panel" data-tipo="imagem">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4-4 4 4 4-6 4 6M3 6a1 1 0 011-1h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6z"/></svg>
+            Upload de Imagem
           </button>
         </div>
 
         <!-- Painel: Iframe -->
-        <div id="vid-iframe-panel" class="vid-panel" style="display:<?= !$showUpload ? 'block' : 'none' ?>">
+        <div id="vid-iframe-panel" class="vid-panel" style="display:<?= !$showImagem ? 'block' : 'none' ?>">
           <textarea class="adm-form__input" id="iframe" name="iframe"
                     rows="4" placeholder='<iframe src="https://www.youtube.com/embed/..." ...></iframe>'><?= htmlspecialchars($vIframe) ?></textarea>
           <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">Cole o código &lt;iframe&gt; do YouTube, Vimeo ou qualquer embed.</p>
         </div>
 
-        <!-- Painel: Upload de vídeo -->
-        <div id="vid-upload-panel" class="vid-panel" style="display:<?= $showUpload ? 'block' : 'none' ?>">
-          <?php if ($vVideo): ?>
-            <video id="video-preview" src="<?= htmlspecialchars('../' . $vVideo, ENT_QUOTES, 'UTF-8') ?>"
-                   muted playsinline controls
-                   style="width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;background:#000;object-fit:contain;"></video>
+        <!-- Painel: Upload de imagem de fundo -->
+        <div id="vid-imagem-panel" class="vid-panel" style="display:<?= $showImagem ? 'block' : 'none' ?>">
+          <?php if ($vImagemFundo): ?>
+            <img id="fundo-preview" src="<?= htmlspecialchars('../' . $vImagemFundo, ENT_QUOTES, 'UTF-8') ?>"
+                 alt="Imagem de fundo atual"
+                 style="width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
           <?php else: ?>
-            <video id="video-preview" src="" muted playsinline controls
-                   style="display:none;width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;background:#000;object-fit:contain;"></video>
+            <img id="fundo-preview" src="" alt=""
+                 style="display:none;width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
           <?php endif; ?>
-          <label class="post-img-upload" for="video-upload" style="padding:20px 16px;">
+          <label class="post-img-upload" for="fundo-upload" style="padding:20px 16px;">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>
-            <span id="video-label">Enviar vídeo</span>
+            <span id="fundo-label">Enviar imagem de fundo</span>
           </label>
-          <input type="file" id="video-upload" name="video_file" accept="video/mp4,video/webm,video/ogg,video/quicktime" style="display:none;">
-          <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">MP4, WebM, OGG ou MOV. Máximo 200 MB.</p>
+          <input type="file" id="fundo-upload" name="imagem_fundo_file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">JPG, PNG ou WebP. Máximo 5 MB.</p>
         </div>
       </div>
 
@@ -353,28 +377,32 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
     reader.readAsDataURL(file);
   });
 
-  /* video toggle */
-  var tipoInput = document.getElementById('video-tipo');
+  /* mídia toggle */
+  var midiaInput = document.getElementById('midia-tipo');
   document.querySelectorAll('.vid-toggle__btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       document.querySelectorAll('.vid-toggle__btn').forEach(function (b) { b.classList.remove('is-active'); });
       this.classList.add('is-active');
       document.querySelectorAll('.vid-panel').forEach(function (p) { p.style.display = 'none'; });
       document.getElementById(this.dataset.target).style.display = 'block';
-      tipoInput.value = this.dataset.tipo;
+      midiaInput.value = this.dataset.tipo;
     });
   });
 
-  /* video file preview */
-  var vidInput   = document.getElementById('video-upload');
-  var vidPreview = document.getElementById('video-preview');
-  var vidLabel   = document.getElementById('video-label');
-  vidInput.addEventListener('change', function () {
+  /* imagem fundo preview */
+  var fundoInput   = document.getElementById('fundo-upload');
+  var fundoPreview = document.getElementById('fundo-preview');
+  var fundoLabel   = document.getElementById('fundo-label');
+  fundoInput.addEventListener('change', function () {
     var file = this.files[0];
     if (!file) return;
-    vidPreview.src = URL.createObjectURL(file);
-    vidPreview.style.display = 'block';
-    vidLabel.textContent = file.name;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      fundoPreview.src = e.target.result;
+      fundoPreview.style.display = 'block';
+      fundoLabel.textContent = file.name;
+    };
+    reader.readAsDataURL(file);
   });
 }());
 </script>

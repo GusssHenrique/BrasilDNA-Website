@@ -20,6 +20,15 @@ if (!$banner || empty($banner['link_url'])) {
 $pdo->prepare('UPDATE banners SET cliques = cliques + 1 WHERE id = :id')
     ->execute([':id' => $id]);
 
-header('Location: ' . $banner['link_url']);
+require_once __DIR__ . '/includes/stats.php';
+registrarStat($pdo, 'banner', $id, 'cliques');
+
+$url = $banner['link_url'];
+if (!filter_var($url, FILTER_VALIDATE_URL) || !in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'])) {
+    header('Location: index.php');
+    exit;
+}
+
+header('Location: ' . $url);
 exit;
 

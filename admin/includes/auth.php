@@ -1,20 +1,21 @@
 <?php
-/**
- * Funções de autenticação.
- *
- * Este arquivo cuida de duas coisas:
- *  1. Iniciar a sessão (memória entre páginas)
- *  2. Oferecer uma função pronta para proteger páginas que só
- *     o admin logado pode ver.
- */
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 function estaLogado(): bool
 {
-    return isset($_SESSION['admin_id']) && ($_SESSION['admin_tipo'] ?? '') === 'admin';
+    if (!isset($_SESSION['admin_id']) || ($_SESSION['admin_tipo'] ?? '') !== 'admin') {
+        return false;
+    }
+    // Session timeout: 2 horas de inatividade
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 7200)) {
+        session_unset();
+        session_destroy();
+        return false;
+    }
+    $_SESSION['last_activity'] = time();
+    return true;
 }
 
 function exigirLogin(): void
@@ -23,4 +24,17 @@ function exigirLogin(): void
         header('Location: login.php');
         exit;
     }
+}
+
+function gerarCSRF(): string
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function validarCSRF(string $token): bool
+{
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }

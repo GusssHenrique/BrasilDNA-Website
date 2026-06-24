@@ -8,26 +8,31 @@ $msg     = '';
 $msgTipo = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome      = trim($_POST['nome']  ?? '');
-    $email     = trim($_POST['email'] ?? '');
-    $senha     = $_POST['senha'] ?? '';
-    $tipoNovo  = in_array($_POST['tipo'] ?? '', ['admin', 'super_admin']) ? $_POST['tipo'] : 'admin';
-
-    if (!$nome || !$email || !$senha) {
-        $msg     = 'Preencha todos os campos.';
+    if (!validarCSRF($_POST['csrf_token'] ?? '')) {
+        $msg     = 'Requisição inválida. Tente novamente.';
         $msgTipo = 'err';
     } else {
-        $check = $pdo->prepare('SELECT id FROM admins WHERE email = :e');
-        $check->execute([':e' => $email]);
-        if ($check->fetch()) {
-            $msg     = 'Já existe um admin com esse email.';
+        $nome     = trim($_POST['nome']  ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $senha    = $_POST['senha'] ?? '';
+        $tipoNovo = in_array($_POST['tipo'] ?? '', ['admin', 'super_admin']) ? $_POST['tipo'] : 'admin';
+
+        if (!$nome || !$email || !$senha) {
+            $msg     = 'Preencha todos os campos.';
             $msgTipo = 'err';
         } else {
-            $hash = password_hash($senha, PASSWORD_DEFAULT);
-            $pdo->prepare('INSERT INTO admins (nome, email, senha, tipo) VALUES (:n, :e, :s, :t)')
-                ->execute([':n' => $nome, ':e' => $email, ':s' => $hash, ':t' => $tipoNovo]);
-            $msg     = 'Admin criado com sucesso.';
-            $msgTipo = 'ok';
+            $check = $pdo->prepare('SELECT id FROM admins WHERE email = :e');
+            $check->execute([':e' => $email]);
+            if ($check->fetch()) {
+                $msg     = 'Já existe um admin com esse email.';
+                $msgTipo = 'err';
+            } else {
+                $hash = password_hash($senha, PASSWORD_DEFAULT);
+                $pdo->prepare('INSERT INTO admins (nome, email, senha, tipo) VALUES (:n, :e, :s, :t)')
+                    ->execute([':n' => $nome, ':e' => $email, ':s' => $hash, ':t' => $tipoNovo]);
+                $msg     = 'Admin criado com sucesso.';
+                $msgTipo = 'ok';
+            }
         }
     }
 }
@@ -99,6 +104,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 <div class="adm-card" style="max-width:480px;">
   <h2 style="font-size:16px;font-weight:600;margin-bottom:20px;">Novo Admin</h2>
   <form method="POST" class="adm-form">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
     <div class="adm-form__group">
       <label class="adm-form__label">Nome</label>
       <input class="adm-form__input" type="text" name="nome"

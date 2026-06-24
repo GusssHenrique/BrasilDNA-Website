@@ -60,6 +60,17 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
     </div>
 
     <nav class="adm-sidebar__nav">
+      <div class="adm-sidebar__label">Visão geral</div>
+
+      <a href="<?= $adminBase ?>painel.php" class="adm-sidebar__link <?= $paginaAtiva === 'painel' ? 'is-active' : '' ?>">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="9" height="9" rx="1.5"/><rect x="13" y="2" width="9" height="4" rx="1.5"/>
+          <rect x="13" y="9" width="9" height="4" rx="1.5"/><rect x="2" y="13" width="9" height="9" rx="1.5"/>
+          <rect x="13" y="15" width="9" height="7" rx="1.5"/>
+        </svg>
+        Painel Geral
+      </a>
+
       <div class="adm-sidebar__label">Conteúdo</div>
 
       <a href="<?= $adminBase ?>index.php" class="adm-sidebar__link <?= $paginaAtiva === 'posts' ? 'is-active' : '' ?>">

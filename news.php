@@ -5,6 +5,12 @@ $posts = [];
 try {
     $stmt  = $pdo->query('SELECT * FROM posts WHERE status = "publicado" ORDER BY data_publicacao IS NULL ASC, data_publicacao ASC');
     $posts = $stmt->fetchAll();
+    if (!empty($posts)) {
+        require_once __DIR__ . '/includes/stats.php';
+        foreach ($posts as $p) {
+            registrarStat($pdo, 'post', (int) $p['id'], 'visualizacoes');
+        }
+    }
 } catch (\PDOException $e) {
     $posts = [];
 }
