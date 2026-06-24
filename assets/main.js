@@ -861,13 +861,15 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    const nameEl   = document.getElementById("clientModalName");
    const descEl   = document.getElementById("clientModalDesc");
    const linkEl   = document.getElementById("clientModalLink");
+   const videoWrap = document.getElementById("clientModalVideo");
    let lastFocused = null;
 
    function openModal(card) {
-      const name = card.dataset.name || "";
-      const logo = card.dataset.logo || "";
-      const desc = card.dataset.desc || "";
-      const site = card.dataset.site || "";
+      const name   = card.dataset.name || "";
+      const logo   = card.dataset.logo || "";
+      const desc   = card.dataset.desc || "";
+      const site   = card.dataset.site || "";
+      const iframe = card.dataset.iframe || "";
       nameEl.textContent = name;
       descEl.textContent = desc || "Parceiro estratégico do Brasil DNA.";
       const logoWrap = logoEl.closest(".client-modal__logo-wrap");
@@ -882,6 +884,19 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
          initials.hidden = true;
          if (logoWrap) logoWrap.hidden = true;
       }
+      if (videoWrap) {
+         if (iframe) {
+            if (iframe.trimStart().startsWith("<")) {
+               videoWrap.innerHTML = iframe;
+            } else {
+               videoWrap.innerHTML = '<iframe src="' + iframe + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            }
+            videoWrap.hidden = false;
+         } else {
+            videoWrap.innerHTML = "";
+            videoWrap.hidden = true;
+         }
+      }
       linkEl.href = site || "#";
       lastFocused = document.activeElement;
       modal.removeAttribute("hidden");
@@ -893,6 +908,7 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
 
    function closeModal() {
       modal.classList.remove("is-open");
+      if (videoWrap) { videoWrap.innerHTML = ""; videoWrap.hidden = true; }
       setTimeout(() => {
          modal.setAttribute("hidden", "");
          document.body.style.overflow = "";

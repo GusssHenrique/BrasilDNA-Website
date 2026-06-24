@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $nome     = trim($_POST['nome_parceiro'] ?? '');
-    $titulo   = trim($_POST['titulo']        ?? '');
-    $subtexto = trim($_POST['subtexto']      ?? '');
-    $botao    = trim($_POST['botao_texto']   ?? 'Learn More');
+    $titulo   = '';
+    $subtexto = '';
+    $botao    = '';
     $link     = trim($_POST['link_url']      ?? '');
     $ativo    = isset($_POST['ativo']) ? 1 : 0;
-    $ordem    = (int) ($_POST['ordem']       ?? 0);
+    $ordem    = 0;
     $logo     = $banner['logo_url']   ?? null;
     $imagem   = $banner['imagem_url'] ?? null;
 
@@ -72,10 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($nome === '') {
-        $erro = 'O nome do parceiro é obrigatório.';
-    }
-
     if (empty($erro)) {
         try {
             if ($id !== null) {
@@ -113,12 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $vNome     = $_POST['nome_parceiro'] ?? ($banner['nome_parceiro'] ?? '');
-$vTitulo   = $_POST['titulo']        ?? ($banner['titulo']        ?? '');
-$vSubtexto = $_POST['subtexto']      ?? ($banner['subtexto']      ?? '');
-$vBotao    = $_POST['botao_texto']   ?? ($banner['botao_texto']   ?? 'Learn More');
 $vLink     = $_POST['link_url']      ?? ($banner['link_url']      ?? '');
 $vAtivo    = isset($_POST['ativo'])  ? (int) $_POST['ativo'] : (int) ($banner['ativo'] ?? 1);
-$vOrdem    = $_POST['ordem']         ?? ($banner['ordem']         ?? 0);
 $vLogo     = $banner['logo_url']     ?? '';
 $vImagem   = $banner['imagem_url']   ?? '';
 
@@ -163,37 +155,10 @@ require_once __DIR__ . '/includes/sidebar.php';
       </div>
 
       <div class="adm-form__group">
-        <label class="adm-form__label" for="titulo">
-          Título principal
-          <span class="post-label-hint">(headline no banner)</span>
-        </label>
-        <input class="adm-form__input" type="text" id="titulo" name="titulo"
-               placeholder="Ex: Your trusted DMC in Brazil"
-               value="<?= htmlspecialchars($vTitulo) ?>">
-      </div>
-
-      <div class="adm-form__group">
-        <label class="adm-form__label" for="subtexto">
-          Tagline
-          <span class="post-label-hint">(texto abaixo do logo)</span>
-        </label>
-        <input class="adm-form__input" type="text" id="subtexto" name="subtexto"
-               placeholder="Ex: Turn inspiration into itineraries"
-               value="<?= htmlspecialchars($vSubtexto) ?>">
-      </div>
-
-      <div class="adm-form__group">
-        <label class="adm-form__label" for="botao_texto">Texto do botão CTA</label>
-        <input class="adm-form__input" type="text" id="botao_texto" name="botao_texto"
-               placeholder="Ex: Discover Services"
-               value="<?= htmlspecialchars($vBotao) ?>">
-      </div>
-
-      <div class="adm-form__group">
-        <label class="adm-form__label" for="link_url">URL de destino</label>
+        <label class="adm-form__label" for="link_url">URL de destino <span style="color:var(--action)">*</span></label>
         <input class="adm-form__input" type="url" id="link_url" name="link_url"
                placeholder="https://..."
-               value="<?= htmlspecialchars($vLink) ?>">
+               value="<?= htmlspecialchars($vLink) ?>" required>
       </div>
 
     </div>
@@ -241,13 +206,6 @@ require_once __DIR__ . '/includes/sidebar.php';
                  style="width:18px;height:18px;accent-color:var(--action);cursor:pointer;">
           Exibir no site
         </label>
-      </div>
-
-      <div class="post-side-section">
-        <label class="post-side-label" for="ordem">Ordem de exibição</label>
-        <input class="adm-form__input" type="number" id="ordem" name="ordem"
-               min="0" value="<?= (int) $vOrdem ?>" style="max-width:100px;">
-        <p style="font-size:.78rem;color:var(--text-sec);margin-top:6px;">Menor número aparece primeiro.</p>
       </div>
 
       <div class="post-side-actions">

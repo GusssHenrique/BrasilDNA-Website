@@ -23,7 +23,10 @@ $pdo->prepare('UPDATE banners SET cliques = cliques + 1 WHERE id = :id')
 require_once __DIR__ . '/includes/stats.php';
 registrarStat($pdo, 'banner', $id, 'cliques');
 
-$url = $banner['link_url'];
+$url = trim($banner['link_url']);
+if (!preg_match('#^https?://#i', $url)) {
+    $url = 'https://' . $url;
+}
 if (!filter_var($url, FILTER_VALIDATE_URL) || !in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'])) {
     header('Location: index.php');
     exit;

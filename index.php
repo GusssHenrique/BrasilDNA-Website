@@ -11,7 +11,7 @@ $banners_parceiros = [];
 $clientes_home = [];
 try {
     require_once __DIR__ . '/includes/conexao.php';
-    $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY ordem ASC, criado_em DESC");
+    $stmt = $pdo->query("SELECT * FROM banners WHERE ativo = 1 ORDER BY criado_em DESC");
     $banners_parceiros = $stmt->fetchAll();
     if (!empty($banners_parceiros)) {
         require_once __DIR__ . '/includes/stats.php';
@@ -374,21 +374,20 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
       <source src="assets/video/video-horizzo.mp4" type="video/mp4">
     </video>
     <div class="clients-video-panel__overlay"></div>
+    <div class="clients-video-panel__text" data-reveal>
+      <span class="label-tag label-tag--light">Our Clients</span>
+      <h2>Companies that <em>trust Brasil DNA</em></h2>
+      <p class="clients-intro__desc">Brasil DNA proudly collaborates with a curated selection of Brazilian tourism companies, offering authentic experiences, exceptional services, and unique opportunities to showcase the best of Brazil.</p>
+      <div class="clients-counter-pill">
+        <strong><?= $_totalPartners ?>+</strong>
+        <span>strategic partners</span>
+      </div>
+    </div>
   </div>
 
   <!-- Painel direito: conteúdo -->
   <div class="clients-left">
     <div class="clients-left-inner">
-
-      <div class="clients-intro" data-reveal>
-        <span class="label-tag label-tag--light">Our Clients</span>
-        <h2>Companies that <em>trust Brasil DNA</em></h2>
-        <p class="clients-intro__desc">Brasil DNA proudly collaborates with a curated selection of Brazilian tourism companies, offering authentic experiences, exceptional services, and unique opportunities to showcase the best of Brazil.</p>
-        <div class="clients-counter-pill">
-          <strong><?= $_totalPartners ?>+</strong>
-          <span>strategic partners</span>
-        </div>
-      </div>
 
       <!-- Mosaico de parceiros -->
       <div class="clients-mosaic">
@@ -403,15 +402,9 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
              data-name="<?= htmlspecialchars($sc0['nome']) ?>"
              data-logo="<?= htmlspecialchars($sc0['logo'], ENT_QUOTES, 'UTF-8') ?>"
              data-desc="<?= htmlspecialchars($sc0['desc'], ENT_QUOTES, 'UTF-8') ?>"
-             data-site="<?= htmlspecialchars($sc0['link'], ENT_QUOTES, 'UTF-8') ?>">
-          <?php if ($yt0): ?>
-            <div class="client-card__video-wrap" aria-hidden="true">
-              <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($yt0, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($yt0, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
-                frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>
-            </div>
-          <?php else: ?>
-            <img class="client-card__bg" src="<?= htmlspecialchars($sc0['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
-          <?php endif; ?>
+             data-site="<?= htmlspecialchars($sc0['link'], ENT_QUOTES, 'UTF-8') ?>"
+             <?php if ($yt0): ?>data-iframe="https://www.youtube.com/embed/<?= htmlspecialchars($yt0, ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
+          <img class="client-card__bg" src="<?= htmlspecialchars($sc0['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
           <div class="client-card__overlay"></div>
           <span class="client-card__plus" aria-hidden="true">+</span>
           <div class="client-card__body">
@@ -430,15 +423,9 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
              data-name="<?= htmlspecialchars($sc['nome']) ?>"
              data-logo="<?= htmlspecialchars($sc['logo'], ENT_QUOTES, 'UTF-8') ?>"
              data-desc="<?= htmlspecialchars($sc['desc'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-             data-site="<?= htmlspecialchars($sc['link'], ENT_QUOTES, 'UTF-8') ?>">
-          <?php if ($syt): ?>
-            <div class="client-card__video-wrap" aria-hidden="true">
-              <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($syt, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($syt, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
-                frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>
-            </div>
-          <?php else: ?>
-            <img class="client-card__bg" src="<?= htmlspecialchars($sc['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
-          <?php endif; ?>
+             data-site="<?= htmlspecialchars($sc['link'], ENT_QUOTES, 'UTF-8') ?>"
+             <?php if ($syt): ?>data-iframe="https://www.youtube.com/embed/<?= htmlspecialchars($syt, ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
+          <img class="client-card__bg" src="<?= htmlspecialchars($sc['img'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
           <div class="client-card__overlay"></div>
           <span class="client-card__plus" aria-hidden="true">+</span>
           <div class="client-card__body">
@@ -449,17 +436,10 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
         <?php endforeach; ?>
 
         <?php
-        function _ytId(string $html): ?string {
-            if (preg_match('#(?:youtube\.com[^\'"]*(?:embed/|v=)|youtu\.be/)([a-zA-Z0-9_-]{11})#', $html, $m)) {
-                return $m[1];
-            }
-            return null;
-        }
         foreach ($clientes_home as $c):
-          $sz     = $_sizePool[$_si % count($_sizePool)]; $_si++;
-          $ytId    = !empty($c['iframe']) ? _ytId($c['iframe']) : null;
+          $sz       = $_sizePool[$_si % count($_sizePool)]; $_si++;
           $hasFundo = !empty($c['imagem_fundo']);
-          $solid   = $ytId === null && !$hasFundo;
+          $solid    = !$hasFundo;
         ?>
         <div class="client-card client-card--mosaic<?= $solid ? ' client-card--solid' : '' ?> client-card--<?= $sz ?>"
              role="button" tabindex="0"
@@ -467,17 +447,9 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
              data-name="<?= htmlspecialchars($c['titulo']) ?>"
              data-logo="<?= htmlspecialchars($c['logo'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
              data-desc="<?= htmlspecialchars($c['descricao'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-             data-site="<?= htmlspecialchars($c['link_guia'] ?: $c['site'] ?: '', ENT_QUOTES, 'UTF-8') ?>">
-          <?php if ($ytId): ?>
-            <div class="client-card__video-wrap" aria-hidden="true">
-              <iframe
-                src="https://www.youtube.com/embed/<?= htmlspecialchars($ytId, ENT_QUOTES, 'UTF-8') ?>?autoplay=1&mute=1&loop=1&modestbranding=1&playsinline=1&playlist=<?= htmlspecialchars($ytId, ENT_QUOTES, 'UTF-8') ?>&controls=0&showinfo=0&rel=0&disablekb=1&iv_load_policy=3"
-                frameborder="0"
-                allow="autoplay; encrypted-media"
-                loading="lazy">
-              </iframe>
-            </div>
-          <?php elseif ($hasFundo): ?>
+             data-site="<?= htmlspecialchars($c['link_guia'] ?: $c['site'] ?: '', ENT_QUOTES, 'UTF-8') ?>"
+             <?php if (!empty($c['iframe'])): ?>data-iframe="<?= htmlspecialchars($c['iframe'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
+          <?php if ($hasFundo): ?>
             <img class="client-card__bg" src="<?= htmlspecialchars($c['imagem_fundo'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
           <?php endif; ?>
           <div class="client-card__overlay"></div>
@@ -582,25 +554,6 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
           <?php endif; ?>
           <div class="partner-banner__overlay"></div>
 
-          <div class="partner-banner__left">
-            <?php if ($logoUrl): ?>
-              <img class="partner-banner__logo" src="<?= $logoUrl ?>" alt="<?= $partner ?>" loading="lazy">
-            <?php else: ?>
-              <span class="partner-banner__logo-text"><?= $partner ?></span>
-            <?php endif; ?>
-            <?php if ($subtexto): ?>
-              <p class="partner-banner__sub"><?= $subtexto ?></p>
-            <?php endif; ?>
-          </div>
-
-          <div class="partner-banner__right">
-            <?php if ($titulo): ?>
-              <p class="partner-banner__title"><?= $titulo ?></p>
-            <?php endif; ?>
-            <?php if ($btnTxt): ?>
-              <span class="partner-banner__btn"><?= $btnTxt ?></span>
-            <?php endif; ?>
-          </div>
         </a>
         <?php endforeach; ?>
       </div>
@@ -702,6 +655,7 @@ $_totalPartners = count($clientes_home) + count($_staticClients);
   <div class="client-modal__backdrop"></div>
   <div class="client-modal__panel">
     <button class="client-modal__close" aria-label="Fechar">&#x2715;</button>
+    <div id="clientModalVideo" class="client-modal__video-wrap" hidden></div>
     <div class="client-modal__logo-wrap">
       <img id="clientModalLogo" src="" alt="" class="client-modal__logo" hidden>
       <div id="clientModalInitials" class="client-modal__initials" hidden></div>

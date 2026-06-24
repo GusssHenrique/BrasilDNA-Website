@@ -35,7 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo    = trim($_POST['titulo']     ?? '');
     $descricao = trim($_POST['descricao']  ?? '');
     $iframe    = trim($_POST['iframe']     ?? '');
-    $midia_tipo = trim($_POST['midia_tipo'] ?? 'iframe');
+    // Aceita URL do YouTube (youtu.be ou youtube.com) e converte para embed URL
+    if ($iframe !== '' && !str_starts_with($iframe, '<')) {
+        if (preg_match('#(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([a-zA-Z0-9_-]{11})#', $iframe, $_m)) {
+            $iframe = 'https://www.youtube.com/embed/' . $_m[1];
+        }
+    }
     $facebook  = trim($_POST['facebook']   ?? '');
     $instagram = trim($_POST['instagram']  ?? '');
     $linkedin  = trim($_POST['linkedin']   ?? '');
@@ -44,12 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $link_guia = trim($_POST['link_guia']  ?? '');
     $logo         = $cliente['logo']         ?? null;
     $imagem_fundo = $cliente['imagem_fundo'] ?? null;
-
-    if ($midia_tipo === 'imagem') {
-        $iframe = '';
-    } elseif ($midia_tipo === 'iframe') {
-        $imagem_fundo = null;
-    }
 
     if ($titulo === '') {
         $erro = 'O título do cliente é obrigatório.';
@@ -156,7 +155,6 @@ $vYoutube   = $_POST['youtube']    ?? ($cliente['youtube']    ?? '');
 $vLinkGuia  = $_POST['link_guia']  ?? ($cliente['link_guia']  ?? '');
 $vLogo        = $cliente['logo']         ?? '';
 $vImagemFundo = $cliente['imagem_fundo'] ?? '';
-$showImagem   = !empty($vImagemFundo) && empty($vIframe);
 
 $pageTitle   = $id !== null ? 'Editar Cliente' : 'Novo Cliente';
 $paginaAtiva = 'clientes';
@@ -208,48 +206,33 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
                   rows="5" placeholder="Descreva o cliente..."><?= htmlspecialchars($vDescricao) ?></textarea>
       </div>
 
-      <!-- Mídia de fundo do card: toggle iframe / imagem -->
+      <!-- Imagem de fundo do card -->
       <div class="adm-form__group">
-        <label class="adm-form__label">Mídia de fundo do card</label>
+        <label class="adm-form__label">Imagem de fundo do card</label>
+        <?php if ($vImagemFundo): ?>
+          <img id="fundo-preview" src="<?= htmlspecialchars('../' . $vImagemFundo, ENT_QUOTES, 'UTF-8') ?>"
+               alt="Imagem de fundo atual"
+               style="width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
+        <?php else: ?>
+          <img id="fundo-preview" src="" alt=""
+               style="display:none;width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
+        <?php endif; ?>
+        <label class="post-img-upload" for="fundo-upload" style="padding:20px 16px;">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          <span id="fundo-label">Enviar imagem de fundo</span>
+        </label>
+        <input type="file" id="fundo-upload" name="imagem_fundo_file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+        <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">JPG, PNG ou WebP. Máximo 5 MB.</p>
+      </div>
 
-        <input type="hidden" name="midia_tipo" id="midia-tipo" value="<?= $showImagem ? 'imagem' : 'iframe' ?>">
-        <div class="vid-toggle" id="vidToggle">
-          <button type="button" class="vid-toggle__btn<?= !$showImagem ? ' is-active' : '' ?>" data-target="vid-iframe-panel" data-tipo="iframe">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.07A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
-            Iframe / Link
-          </button>
-          <button type="button" class="vid-toggle__btn<?= $showImagem ? ' is-active' : '' ?>" data-target="vid-imagem-panel" data-tipo="imagem">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4-4 4 4 4-6 4 6M3 6a1 1 0 011-1h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6z"/></svg>
-            Upload de Imagem
-          </button>
-        </div>
-
-        <!-- Painel: Iframe -->
-        <div id="vid-iframe-panel" class="vid-panel" style="display:<?= !$showImagem ? 'block' : 'none' ?>">
-          <textarea class="adm-form__input" id="iframe" name="iframe"
-                    rows="4" placeholder='<iframe src="https://www.youtube.com/embed/..." ...></iframe>'><?= htmlspecialchars($vIframe) ?></textarea>
-          <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">Cole o código &lt;iframe&gt; do YouTube, Vimeo ou qualquer embed.</p>
-        </div>
-
-        <!-- Painel: Upload de imagem de fundo -->
-        <div id="vid-imagem-panel" class="vid-panel" style="display:<?= $showImagem ? 'block' : 'none' ?>">
-          <?php if ($vImagemFundo): ?>
-            <img id="fundo-preview" src="<?= htmlspecialchars('../' . $vImagemFundo, ENT_QUOTES, 'UTF-8') ?>"
-                 alt="Imagem de fundo atual"
-                 style="width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
-          <?php else: ?>
-            <img id="fundo-preview" src="" alt=""
-                 style="display:none;width:100%;max-height:140px;border-radius:8px;margin-bottom:10px;object-fit:cover;">
-          <?php endif; ?>
-          <label class="post-img-upload" for="fundo-upload" style="padding:20px 16px;">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-            </svg>
-            <span id="fundo-label">Enviar imagem de fundo</span>
-          </label>
-          <input type="file" id="fundo-upload" name="imagem_fundo_file" accept="image/jpeg,image/png,image/webp" style="display:none;">
-          <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">JPG, PNG ou WebP. Máximo 5 MB.</p>
-        </div>
+      <!-- Vídeo do pop-up -->
+      <div class="adm-form__group">
+        <label class="adm-form__label" for="iframe">Vídeo do pop-up (iframe)</label>
+        <textarea class="adm-form__input" id="iframe" name="iframe"
+                  rows="3" placeholder='https://youtu.be/... ou https://www.youtube.com/watch?v=... ou código <iframe>'><?= htmlspecialchars($vIframe) ?></textarea>
+        <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">Cole o link do YouTube, Vimeo ou código &lt;iframe&gt;. Aparece no pop-up ao clicar no card.</p>
       </div>
 
     </div>
@@ -333,35 +316,8 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
   </div>
 </form>
 
-<style>
-.vid-toggle {
-  display: inline-flex;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.vid-toggle__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: transparent;
-  border: none;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-sec);
-  cursor: pointer;
-  transition: background .15s, color .15s;
-}
-.vid-toggle__btn:first-child { border-right: 1px solid var(--border); }
-.vid-toggle__btn.is-active   { background: var(--action); color: #fff; }
-.vid-panel { padding-top: 4px; }
-</style>
-
 <script>
 (function () {
-  /* logo preview */
   var logoInput   = document.getElementById('logo-upload');
   var logoPreview = document.getElementById('logo-preview');
   var logoLabel   = document.getElementById('logo-label');
@@ -377,19 +333,6 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
     reader.readAsDataURL(file);
   });
 
-  /* mídia toggle */
-  var midiaInput = document.getElementById('midia-tipo');
-  document.querySelectorAll('.vid-toggle__btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.vid-toggle__btn').forEach(function (b) { b.classList.remove('is-active'); });
-      this.classList.add('is-active');
-      document.querySelectorAll('.vid-panel').forEach(function (p) { p.style.display = 'none'; });
-      document.getElementById(this.dataset.target).style.display = 'block';
-      midiaInput.value = this.dataset.tipo;
-    });
-  });
-
-  /* imagem fundo preview */
   var fundoInput   = document.getElementById('fundo-upload');
   var fundoPreview = document.getElementById('fundo-preview');
   var fundoLabel   = document.getElementById('fundo-label');
