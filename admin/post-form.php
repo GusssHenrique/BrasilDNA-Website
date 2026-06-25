@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagem = $post['imagem'] ?? null;
 
     if (!empty($_FILES['imagem_file']['tmp_name'])) {
-        $uploadDir    = __DIR__ . '/../uploads/';
+        $uploadDir    = __DIR__ . '/../uploads/posts/';
         $ext          = strtolower(pathinfo($_FILES['imagem_file']['name'], PATHINFO_EXTENSION));
         $allowedExts  = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $filename = uniqid('img_') . '.' . $ext;
             if (move_uploaded_file($_FILES['imagem_file']['tmp_name'], $uploadDir . $filename)) {
-                $imagem = 'uploads/' . $filename;
+                $imagem = 'uploads/posts/' . $filename;
             } else {
                 $erro = 'Falha ao salvar a imagem no servidor.';
             }
@@ -129,7 +129,6 @@ require_once __DIR__ . '/includes/sidebar.php';
 <form id="post-form" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarCSRF()) ?>">
   <input type="hidden" name="status"   id="status-field"   value="<?= htmlspecialchars($vStatus) ?>">
-  <input type="hidden" name="conteudo" id="conteudo-field" value="">
 
   <div class="post-form-layout">
 
@@ -165,32 +164,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 
       <div class="adm-form__group">
         <label class="adm-form__label">Corpo do post</label>
-        <div class="post-editor-wrap">
-          <div class="post-editor-toolbar">
-            <button type="button" class="post-editor-btn" onclick="fmt('bold')"           title="Negrito"><b>B</b></button>
-            <button type="button" class="post-editor-btn" onclick="fmt('italic')"          title="Itálico"><i>I</i></button>
-            <button type="button" class="post-editor-btn" onclick="fmt('formatBlock','h2')" title="Título H2" style="font-size:12px;font-weight:700;">H2</button>
-            <button type="button" class="post-editor-btn" onclick="fmt('formatBlock','h3')" title="Título H3" style="font-size:12px;font-weight:700;">H3</button>
-            <button type="button" class="post-editor-btn" onclick="insertLink()" title="Inserir link">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
-              </svg>
-            </button>
-            <button type="button" class="post-editor-btn" onclick="insertImg()" title="Inserir imagem">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
-              </svg>
-            </button>
-          </div>
-          <div
-            class="post-editor-body"
-            contenteditable="true"
-            id="editor"
-            data-placeholder="Escreva o conteúdo do post aqui..."
-          ><?= $vConteudo ?></div>
-        </div>
+        <textarea id="editor" name="conteudo"><?= $vConteudo ?></textarea>
       </div>
 
     </div>
@@ -238,12 +212,12 @@ require_once __DIR__ . '/includes/sidebar.php';
         <button
           type="submit"
           class="btn btn-primary btn-full"
-          onclick="setStatus('publicado'); syncEditor();"
+          onclick="setStatus('publicado');"
         >Publicar</button>
         <button
           type="submit"
           class="btn btn-ghost btn-full"
-          onclick="setStatus('rascunho'); syncEditor();"
+          onclick="setStatus('rascunho');"
         >Salvar rascunho</button>
       </div>
 
@@ -252,33 +226,12 @@ require_once __DIR__ . '/includes/sidebar.php';
 </form>
 
 <script>
-function fmt(cmd, val) {
-  document.getElementById('editor').focus();
-  document.execCommand(cmd, false, val || null);
-}
-
-function insertLink() {
-  var url = prompt('URL do link:');
-  if (url) { document.getElementById('editor').focus(); document.execCommand('createLink', false, url); }
-}
-
-function insertImg() {
-  var url = prompt('URL da imagem:');
-  if (url) { document.getElementById('editor').focus(); document.execCommand('insertImage', false, url); }
-}
-
 function setStatus(val) {
   document.getElementById('status-field').value = val;
   document.querySelectorAll('.post-status-btn').forEach(function(b) {
     b.classList.toggle('is-active', b.dataset.status === val);
   });
 }
-
-function syncEditor() {
-  document.getElementById('conteudo-field').value = document.getElementById('editor').innerHTML;
-}
-
-document.getElementById('post-form').addEventListener('submit', syncEditor);
 
 document.getElementById('imagem-upload').addEventListener('change', function() {
   var file = this.files[0];
@@ -292,6 +245,25 @@ document.getElementById('imagem-upload').addEventListener('change', function() {
     label.textContent = file.name;
   };
   reader.readAsDataURL(file);
+});
+
+tinymce.init({
+  license_key: 'gpl',
+  selector: '#editor',
+  height: 450,
+  menubar: true,
+  plugins: 'link lists image table code autolink preview searchreplace wordcount emoticons',
+  toolbar: 'undo redo | styleselect | bold italic underline | ' +
+           'alignleft aligncenter alignright alignjustify | ' +
+           'bullist numlist outdent indent | link image table | code | ' +
+           'searchreplace preview emoticons',
+  content_style: 'body { font-family: Inter, sans-serif; font-size: 15px; }',
+  images_upload_url: '/BrasilDNA-Website/admin/upload_image.php',
+  automatic_uploads: true,
+  paste_data_images: true,
+  relative_urls: false,
+  remove_script_host: false,
+  convert_urls: true,
 });
 </script>
 

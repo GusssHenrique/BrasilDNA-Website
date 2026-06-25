@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
 CREATE TABLE IF NOT EXISTS `clientes` (
   `id`          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `titulo`      VARCHAR(200)  NOT NULL,
+  `tipo`        ENUM('destino','parceiro') NOT NULL DEFAULT 'destino',
+  `regiao`      VARCHAR(100)      NULL,
   `logo`        VARCHAR(500)      NULL,
   `descricao`   TEXT              NULL,
   `iframe`      TEXT              NULL,
@@ -98,6 +100,9 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `criado_em`   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Para bancos já existentes (adicionar tipo e regiao):
+-- ALTER TABLE `clientes` ADD COLUMN `tipo` ENUM('destino','parceiro') NOT NULL DEFAULT 'destino' AFTER `titulo`, ADD COLUMN `regiao` VARCHAR(100) NULL AFTER `tipo`;
 
 -- Para bancos já existentes (renomear video → imagem_fundo):
 -- ALTER TABLE `clientes` CHANGE `video` `imagem_fundo` VARCHAR(500) NULL;

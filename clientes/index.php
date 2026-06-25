@@ -67,6 +67,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
         <tr>
           <th>Logo</th>
           <th>Título</th>
+          <th>Tipo</th>
           <th>Redes Sociais</th>
           <th>Data</th>
           <th>Ações</th>
@@ -85,6 +86,14 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
             </td>
             <td>
               <div class="adm-table__title"><?= htmlspecialchars($c['titulo']) ?></div>
+            </td>
+            <td>
+              <?php $badge = ($c['tipo'] ?? 'destino') === 'parceiro' ? 'Parceiro' : 'Destino'; ?>
+              <span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:600;
+                background:<?= $badge === 'Destino' ? 'rgba(0,140,60,.15)' : 'rgba(0,80,180,.15)' ?>;
+                color:<?= $badge === 'Destino' ? '#00803a' : '#0050b4' ?>;">
+                <?= $badge ?>
+              </span>
             </td>
             <td>
               <div style="display:flex;gap:6px;flex-wrap:wrap;">

@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $logo     = $banner['logo_url']   ?? null;
     $imagem   = $banner['imagem_url'] ?? null;
 
-    $uploadDir    = __DIR__ . '/../uploads/';
+    $uploadDir    = __DIR__ . '/../uploads/banners/';
     $allowedExts  = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $filename = uniqid('logo_') . '.' . $ext;
             if (move_uploaded_file($_FILES['logo_file']['tmp_name'], $uploadDir . $filename)) {
-                $logo = 'uploads/' . $filename;
+                $logo = 'uploads/banners/' . $filename;
             } else {
                 $erro = 'Falha ao salvar o logo.';
             }
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $filename = uniqid('bg_') . '.' . $ext;
             if (move_uploaded_file($_FILES['bg_file']['tmp_name'], $uploadDir . $filename)) {
-                $imagem = 'uploads/' . $filename;
+                $imagem = 'uploads/banners/' . $filename;
             } else {
                 $erro = 'Falha ao salvar a imagem de fundo.';
             }

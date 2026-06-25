@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/conexao.php';
 
 $posts = [];
 try {
-    $stmt  = $pdo->query('SELECT * FROM posts WHERE status = "publicado" ORDER BY data_publicacao IS NULL ASC, data_publicacao ASC');
+    $stmt  = $pdo->query('SELECT * FROM posts WHERE status = "publicado" ORDER BY data_publicacao IS NULL ASC, data_publicacao DESC');
     $posts = $stmt->fetchAll();
     if (!empty($posts)) {
         require_once __DIR__ . '/includes/stats.php';

@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $titulo    = trim($_POST['titulo']     ?? '');
+    $tipo      = in_array($_POST['tipo'] ?? '', ['destino', 'parceiro']) ? $_POST['tipo'] : 'destino';
+    $regiao    = trim($_POST['regiao']     ?? '');
     $descricao = trim($_POST['descricao']  ?? '');
     $iframe    = trim($_POST['iframe']     ?? '');
     // Aceita URL do YouTube (youtu.be ou youtube.com) e converte para embed URL
@@ -68,9 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $erro = 'Logo muito grande. Máximo 2 MB.';
         } else {
             $filename  = uniqid('cliente_') . '.' . $ext;
-            $uploadDir = __DIR__ . '/../uploads/';
+            $uploadDir = __DIR__ . '/../uploads/clientes/';
             if (move_uploaded_file($_FILES['logo_file']['tmp_name'], $uploadDir . $filename)) {
-                $logo = 'uploads/' . $filename;
+                $logo = 'uploads/clientes/' . $filename;
             } else {
                 $erro = 'Falha ao salvar o logo.';
             }
@@ -90,12 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $erro = 'Imagem de fundo muito grande. Máximo 5 MB.';
         } else {
             $fFilename = uniqid('fundo_') . '.' . $extF;
-            $uploadDir = __DIR__ . '/../uploads/';
+            $uploadDir = __DIR__ . '/../uploads/clientes/';
             if (move_uploaded_file($_FILES['imagem_fundo_file']['tmp_name'], $uploadDir . $fFilename)) {
                 if ($imagem_fundo && file_exists(__DIR__ . '/../' . $imagem_fundo)) {
                     @unlink(__DIR__ . '/../' . $imagem_fundo);
                 }
-                $imagem_fundo = 'uploads/' . $fFilename;
+                $imagem_fundo = 'uploads/clientes/' . $fFilename;
             } else {
                 $erro = 'Falha ao salvar a imagem de fundo.';
             }
@@ -106,13 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             if ($id !== null) {
                 $stmt = $pdo->prepare(
-                    'UPDATE clientes SET titulo=:titulo, logo=:logo, descricao=:descricao,
+                    'UPDATE clientes SET titulo=:titulo, tipo=:tipo, regiao=:regiao, logo=:logo, descricao=:descricao,
                      iframe=:iframe, imagem_fundo=:imagem_fundo, facebook=:facebook, instagram=:instagram,
                      linkedin=:linkedin, site=:site, youtube=:youtube, link_guia=:link_guia
                      WHERE id=:id'
                 );
                 $stmt->execute([
-                    ':titulo' => $titulo, ':logo' => $logo, ':descricao' => $descricao,
+                    ':titulo' => $titulo, ':tipo' => $tipo, ':regiao' => $regiao,
+                    ':logo' => $logo, ':descricao' => $descricao,
                     ':iframe' => $iframe, ':imagem_fundo' => $imagem_fundo,
                     ':facebook' => $facebook, ':instagram' => $instagram,
                     ':linkedin' => $linkedin, ':site' => $site, ':youtube' => $youtube,
@@ -120,13 +123,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             } else {
                 $stmt = $pdo->prepare(
-                    'INSERT INTO clientes (titulo, logo, descricao, iframe, imagem_fundo, facebook, instagram,
+                    'INSERT INTO clientes (titulo, tipo, regiao, logo, descricao, iframe, imagem_fundo, facebook, instagram,
                      linkedin, site, youtube, link_guia)
-                     VALUES (:titulo, :logo, :descricao, :iframe, :imagem_fundo, :facebook, :instagram,
+                     VALUES (:titulo, :tipo, :regiao, :logo, :descricao, :iframe, :imagem_fundo, :facebook, :instagram,
                      :linkedin, :site, :youtube, :link_guia)'
                 );
                 $stmt->execute([
-                    ':titulo' => $titulo, ':logo' => $logo, ':descricao' => $descricao,
+                    ':titulo' => $titulo, ':tipo' => $tipo, ':regiao' => $regiao,
+                    ':logo' => $logo, ':descricao' => $descricao,
                     ':iframe' => $iframe, ':imagem_fundo' => $imagem_fundo,
                     ':facebook' => $facebook, ':instagram' => $instagram,
                     ':linkedin' => $linkedin, ':site' => $site, ':youtube' => $youtube,
@@ -145,6 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $vTitulo    = $_POST['titulo']     ?? ($cliente['titulo']     ?? '');
+$vTipo      = $_POST['tipo']       ?? ($cliente['tipo']       ?? 'destino');
+$vRegiao    = $_POST['regiao']     ?? ($cliente['regiao']     ?? '');
 $vDescricao = $_POST['descricao']  ?? ($cliente['descricao']  ?? '');
 $vIframe    = $_POST['iframe']     ?? ($cliente['iframe']     ?? '');
 $vFacebook  = $_POST['facebook']   ?? ($cliente['facebook']   ?? '');
@@ -193,17 +199,39 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
 
       <div class="adm-form__group">
         <label class="adm-form__label" for="titulo">
-          Título (Cliente) <span style="color:var(--action)">*</span>
+          Título <span style="color:var(--action)">*</span>
         </label>
         <input class="adm-form__input" type="text" id="titulo" name="titulo"
-               placeholder="Ex: Compass Brazil"
+               placeholder="Ex: Bahia ou Compass Brazil"
                value="<?= htmlspecialchars($vTitulo) ?>" required>
+      </div>
+
+      <div class="adm-form__group">
+        <label class="adm-form__label">Tipo <span style="color:var(--action)">*</span></label>
+        <div style="display:flex;gap:16px;margin-top:4px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="radio" name="tipo" value="destino" <?= $vTipo === 'destino' ? 'checked' : '' ?>>
+            Destino
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="radio" name="tipo" value="parceiro" <?= $vTipo === 'parceiro' ? 'checked' : '' ?>>
+            Parceiro
+          </label>
+        </div>
+        <p style="font-size:.75rem;color:var(--text-sec);margin-top:6px;">Destinos aparecem na seção de destinos turísticos. Parceiros aparecem na seção de parceiros.</p>
+      </div>
+
+      <div class="adm-form__group" id="campo-regiao" style="<?= $vTipo === 'parceiro' ? 'display:none;' : '' ?>">
+        <label class="adm-form__label" for="regiao">Região (apenas Destinos)</label>
+        <input class="adm-form__input" type="text" id="regiao" name="regiao"
+               placeholder="Ex: Nordeste, Centro-Oeste, Sul..."
+               value="<?= htmlspecialchars($vRegiao) ?>">
       </div>
 
       <div class="adm-form__group">
         <label class="adm-form__label" for="descricao">Descrição</label>
         <textarea class="adm-form__input" id="descricao" name="descricao"
-                  rows="5" placeholder="Descreva o cliente..."><?= htmlspecialchars($vDescricao) ?></textarea>
+                  rows="5" placeholder="Descreva o cliente..."><?= $vDescricao ?></textarea>
       </div>
 
       <!-- Imagem de fundo do card -->
@@ -318,6 +346,18 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
 
 <script>
 (function () {
+  var radios = document.querySelectorAll('input[name="tipo"]');
+  var campoRegiao = document.getElementById('campo-regiao');
+  function toggleRegiao() {
+    var val = document.querySelector('input[name="tipo"]:checked').value;
+    campoRegiao.style.display = val === 'parceiro' ? 'none' : '';
+  }
+  radios.forEach(function(r) { r.addEventListener('change', toggleRegiao); });
+}());
+</script>
+
+<script>
+(function () {
   var logoInput   = document.getElementById('logo-upload');
   var logoPreview = document.getElementById('logo-preview');
   var logoLabel   = document.getElementById('logo-label');
@@ -348,6 +388,25 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
     reader.readAsDataURL(file);
   });
 }());
+
+tinymce.init({
+  license_key: 'gpl',
+  selector: '#descricao',
+  height: 300,
+  menubar: true,
+  plugins: 'link lists image table code autolink preview searchreplace wordcount emoticons',
+  toolbar: 'undo redo | styleselect | bold italic underline | ' +
+           'alignleft aligncenter alignright alignjustify | ' +
+           'bullist numlist outdent indent | link image table | code | ' +
+           'searchreplace preview emoticons',
+  content_style: 'body { font-family: Inter, sans-serif; font-size: 14px; }',
+  images_upload_url: '/BrasilDNA-Website/admin/upload_image.php',
+  automatic_uploads: true,
+  paste_data_images: true,
+  relative_urls: false,
+  remove_script_host: false,
+  convert_urls: true,
+});
 </script>
 
 <?php
