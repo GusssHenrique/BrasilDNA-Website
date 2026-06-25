@@ -37,49 +37,14 @@ try {
 } catch (\Throwable $e) {
     $banners_parceiros = [];
     $clientes_home = [];
+    $destinos_home = [];
+    $parceiros_home = [];
     $posts_home = [];
 }
+
+$currentPage = 'home';
+require_once __DIR__ . '/includes/site-header.php';
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brasil DNA — Experience the Essence of Brazil</title>
-<meta name="description" content="Brasil DNA: Where Nature, Culture, and Warmth Create Unforgettable Journeys.">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<?php
-$v_css = file_exists(__DIR__ . '/assets/style.css') ? filemtime(__DIR__ . '/assets/style.css') : 1;
-$v_js  = file_exists(__DIR__ . '/assets/main.js')   ? filemtime(__DIR__ . '/assets/main.js')   : 1;
-?>
-<link rel="stylesheet" href="assets/style.css?v=<?= $v_css ?>">
-</head>
-<body>
-
-<!-- ===== HEADER ===== -->
-<header class="site-header" id="siteHeader">
-  <div class="container header-inner">
-    <a href="<?= esc_url_safe('/') ?>" class="logo" aria-label="Brasil DNA — Home">
-<img src="assets/images/logo_brasilDNA_preto.webp" alt="Brasil DNA" class="logo-img" height="50" loading="eager">
-    </a>
-
-    <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
-      <a href="<?= esc_url_safe('about-us.php') ?>">About Us</a>
-      <a href="news.php">News</a>
-      <a href="#destinos" class="nav-cta">Explore Brazil</a>
-    </nav>
-
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="hero">
@@ -230,81 +195,6 @@ $v_js  = file_exists(__DIR__ . '/assets/main.js')   ? filemtime(__DIR__ . '/asse
   </div>
 </section>
 
-<!-- ===== DESTINATIONS ===== -->
-<section class="section destinations" id="destinos">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <span class="label-tag">Brazilian Destinations</span>
-      <h2>Places that stay <em>with you forever</em></h2>
-    </div>
-
-    <?php foreach ($destinos_home as $_di => $_dest): ?>
-    <article class="dest-card <?= $_di % 2 !== 0 ? 'dest-card--flip' : '' ?>" data-reveal>
-      <div class="dest-media dest-media--video">
-        <?php if (!empty($_dest['iframe'])): ?>
-        <div class="dest-video-wrap">
-          <?php if (str_starts_with(trim($_dest['iframe']), '<')): ?>
-            <?= $_dest['iframe'] ?>
-          <?php else: ?>
-            <iframe src="<?= esc_url_safe($_dest['iframe']) ?>" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <?php endif; ?>
-        </div>
-        <?php elseif (!empty($_dest['imagem_fundo'])): ?>
-        <img src="<?= esc_url_safe($_dest['imagem_fundo']) ?>" alt="<?= htmlspecialchars($_dest['titulo']) ?>" style="width:100%;height:100%;object-fit:cover;">
-        <?php endif; ?>
-        <div class="dest-social">
-          <?php if (!empty($_dest['logo'])): ?>
-          <img src="<?= esc_url_safe($_dest['logo']) ?>" alt="Logo <?= htmlspecialchars($_dest['titulo']) ?>" class="dest-logo" loading="lazy">
-          <?php endif; ?>
-          <div class="dest-social__icons-row">
-            <?php if (!empty($_dest['linkedin'])): ?>
-            <a href="<?= esc_url_safe($_dest['linkedin']) ?>" target="_blank" rel="noopener" aria-label="LinkedIn" class="dest-social__btn">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.3 9.5H5.7V18h2.6V9.5zM7 8.4a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 9.6h-2.6v-4.1c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V18H10v-8.5h2.5v1.2h.1c.4-.7 1.3-1.4 2.6-1.4 2.8 0 3.3 1.8 3.3 4.2V18z"/></svg>
-            </a>
-            <?php endif; ?>
-            <?php if (!empty($_dest['facebook'])): ?>
-            <a href="<?= esc_url_safe($_dest['facebook']) ?>" target="_blank" rel="noopener" aria-label="Facebook" class="dest-social__btn">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22 12a10 10 0 10-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.5h-1.2c-1.2 0-1.5.7-1.5 1.5v1.8H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
-            </a>
-            <?php endif; ?>
-            <?php if (!empty($_dest['instagram'])): ?>
-            <a href="<?= esc_url_safe($_dest['instagram']) ?>" target="_blank" rel="noopener" aria-label="Instagram" class="dest-social__btn">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2 0 2 .2 2.6.5.7.2 1.2.6 1.7 1.1.5.5.8 1 1.1 1.7.2.6.4 1.4.5 2.6 0 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.2-.2 2-.5 2.6-.2.7-.6 1.2-1.1 1.7-.5.5-1 .8-1.7 1.1-.6.2-1.4.4-2.6.5-1.2 0-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2 0-2-.2-2.6-.5-.7-.2-1.2-.6-1.7-1.1-.5-.5-.8-1-1.1-1.7-.2-.6-.4-1.4-.5-2.6 0-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c0-1.2.2-2 .5-2.6.2-.7.6-1.2 1.1-1.7.5-.5 1-.8 1.7-1.1.6-.2 1.4-.4 2.6-.5C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1 0-1.6.2-1.9.3-.5.2-.8.4-1.2.7-.3.4-.5.7-.7 1.2-.1.3-.3.9-.3 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c0 1 .2 1.6.3 1.9.2.5.4.8.7 1.2.4.3.7.5 1.2.7.3.1.9.3 1.9.3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1 0 1.6-.2 1.9-.3.5-.2.8-.4 1.2-.7.3-.4.5-.7.7-1.2.1-.3.3-.9.3-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1-.2-1.6-.3-1.9-.2-.5-.4-.8-.7-1.2-.4-.3-.7-.5-1.2-.7-.3-.1-.9-.3-1.9-.3-1.2-.1-1.6-.1-4.7-.1zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.4-3.4a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
-            </a>
-            <?php endif; ?>
-            <?php if (!empty($_dest['youtube'])): ?>
-            <a href="<?= esc_url_safe($_dest['youtube']) ?>" target="_blank" rel="noopener" aria-label="YouTube" class="dest-social__btn">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.7-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.9C6.8 19 12 19 12 19s4.8 0 7-.1c.4 0 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/></svg>
-            </a>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
-      <div class="dest-info">
-        <?php if (!empty($_dest['regiao'])): ?>
-        <span class="dest-region"><?= htmlspecialchars($_dest['regiao']) ?></span>
-        <?php endif; ?>
-        <h3><?= htmlspecialchars($_dest['titulo']) ?></h3>
-        <?php if (!empty($_dest['descricao'])): ?>
-        <p><?= nl2br(htmlspecialchars($_dest['descricao'])) ?></p>
-        <?php endif; ?>
-        <?php $_destLink = $_dest['link_guia'] ?: $_dest['site']; ?>
-        <?php if (!empty($_destLink)): ?>
-        <a href="<?= esc_url_safe($_destLink) ?>" target="_blank" rel="noopener" class="dest-link">
-          Explore <?= htmlspecialchars($_dest['titulo']) ?>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <?php endif; ?>
-      </div>
-    </article>
-    <?php endforeach; ?>
-
-    <?php if (empty($destinos_home)): ?>
-    <p style="text-align:center;color:var(--text-sec);padding:40px 0;">Nenhum destino cadastrado ainda.</p>
-    <?php endif; ?>
-  </div>
-</section>
-
 <!-- ===== PARTNERS ===== -->
 <section class="section partners" id="partners">
   <div class="container">
@@ -318,7 +208,7 @@ $v_js  = file_exists(__DIR__ . '/assets/main.js')   ? filemtime(__DIR__ . '/asse
       <article class="partner-card" data-reveal <?= $_pi > 0 ? 'data-reveal-delay="' . ($_pi * 120) . '"' : '' ?>>
         <div class="partner-icon">
           <?php if (!empty($_parc['logo'])): ?>
-            <img src="<?= esc_url_safe($_parc['logo']) ?>" alt="Logo <?= htmlspecialchars($_parc['titulo']) ?>" style="width:48px;height:48px;object-fit:contain;">
+            <img src="<?= esc_url_safe($_parc['logo']) ?>" alt="Logo <?= htmlspecialchars($_parc['titulo']) ?>" style="width:100%;height:100%;object-fit:contain;padding:10px;">
           <?php else: ?>
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/></svg>
           <?php endif; ?>
@@ -328,7 +218,7 @@ $v_js  = file_exists(__DIR__ . '/assets/main.js')   ? filemtime(__DIR__ . '/asse
         <p class="partner-since"><?= htmlspecialchars($_parc['regiao']) ?></p>
         <?php endif; ?>
         <?php if (!empty($_parc['descricao'])): ?>
-        <p><?= htmlspecialchars($_parc['descricao']) ?></p>
+        <div class="partner-desc"><?= $_parc['descricao'] ?></div>
         <?php endif; ?>
         <?php $_parcLink = $_parc['link_guia'] ?: $_parc['site']; ?>
         <?php if (!empty($_parcLink)): ?>
@@ -345,7 +235,7 @@ $v_js  = file_exists(__DIR__ . '/assets/main.js')   ? filemtime(__DIR__ . '/asse
 $_sizePool = ['tall','wide','normal','normal','normal','tall','normal','wide','normal'];
 shuffle($_sizePool);
 $_si = 0;
-$_totalPartners = count($clientes_home);
+$_totalPartners = count($destinos_home);
 ?>
 <section class="section clients" id="clients">
 
@@ -356,7 +246,7 @@ $_totalPartners = count($clientes_home);
     </video>
     <div class="clients-video-panel__overlay"></div>
     <div class="clients-video-panel__text" data-reveal>
-      <span class="label-tag label-tag--light">Our Clients</span>
+      <span class="label-tag label-tag--light">Brazilian Destinations</span>
       <h2>Companies that <em>trust Brasil DNA</em></h2>
       <p class="clients-intro__desc">Brasil DNA proudly collaborates with a curated selection of Brazilian tourism companies, offering authentic experiences, exceptional services, and unique opportunities to showcase the best of Brazil.</p>
       <div class="clients-counter-pill">
@@ -374,7 +264,7 @@ $_totalPartners = count($clientes_home);
       <div class="clients-mosaic">
 
         <?php
-        foreach ($clientes_home as $c):
+        foreach ($destinos_home as $c):
           $sz       = $_sizePool[$_si % count($_sizePool)]; $_si++;
           $hasFundo = !empty($c['imagem_fundo']);
           $solid    = !$hasFundo;
@@ -386,7 +276,11 @@ $_totalPartners = count($clientes_home);
              data-logo="<?= htmlspecialchars($c['logo'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
              data-desc="<?= htmlspecialchars($c['descricao'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
              data-site="<?= htmlspecialchars($c['link_guia'] ?: $c['site'] ?: '', ENT_QUOTES, 'UTF-8') ?>"
-             <?php if (!empty($c['iframe'])): ?>data-iframe="<?= htmlspecialchars($c['iframe'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
+             <?php if (!empty($c['iframe'])): ?>data-iframe="<?= htmlspecialchars($c['iframe'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>
+             <?php if (!empty($c['facebook'])): ?>data-facebook="<?= htmlspecialchars($c['facebook'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>
+             <?php if (!empty($c['instagram'])): ?>data-instagram="<?= htmlspecialchars($c['instagram'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>
+             <?php if (!empty($c['linkedin'])): ?>data-linkedin="<?= htmlspecialchars($c['linkedin'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>
+             <?php if (!empty($c['youtube'])): ?>data-youtube="<?= htmlspecialchars($c['youtube'], ENT_QUOTES, 'UTF-8') ?>"<?php endif; ?>>
           <?php if ($hasFundo): ?>
             <img class="client-card__bg" src="<?= htmlspecialchars($c['imagem_fundo'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" aria-hidden="true">
           <?php endif; ?>
@@ -420,7 +314,7 @@ $_totalPartners = count($clientes_home);
 
     <div class="news-grid">
       <?php foreach ($posts_home as $_pi => $_p):
-        $postLink = 'news.php?id=' . (int) $_p['id'];
+        $postLink = 'post.php?id=' . (int) $_p['id'];
         $postDate = !empty($_p['data_publicacao']) ? date('d/m/Y', strtotime($_p['data_publicacao'])) : '';
         $delay    = $_pi * 80;
       ?>
@@ -459,8 +353,9 @@ $_totalPartners = count($clientes_home);
     <div class="banner-carousel" id="bannerCarousel">
       <div class="banner-track">
         <?php foreach ($banners_parceiros as $idx => $b):
-          $logoUrl  = htmlspecialchars($b['logo_url']     ?? '',          ENT_QUOTES, 'UTF-8');
-          $bgUrl    = htmlspecialchars($b['imagem_url']   ?? '',          ENT_QUOTES, 'UTF-8');
+          $logoUrl  = htmlspecialchars($b['logo_url']             ?? '', ENT_QUOTES, 'UTF-8');
+          $bgUrl    = htmlspecialchars($b['imagem_url']           ?? '', ENT_QUOTES, 'UTF-8');
+          $bgVert   = htmlspecialchars($b['imagem_vertical_url']  ?? '', ENT_QUOTES, 'UTF-8');
           $titulo   = htmlspecialchars($b['titulo']       ?? '');
           $subtexto = htmlspecialchars($b['subtexto']     ?? '');
           $btnTxt   = htmlspecialchars($b['botao_texto']  ?? 'Learn More');
@@ -468,8 +363,17 @@ $_totalPartners = count($clientes_home);
           $activeClass = $idx === 0 ? ' is-active' : '';
         ?>
         <a href="banner-click.php?id=<?= (int)$b['id'] ?>" class="partner-banner<?= $activeClass ?>" target="_blank" rel="noopener noreferrer" tabindex="<?= $idx === 0 ? '0' : '-1' ?>">
-          <?php if ($bgUrl): ?>
-            <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
+          <?php if ($bgUrl || $bgVert): ?>
+            <picture>
+              <?php if ($bgVert): ?>
+                <source media="(max-width: 768px)" srcset="<?= $bgVert ?>">
+              <?php endif; ?>
+              <?php if ($bgUrl): ?>
+                <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
+              <?php elseif ($bgVert): ?>
+                <img class="partner-banner__bg" src="<?= $bgVert ?>" alt="" aria-hidden="true" loading="lazy">
+              <?php endif; ?>
+            </picture>
           <?php endif; ?>
           <div class="partner-banner__overlay"></div>
 
@@ -496,7 +400,7 @@ $_totalPartners = count($clientes_home);
 <?php endif; ?>
 
 <!-- ===== NEWSLETTER ===== -->
-<section class="newsletter" id="newsletter">
+<!-- <section class="newsletter" id="newsletter">
   <div class="nl-bg" aria-hidden="true"></div>
   <div class="container newsletter-inner" data-reveal>
     <div class="nl-text">
@@ -515,58 +419,7 @@ $_totalPartners = count($clientes_home);
       </div>
     </form>
   </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer class="site-footer">
-  <div class="container footer-top">
-    <div class="footer-brand">
-      <img src="assets/images/logo_brasilDNA_branco.png"
-           alt="Brasil DNA" class="footer-logo" height="40" loading="lazy">
-      <p>Experience the Essence of Brazil.</p>
-      <div class="social-links">
-        <a href="https://www.facebook.com/brasildna" target="_blank" rel="noopener" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22 12a10 10 0 10-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.5h-1.2c-1.2 0-1.5.7-1.5 1.5v1.8H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
-        </a>
-        <a href="https://www.instagram.com/dnabrasil_official" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2 0 2 .2 2.6.5.7.2 1.2.6 1.7 1.1.5.5.8 1 1.1 1.7.2.6.4 1.4.5 2.6 0 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.2-.2 2-.5 2.6-.2.7-.6 1.2-1.1 1.7-.5.5-1 .8-1.7 1.1-.6.2-1.4.4-2.6.5-1.2 0-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2 0-2-.2-2.6-.5-.7-.2-1.2-.6-1.7-1.1-.5-.5-.8-1-1.1-1.7-.2-.6-.4-1.4-.5-2.6 0-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c0-1.2.2-2 .5-2.6.2-.7.6-1.2 1.1-1.7.5-.5 1-.8 1.7-1.1.6-.2 1.4-.4 2.6-.5C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1 0-1.6.2-1.9.3-.5.2-.8.4-1.2.7-.3.4-.5.7-.7 1.2-.1.3-.3.9-.3 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c0 1 .2 1.6.3 1.9.2.5.4.8.7 1.2.4.3.7.5 1.2.7.3.1.9.3 1.9.3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1 0 1.6-.2 1.9-.3.5-.2.8-.4 1.2-.7.3-.4.5-.7.7-1.2.1-.3.3-.9.3-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1-.2-1.6-.3-1.9-.2-.5-.4-.8-.7-1.2-.4-.3-.7-.5-1.2-.7-.3-.1-.9-.3-1.9-.3-1.2-.1-1.6-.1-4.7-.1zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.4-3.4a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/company/global-vision-access/" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.3 9.5H5.7V18h2.6V9.5zM7 8.4a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 9.6h-2.6v-4.1c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V18H10v-8.5h2.5v1.2h.1c.4-.7 1.3-1.4 2.6-1.4 2.8 0 3.3 1.8 3.3 4.2V18z"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <nav class="footer-nav">
-      <h4>Navigate</h4>
-      <a href="<?= esc_url_safe('about-us.php') ?>">About Us</a>
-      <a href="news.php">News</a>
-      <a href="#destinos">Destinations</a>
-      <!-- <a href="parceiro/login.php" class="footer-partner-link">Be Our Partner</a> -->
-    </nav>
-
-    <div class="footer-presented">
-      <h4>Initiative presented by</h4>
-      <img src="assets/images/globalvisioaccess.svg"
-           alt="GVA — Global Vision Access" loading="lazy">
-    </div>
-  </div>
-
-  <div class="footer-partners-bar">
-    <div class="container footer-partners-row">
-      <img src="assets/images/Logotipo_Brasil.png" alt="Marca Brasil" loading="lazy">
-      <img src="assets/images/embratur.png" alt="Embratur" loading="lazy">
-      <img src="assets/images/ministerio-do-turismo.png" alt="Ministério do Turismo" loading="lazy">
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <div class="container painel">
-      <p>&copy; <?= date('Y') ?> Brasil DNA. All rights reserved.</p>
-      <a href="./admin/login.php">administrative panel</a>
-    </div>
-  </div>
-</footer>
+</section> -->
 
 <!-- ===== CLIENT MODAL ===== -->
 <div id="clientModal" class="client-modal" role="dialog" aria-modal="true"
@@ -574,18 +427,41 @@ $_totalPartners = count($clientes_home);
   <div class="client-modal__backdrop"></div>
   <div class="client-modal__panel">
     <button class="client-modal__close" aria-label="Fechar">&#x2715;</button>
-    <div id="clientModalVideo" class="client-modal__video-wrap" hidden></div>
-    <div class="client-modal__logo-wrap">
-      <img id="clientModalLogo" src="" alt="" class="client-modal__logo" hidden>
-      <div id="clientModalInitials" class="client-modal__initials" hidden></div>
+
+    <!-- Coluna esquerda: vídeo + logo + redes -->
+    <div class="client-modal__left">
+      <div id="clientModalVideo" class="client-modal__video-wrap" hidden></div>
+      <div class="client-modal__logo-wrap">
+        <img id="clientModalLogo" src="" alt="" class="client-modal__logo" hidden>
+        <div id="clientModalInitials" class="client-modal__initials" hidden></div>
+      </div>
+      <div id="clientModalSocial" class="client-modal__social" hidden>
+        <a id="clientModalFacebook" href="#" target="_blank" rel="noopener" aria-label="Facebook" class="client-modal__social-btn" hidden>
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a id="clientModalInstagram" href="#" target="_blank" rel="noopener" aria-label="Instagram" class="client-modal__social-btn" hidden>
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a id="clientModalLinkedin" href="#" target="_blank" rel="noopener" aria-label="LinkedIn" class="client-modal__social-btn" hidden>
+          <i class="bi bi-linkedin"></i>
+        </a>
+        <a id="clientModalYoutube" href="#" target="_blank" rel="noopener" aria-label="YouTube" class="client-modal__social-btn" hidden>
+          <i class="bi bi-youtube"></i>
+        </a>
+      </div>
     </div>
-    <span id="clientModalName" class="client-modal__name"></span>
-    <p id="clientModalDesc" class="client-modal__desc"></p>
-    <a id="clientModalLink" href="#" target="_blank" rel="noopener"
-       class="btn btn-primary client-modal__btn">Visitar site</a>
+
+    <!-- Coluna direita: título + descrição + link -->
+    <div class="client-modal__right">
+      <h2 id="clientModalName" class="client-modal__name"></h2>
+      <p id="clientModalDesc" class="client-modal__desc"></p>
+      <a id="clientModalLink" href="#" target="_blank" rel="noopener"
+         class="client-modal__btn">
+        <span id="clientModalLinkText">Explore</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 
-<script src="assets/main.js?v=<?= $v_js ?>" defer></script>
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/site-footer.php'; ?>

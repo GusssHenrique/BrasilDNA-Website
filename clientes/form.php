@@ -235,7 +235,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
       </div>
 
       <!-- Imagem de fundo do card -->
-      <div class="adm-form__group">
+      <div class="adm-form__group" id="campo-imagem-fundo" style="<?= $vTipo === 'parceiro' ? 'display:none;' : '' ?>">
         <label class="adm-form__label">Imagem de fundo do card</label>
         <?php if ($vImagemFundo): ?>
           <img id="fundo-preview" src="<?= htmlspecialchars('../' . $vImagemFundo, ENT_QUOTES, 'UTF-8') ?>"
@@ -256,7 +256,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
       </div>
 
       <!-- Vídeo do pop-up -->
-      <div class="adm-form__group">
+      <div class="adm-form__group" id="campo-iframe" style="<?= $vTipo === 'parceiro' ? 'display:none;' : '' ?>">
         <label class="adm-form__label" for="iframe">Vídeo do pop-up (iframe)</label>
         <textarea class="adm-form__input" id="iframe" name="iframe"
                   rows="3" placeholder='https://youtu.be/... ou https://www.youtube.com/watch?v=... ou código <iframe>'><?= htmlspecialchars($vIframe) ?></textarea>
@@ -346,13 +346,17 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
 
 <script>
 (function () {
-  var radios = document.querySelectorAll('input[name="tipo"]');
-  var campoRegiao = document.getElementById('campo-regiao');
-  function toggleRegiao() {
-    var val = document.querySelector('input[name="tipo"]:checked').value;
-    campoRegiao.style.display = val === 'parceiro' ? 'none' : '';
+  var radios          = document.querySelectorAll('input[name="tipo"]');
+  var campoRegiao     = document.getElementById('campo-regiao');
+  var campoFundo      = document.getElementById('campo-imagem-fundo');
+  var campoIframe     = document.getElementById('campo-iframe');
+  function toggleTipo() {
+    var isParceiro = document.querySelector('input[name="tipo"]:checked').value === 'parceiro';
+    campoRegiao.style.display  = isParceiro ? 'none' : '';
+    campoFundo.style.display   = isParceiro ? 'none' : '';
+    campoIframe.style.display  = isParceiro ? 'none' : '';
   }
-  radios.forEach(function(r) { r.addEventListener('change', toggleRegiao); });
+  radios.forEach(function(r) { r.addEventListener('change', toggleTipo); });
 }());
 </script>
 

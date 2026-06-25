@@ -4,6 +4,11 @@ require_once __DIR__ . '/includes/auth.php';
 
 exigirLogin();
 
+/* Garante coluna imagem_vertical_url existe */
+try {
+    $pdo->exec("ALTER TABLE banners ADD COLUMN imagem_vertical_url VARCHAR(500) NULL AFTER imagem_url");
+} catch (\PDOException $e) { /* já existe — ignora */ }
+
 $id     = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : null;
 $banner = null;
 $erro   = '';
@@ -27,72 +32,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $link     = trim($_POST['link_url']      ?? '');
     $ativo    = isset($_POST['ativo']) ? 1 : 0;
     $ordem    = 0;
-    $logo     = $banner['logo_url']   ?? null;
-    $imagem   = $banner['imagem_url'] ?? null;
+    $logo     = $banner['logo_url']            ?? null;
+    $imagem   = $banner['imagem_url']          ?? null;
+    $imgVert  = $banner['imagem_vertical_url'] ?? null;
 
     $uploadDir    = __DIR__ . '/../uploads/banners/';
     $allowedExts  = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
-    if (!empty($_FILES['logo_file']['tmp_name'])) {
-        $ext   = strtolower(pathinfo($_FILES['logo_file']['name'], PATHINFO_EXTENSION));
+    /* Helper upload */
+    $doUpload = function(string $field, int $maxMb, string $prefix) use (&$erro, $uploadDir, $allowedExts, $allowedMimes): ?string {
+        if (empty($_FILES[$field]['tmp_name'])) return null;
+        $ext   = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime  = finfo_file($finfo, $_FILES['logo_file']['tmp_name']);
+        $mime  = finfo_file($finfo, $_FILES[$field]['tmp_name']);
         finfo_close($finfo);
         if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
-            $erro = 'Logo: formato inválido. Use JPG, PNG ou WebP.';
-        } elseif ($_FILES['logo_file']['size'] > 2 * 1024 * 1024) {
-            $erro = 'Logo muito grande. Máximo 2 MB.';
-        } else {
-            $filename = uniqid('logo_') . '.' . $ext;
-            if (move_uploaded_file($_FILES['logo_file']['tmp_name'], $uploadDir . $filename)) {
-                $logo = 'uploads/banners/' . $filename;
-            } else {
-                $erro = 'Falha ao salvar o logo.';
-            }
+            $erro = ucfirst($field) . ': formato inválido. Use JPG, PNG ou WebP.'; return null;
         }
-    }
+        if ($_FILES[$field]['size'] > $maxMb * 1024 * 1024) {
+            $erro = ucfirst($field) . ': máximo ' . $maxMb . ' MB.'; return null;
+        }
+        $filename = uniqid($prefix) . '.' . $ext;
+        if (!move_uploaded_file($_FILES[$field]['tmp_name'], $uploadDir . $filename)) {
+            $erro = 'Falha ao salvar arquivo.'; return null;
+        }
+        return 'uploads/banners/' . $filename;
+    };
 
-    if (empty($erro) && !empty($_FILES['bg_file']['tmp_name'])) {
-        $ext   = strtolower(pathinfo($_FILES['bg_file']['name'], PATHINFO_EXTENSION));
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime  = finfo_file($finfo, $_FILES['bg_file']['tmp_name']);
-        finfo_close($finfo);
-        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
-            $erro = 'Background: formato inválido. Use JPG, PNG ou WebP.';
-        } elseif ($_FILES['bg_file']['size'] > 5 * 1024 * 1024) {
-            $erro = 'Imagem de fundo muito grande. Máximo 5 MB.';
-        } else {
-            $filename = uniqid('bg_') . '.' . $ext;
-            if (move_uploaded_file($_FILES['bg_file']['tmp_name'], $uploadDir . $filename)) {
-                $imagem = 'uploads/banners/' . $filename;
-            } else {
-                $erro = 'Falha ao salvar a imagem de fundo.';
-            }
-        }
-    }
+    if ($res = $doUpload('logo_file', 2, 'logo_'))      $logo    = $res;
+    if (empty($erro) && $res = $doUpload('bg_file', 5, 'bg_'))        $imagem  = $res;
+    if (empty($erro) && $res = $doUpload('vert_file', 5, 'vert_'))    $imgVert = $res;
 
     if (empty($erro)) {
         try {
             if ($id !== null) {
                 $stmt = $pdo->prepare(
                     'UPDATE banners SET nome_parceiro=:nome, logo_url=:logo, imagem_url=:imagem,
+                     imagem_vertical_url=:imgvert,
                      titulo=:titulo, subtexto=:subtexto, botao_texto=:botao,
                      link_url=:link, ativo=:ativo, ordem=:ordem WHERE id=:id'
                 );
                 $stmt->execute([
                     ':nome' => $nome, ':logo' => $logo, ':imagem' => $imagem,
+                    ':imgvert' => $imgVert,
                     ':titulo' => $titulo, ':subtexto' => $subtexto, ':botao' => $botao,
                     ':link' => $link, ':ativo' => $ativo, ':ordem' => $ordem, ':id' => $id,
                 ]);
             } else {
                 $stmt = $pdo->prepare(
-                    'INSERT INTO banners (nome_parceiro, logo_url, imagem_url, titulo, subtexto,
-                     botao_texto, link_url, ativo, ordem)
-                     VALUES (:nome, :logo, :imagem, :titulo, :subtexto, :botao, :link, :ativo, :ordem)'
+                    'INSERT INTO banners (nome_parceiro, logo_url, imagem_url, imagem_vertical_url,
+                     titulo, subtexto, botao_texto, link_url, ativo, ordem)
+                     VALUES (:nome, :logo, :imagem, :imgvert, :titulo, :subtexto, :botao, :link, :ativo, :ordem)'
                 );
                 $stmt->execute([
                     ':nome' => $nome, ':logo' => $logo, ':imagem' => $imagem,
+                    ':imgvert' => $imgVert,
                     ':titulo' => $titulo, ':subtexto' => $subtexto, ':botao' => $botao,
                     ':link' => $link, ':ativo' => $ativo, ':ordem' => $ordem,
                 ]);
@@ -108,11 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$vNome     = $_POST['nome_parceiro'] ?? ($banner['nome_parceiro'] ?? '');
-$vLink     = $_POST['link_url']      ?? ($banner['link_url']      ?? '');
-$vAtivo    = isset($_POST['ativo'])  ? (int) $_POST['ativo'] : (int) ($banner['ativo'] ?? 1);
-$vLogo     = $banner['logo_url']     ?? '';
-$vImagem   = $banner['imagem_url']   ?? '';
+$vNome    = $_POST['nome_parceiro'] ?? ($banner['nome_parceiro'] ?? '');
+$vLink    = $_POST['link_url']      ?? ($banner['link_url']      ?? '');
+$vAtivo   = isset($_POST['ativo'])  ? (int) $_POST['ativo'] : (int) ($banner['ativo'] ?? 1);
+$vLogo    = $banner['logo_url']            ?? '';
+$vImagem  = $banner['imagem_url']          ?? '';
+$vImgVert = $banner['imagem_vertical_url'] ?? '';
 
 $pageTitle   = $id !== null ? 'Editar Banner' : 'Novo Banner';
 $paginaAtiva = 'banners';
@@ -185,9 +181,12 @@ require_once __DIR__ . '/includes/sidebar.php';
         <input type="file" id="logo-upload" name="logo_file" accept="image/*" style="display:none;">
       </div>
 
-      <!-- Imagem de fundo -->
+      <!-- Banner Horizontal (desktop) -->
       <div class="post-side-section">
-        <div class="post-side-label">Imagem de fundo</div>
+        <div class="post-side-label">
+          Banner Horizontal
+          <span class="banner-size-hint">🖥 Desktop &amp; tablet — <strong>1400 × 148 px</strong> (formato paisagem)</span>
+        </div>
         <?php if ($vImagem): ?>
           <img id="bg-preview" src="<?= htmlspecialchars($vImagem, ENT_QUOTES, 'UTF-8') ?>"
                alt="Fundo atual" style="width:100%;border-radius:8px;margin-bottom:10px;object-fit:cover;max-height:100px;">
@@ -198,9 +197,33 @@ require_once __DIR__ . '/includes/sidebar.php';
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
           </svg>
-          <span id="bg-label">Enviar imagem de fundo</span>
+          <span id="bg-label">Enviar banner horizontal</span>
         </label>
         <input type="file" id="bg-upload" name="bg_file" accept="image/*" style="display:none;">
+      </div>
+
+      <!-- Banner Vertical (mobile) -->
+      <div class="post-side-section">
+        <div class="post-side-label">
+          Banner Vertical
+          <span class="banner-size-hint">📱 Mobile — <strong>480 × 360 px</strong> (proporção 4:3)</span>
+        </div>
+        <?php if ($vImgVert): ?>
+          <img id="vert-preview" src="<?= htmlspecialchars($vImgVert, ENT_QUOTES, 'UTF-8') ?>"
+               alt="Banner vertical atual" style="width:100%;border-radius:8px;margin-bottom:10px;object-fit:cover;max-height:120px;">
+        <?php else: ?>
+          <img id="vert-preview" src="" alt="" style="display:none;width:100%;border-radius:8px;margin-bottom:10px;object-fit:cover;max-height:120px;">
+        <?php endif; ?>
+        <label class="post-img-upload" for="vert-upload">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          <span id="vert-label">Enviar banner vertical</span>
+        </label>
+        <input type="file" id="vert-upload" name="vert_file" accept="image/*" style="display:none;">
+        <p style="font-size:11px;color:var(--text-sec);margin-top:6px;">
+          Se não enviado, o banner horizontal será usado no mobile também.
+        </p>
       </div>
 
       <!-- Status -->
@@ -213,7 +236,7 @@ require_once __DIR__ . '/includes/sidebar.php';
         </label>
       </div>
 
-      <!-- Ordem -->
+      <!-- Ações -->
       <div class="post-side-actions">
         <button type="submit" class="btn btn-primary btn-full">Salvar Banner</button>
         <a href="banners.php" class="btn btn-ghost btn-full">Cancelar</a>
@@ -241,7 +264,7 @@ function bindUploadPreview(inputId, previewId, labelId) {
 }
 bindUploadPreview('logo-upload', 'logo-preview', 'logo-label');
 bindUploadPreview('bg-upload',   'bg-preview',   'bg-label');
+bindUploadPreview('vert-upload', 'vert-preview', 'vert-label');
 </script>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>
-

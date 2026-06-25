@@ -50,8 +50,7 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
       .nav-overlay {
         display: block;
         position: fixed; inset: 0;
-        background: rgba(1,42,21,.55);
-        backdrop-filter: blur(3px);
+        background: transparent;
         z-index: 929;
         opacity: 0; pointer-events: none;
         transition: opacity .35s ease;
@@ -61,6 +60,7 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
       #mainNav {
         position: fixed; top: 0; right: 0;
         height: 100dvh; width: min(80vw, 300px);
+        z-index: 960;
         background: var(--green-900, #012a15);
         flex-direction: column;
         justify-content: center; align-items: flex-start;
@@ -121,14 +121,14 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
       nav?.classList.remove("is-open");
       toggle?.classList.remove("is-open");
       overlay.classList.remove("is-open");
-      document.body.style.overflow = "";
+      document.body.classList.remove("nav-open");
    }
    function openNav() {
       toggle?.setAttribute("aria-expanded", "true");
       nav?.classList.add("is-open");
       toggle?.classList.add("is-open");
       overlay.classList.add("is-open");
-      document.body.style.overflow = "hidden";
+      document.body.classList.add("nav-open");
    }
 
    toggle?.addEventListener("click", () => {
@@ -140,7 +140,9 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeNav();
    });
-   $$("a", nav || document).forEach((a) => a.addEventListener("click", closeNav));
+   nav?.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => closeNav());
+   });
 })();
 
 /* ─────────────────────────────────────────────────────────── *
@@ -251,134 +253,6 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    setInterval(spawnParticle, 1400);
 })();
 
-/* ─────────────────────────────────────────────────────────── *
- *  6 — ANIMATED STAT COUNTERS
- *      Injects a stats band just below the hero
- * ─────────────────────────────────────────────────────────── */
-(function initStats() {
-   /* Insert the stats section right after #hero */
-   const hero = $("#hero");
-   if (!hero) return;
-
-   const stats = [
-      { value: 8511, suffix: " mil km²", label: "Área do território", prefix: "" },
-      { value: 215, suffix: " milhões", label: "de habitantes", prefix: "" },
-      { value: 7, suffix: "ª", label: "maior economia do mundo", prefix: "" },
-      { value: 60, suffix: "%", label: "da Floresta Amazônica", prefix: "" },
-   ];
-
-   const section = document.createElement("section");
-   section.className = "stats-band";
-   section.setAttribute("aria-label", "Brasil em números");
-   section.innerHTML = `
-    <div class="container stats-inner">
-      ${stats
-         .map(
-            (s, i) => `
-        <div class="stat-item" data-reveal data-reveal-delay="${i * 90}">
-          <span class="stat-number" data-target="${s.value}" data-suffix="${s.suffix}">0${s.suffix}</span>
-          <span class="stat-label">${s.label}</span>
-        </div>
-      `,
-         )
-         .join("")}
-    </div>
-  `;
-   hero.insertAdjacentElement("afterend", section);
-
-   injectStyle(
-      "stats",
-      `
-    .stats-band {
-      background: var(--green-900, #012a15);
-      padding: 0;
-      position: relative;
-      z-index: 1;
-    }
-    .stats-band::before {
-      content: '';
-      display: block;
-      height: 4px;
-      background: linear-gradient(90deg,
-        var(--green-600,#1a7a40) 0%,
-        var(--gold,#f9b000) 50%,
-        var(--red,#c8102e) 100%);
-    }
-    .stats-inner {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-    }
-    .stat-item {
-      padding: 44px 32px;
-      text-align: center;
-      border-right: 1px solid rgba(255,255,255,.08);
-      position: relative;
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-number {
-      display: block;
-      font-family: var(--font-display, 'Playfair Display', serif);
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      font-weight: 900;
-      color: var(--gold, #f9b000);
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-    .stat-label {
-      display: block;
-      font-size: .8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: rgba(255,255,255,.6);
-    }
-    @media (max-width: 768px) {
-      .stats-inner {
-        grid-template-columns: 1fr 1fr;
-      }
-      .stat-item {
-        padding: 32px 20px;
-        border-bottom: 1px solid rgba(255,255,255,.08);
-      }
-      .stat-item:nth-child(2n) { border-right: none; }
-    }
-    @media (max-width: 480px) {
-      .stats-inner { grid-template-columns: 1fr 1fr; }
-      .stat-number { font-size: 1.7rem; }
-    }
-  `,
-   );
-
-   /* Counter animation triggered by IntersectionObserver */
-   if (pRM()) return;
-
-   const counterObs = new IntersectionObserver(
-      (entries) => {
-         entries.forEach(({ isIntersecting, target }) => {
-            if (!isIntersecting) return;
-            counterObs.unobserve(target);
-            const el = target;
-            const end = parseInt(el.dataset.target, 10);
-            const suffix = el.dataset.suffix || "";
-            const dur = 1800;
-            const step = 16;
-            const steps = dur / step;
-            let current = 0;
-            const inc = end / steps;
-
-            const tick = setInterval(() => {
-               current = Math.min(current + inc, end);
-               el.textContent = Math.floor(current).toLocaleString("pt-BR") + suffix;
-               if (current >= end) clearInterval(tick);
-            }, step);
-         });
-      },
-      { threshold: 0.5 },
-   );
-
-   $$(".stat-number", section).forEach((el) => counterObs.observe(el));
-})();
 
 /* ─────────────────────────────────────────────────────────── *
  *  7 — HORIZONTAL MARQUEE TICKER
@@ -856,12 +730,18 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
    if (!modal) return;
    const backdrop = modal.querySelector(".client-modal__backdrop");
    const closeBtn = modal.querySelector(".client-modal__close");
-   const logoEl   = document.getElementById("clientModalLogo");
-   const initials = document.getElementById("clientModalInitials");
-   const nameEl   = document.getElementById("clientModalName");
-   const descEl   = document.getElementById("clientModalDesc");
-   const linkEl   = document.getElementById("clientModalLink");
+   const logoEl    = document.getElementById("clientModalLogo");
+   const initials  = document.getElementById("clientModalInitials");
+   const nameEl    = document.getElementById("clientModalName");
+   const descEl    = document.getElementById("clientModalDesc");
+   const linkEl    = document.getElementById("clientModalLink");
+   const linkText  = document.getElementById("clientModalLinkText");
    const videoWrap = document.getElementById("clientModalVideo");
+   const socialWrap = document.getElementById("clientModalSocial");
+   const fbEl      = document.getElementById("clientModalFacebook");
+   const igEl      = document.getElementById("clientModalInstagram");
+   const liEl      = document.getElementById("clientModalLinkedin");
+   const ytEl      = document.getElementById("clientModalYoutube");
    let lastFocused = null;
 
    function openModal(card) {
@@ -871,18 +751,16 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
       const site   = card.dataset.site || "";
       const iframe = card.dataset.iframe || "";
       nameEl.textContent = name;
-      descEl.textContent = desc || "Parceiro estratégico do Brasil DNA.";
-      const logoWrap = logoEl.closest(".client-modal__logo-wrap");
+      descEl.innerHTML = desc || "Parceiro estratégico do Brasil DNA.";
+      if (linkText) linkText.textContent = "Explore " + name;
       if (logo) {
          logoEl.src = logo;
          logoEl.alt = name;
          logoEl.hidden = false;
-         initials.hidden = true;
-         if (logoWrap) logoWrap.hidden = false;
+         if (initials) initials.hidden = true;
       } else {
          logoEl.hidden = true;
-         initials.hidden = true;
-         if (logoWrap) logoWrap.hidden = true;
+         if (initials) initials.hidden = true;
       }
       if (videoWrap) {
          if (iframe) {
@@ -898,6 +776,16 @@ const isMobile = () => window.matchMedia("(hover: none)").matches;
          }
       }
       linkEl.href = site || "#";
+      linkEl.hidden = !site;
+      const fb = card.dataset.facebook || "";
+      const ig = card.dataset.instagram || "";
+      const li = card.dataset.linkedin || "";
+      const yt = card.dataset.youtube || "";
+      if (fbEl) { fbEl.href = fb; fbEl.style.display = fb ? '' : 'none'; }
+      if (igEl) { igEl.href = ig; igEl.style.display = ig ? '' : 'none'; }
+      if (liEl) { liEl.href = li; liEl.style.display = li ? '' : 'none'; }
+      if (ytEl) { ytEl.href = yt; ytEl.style.display = yt ? '' : 'none'; }
+      if (socialWrap) socialWrap.style.display = (fb || ig || li || yt) ? '' : 'none';
       lastFocused = document.activeElement;
       modal.removeAttribute("hidden");
       modal.offsetHeight; // força reflow para transição CSS
