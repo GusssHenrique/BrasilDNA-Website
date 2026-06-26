@@ -103,25 +103,117 @@ require_once __DIR__ . '/includes/site-header.php';
 
 <!-- ===== WHY TRAVEL ===== -->
 <section class="section why" id="why">
-  <div class="container grid-2">
-    <div class="why-video" data-reveal>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/9tVQt1GnIHs"
-          title="Brasil DNA — What do people who visit Brazil have to say?"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+
+  <!-- Top frieze — a nod to Copacabana's iconic wave-mosaic promenade,
+       rendered in the brand palette and gently scrolling -->
+  <div class="brasil-wave brasil-wave--why" aria-hidden="true"></div>
+
+  <div class="why-bg" aria-hidden="true">
+    <div class="why-bg__blob why-bg__blob--1"></div>
+    <div class="why-bg__blob why-bg__blob--2"></div>
+    <div class="why-bg__blob why-bg__blob--3"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- Top: label + headline centered -->
+    <div class="why-header" data-reveal>
+      <span class="label-tag">Why Travel to Brazil?</span>
+      <h2 class="why-headline">A force that touches the heart<br>and <em>awakens the senses</em></h2>
+      <!-- Decorative divider -->
+      <div class="why-divider" aria-hidden="true">
+        <span class="why-divider__line"></span>
+        <span class="why-divider__dot why-divider__dot--green"></span>
+        <span class="why-divider__dot why-divider__dot--gold"></span>
+        <span class="why-divider__dot why-divider__dot--red"></span>
+        <span class="why-divider__line"></span>
       </div>
-      <p class="video-caption">What do people who visit Brazil have to say?</p>
     </div>
 
-    <div class="why-text" data-reveal data-reveal-delay="120">
-      <span class="label-tag">Why Travel to Brazil?</span>
-      <h2>A force that touches the heart and <em>awakens the senses</em></h2>
-      <p>Brazil is more than a destination — it's the rhythm of samba at twilight, the stillness of a jaguar in the wild, the warmth of a shared moqueca, and the roar of waterfalls that remind us how small we are — yet how connected we can be.</p>
-      <p>Through <strong>Brasil DNA</strong>, you're invited to step into a curated journey across four breathtaking regions, each revealing a facet of Brazil's identity rooted in <strong>nature, culture, and purposeful travel</strong>.</p>
+    <!-- Mid: video + text side by side -->
+    <div class="why-body">
+      <div class="why-video" data-reveal>
+        <!-- Floating badge -->
+        <div class="why-video__badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Travellers' Choice</span>
+          <span class="eq-bars"><span></span><span></span><span></span></span>
+        </div>
+        <div class="why-video__frame">
+          <div class="why-video__accent" aria-hidden="true"></div>
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/9tVQt1GnIHs"
+              title="Brasil DNA — What do people who visit Brazil have to say?"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        <p class="video-caption">What do people who visit Brazil have to say?</p>
+      </div>
+
+      <div class="why-text" data-reveal data-reveal-delay="120">
+        <p class="why-lead">Brazil is more than a destination — it's the rhythm of samba at twilight, the stillness of a jaguar in the wild, the warmth of a shared moqueca, and the roar of waterfalls that remind us how small we are — yet how connected we can be.</p>
+        <p>Through <strong>Brasil DNA</strong>, you're invited to step into a curated journey across four breathtaking regions, each revealing a facet of Brazil's identity rooted in <strong>nature, culture, and purposeful travel</strong>.</p>
+
+        <!-- Proof points — each with distinct colour accent -->
+        <div class="why-proofs">
+          <div class="why-proof why-proof--green">
+            <div class="why-proof__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </div>
+            <div>
+              <strong>4 Curated Regions</strong>
+              <span>Each with its own identity and story</span>
+            </div>
+          </div>
+          <div class="why-proof why-proof--gold">
+            <div class="why-proof__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <strong>Authentic Experiences</strong>
+              <span>People, culture, and nature in harmony</span>
+            </div>
+          </div>
+          <div class="why-proof why-proof--red">
+            <div class="why-proof__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div>
+              <strong>Purposeful Travel</strong>
+              <span>Journeys that leave a lasting impression</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Bottom: stat strip — dark green, rich -->
+    <div class="why-stats" data-reveal data-reveal-delay="200">
+      <div class="why-stats__bg" aria-hidden="true"></div>
+      <div class="why-stat">
+        <span class="why-stat__number"><span class="count-up" data-target="215">0</span><em>M</em></span>
+        <span class="why-stat__label">People — a mosaic of cultures</span>
+      </div>
+      <div class="why-stat__divider" aria-hidden="true"></div>
+      <div class="why-stat">
+        <span class="why-stat__number"><span class="count-up" data-target="8.5" data-decimals="1">0</span><em>M km²</em></span>
+        <span class="why-stat__label">Of breathtaking territory</span>
+      </div>
+      <div class="why-stat__divider" aria-hidden="true"></div>
+      <div class="why-stat">
+        <span class="why-stat__number"><span class="count-up" data-target="1">0</span><em>st</em></span>
+        <span class="why-stat__label">In biodiversity worldwide</span>
+      </div>
+      <div class="why-stat__divider" aria-hidden="true"></div>
+      <div class="why-stat">
+        <span class="why-stat__number"><span class="count-up" data-target="22">0</span><em>+</em></span>
+        <span class="why-stat__label">UNESCO World Heritage Sites</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -173,59 +265,191 @@ require_once __DIR__ . '/includes/site-header.php';
 
 <!-- ===== FEEL BRASIL ===== -->
 <section class="section feel" id="feel">
-  <div class="container grid-2 grid-2--reverse">
-    <div class="feel-text" data-reveal>
-      <span class="label-tag">Feel Brasil</span>
-      <h2>Discover Brazil through <em>authentic experiences</em></h2>
-      <p>Created by <strong>Embratur</strong>, the <strong>Feel Brasil</strong> initiative highlights authentic travel experiences across the country, showcasing curated journeys that connect visitors with Brazil's nature, culture, communities, and traditions.</p>
-      <p>Through Feel Brasil, travelers can discover immersive activities such as exploring protected natural areas, experiencing local gastronomy, and engaging with community-based tourism.</p>
-      <a href="https://www.embratur.com.br" target="_blank" rel="noopener" class="btn btn-primary">Learn More</a>
-    </div>
 
-    <div class="feel-video" data-reveal data-reveal-delay="120">
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/ywZe6LAa0oY"
-          title="Feel Brasil — Vitrine Brasil"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+  <!-- Subtle background blobs (echo of Why Travel) -->
+  <div class="feel-bg" aria-hidden="true">
+    <div class="feel-bg__blob feel-bg__blob--1"></div>
+    <div class="feel-bg__blob feel-bg__blob--2"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- Centered header — mirrors Why Travel's structure -->
+    <div class="feel-header" data-reveal>
+      <span class="label-tag">Feel Brasil</span>
+      <h2 class="feel-headline">Discover Brazil through<br><em>authentic experiences</em></h2>
+      <!-- Divider: same dots, reversed colour order for individuality -->
+      <div class="feel-divider" aria-hidden="true">
+        <span class="feel-divider__line"></span>
+        <span class="feel-divider__dot feel-divider__dot--red"></span>
+        <span class="feel-divider__dot feel-divider__dot--gold"></span>
+        <span class="feel-divider__dot feel-divider__dot--green"></span>
+        <span class="feel-divider__line"></span>
       </div>
     </div>
+
+    <!-- Body: text left + framed video right (side-by-side like Why Travel) -->
+    <div class="feel-body">
+
+      <!-- Text column -->
+      <div class="feel-text" data-reveal>
+        <p class="feel-lead">Created by <strong>Embratur</strong>, the <strong>Feel Brasil</strong> initiative highlights authentic travel experiences across the country — curated journeys that connect visitors with Brazil's nature, culture, communities, and traditions.</p>
+        <p>Travelers can discover immersive activities such as exploring protected natural areas, experiencing local gastronomy, and engaging with community-based tourism.</p>
+
+        <!-- Feature tags — unique to Feel (pill chips, not proof cards) -->
+        <div class="feel-tags">
+          <span class="feel-tag feel-tag--green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Nature & Ecosystems
+          </span>
+          <span class="feel-tag feel-tag--gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Local Gastronomy
+          </span>
+          <span class="feel-tag feel-tag--red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Community Tourism
+          </span>
+        </div>
+
+        <a href="https://www.embratur.com.br" target="_blank" rel="noopener" class="btn btn-primary">Learn More</a>
+      </div>
+
+      <!-- Video column — echoes Why's accent frame, badge swapped for Embratur label -->
+      <div class="feel-video" data-reveal data-reveal-delay="120">
+        <div class="feel-video__label" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span>by Embratur</span>
+          <span class="eq-bars eq-bars--light"><span></span><span></span><span></span></span>
+        </div>
+        <div class="feel-video__frame">
+          <div class="feel-video__accent" aria-hidden="true"></div>
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/ywZe6LAa0oY"
+              title="Feel Brasil — Vitrine Brasil"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        <p class="feel-video__caption">Meet the Brasil DNA 2026 Partners</p>
+      </div>
+
+    </div><!-- /.feel-body -->
+
   </div>
+
+  <!-- Bottom frieze — mirrors Why's wave, scrolling the opposite way -->
+  <div class="brasil-wave brasil-wave--feel" aria-hidden="true"></div>
+
 </section>
 
 <!-- ===== PARTNERS ===== -->
 <section class="section partners" id="partners">
   <div class="container">
-    <div class="section-head" data-reveal>
-      <span class="label-tag">Our Partners</span>
-      <h2>Trusted voices on the <em>ground</em></h2>
+
+    <div class="partners-header" data-reveal>
+      <div>
+        <span class="label-tag">Our Partners</span>
+        <h2>Trusted voices on the <em>ground</em></h2>
+      </div>
+      <p class="partners-lead">Curated destinations and experiences handpicked to reveal the true essence of Brazil — by those who know it best.</p>
     </div>
 
     <div class="partners-row">
-      <?php foreach ($parceiros_home as $_pi => $_parc): ?>
-      <article class="partner-card" data-reveal <?= $_pi > 0 ? 'data-reveal-delay="' . ($_pi * 120) . '"' : '' ?>>
-        <div class="partner-icon">
-          <?php if (!empty($_parc['logo'])): ?>
-            <img src="<?= esc_url_safe($_parc['logo']) ?>" alt="Logo <?= htmlspecialchars($_parc['titulo']) ?>" style="width:100%;height:100%;object-fit:contain;padding:10px;">
-          <?php else: ?>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/></svg>
-          <?php endif; ?>
+
+      <!-- NEx – Natural Experience -->
+      <article class="partner-card" data-reveal>
+        <div class="partner-card__cover">
+          <img
+            src="https://bureaumundo.com/wp-content/uploads/2024/11/Abismo-Anhumas-Creditos-Site-Abismo-Anhumas-1.jpg"
+            alt="Caverna submersa no Abismo de Anhumas, MS"
+            loading="lazy"
+          >
+          <div class="partner-card__cover-overlay"></div>
         </div>
-        <h3><?= htmlspecialchars($_parc['titulo']) ?></h3>
-        <?php if (!empty($_parc['regiao'])): ?>
-        <p class="partner-since"><?= htmlspecialchars($_parc['regiao']) ?></p>
-        <?php endif; ?>
-        <?php if (!empty($_parc['descricao'])): ?>
-        <div class="partner-desc"><?= $_parc['descricao'] ?></div>
-        <?php endif; ?>
-        <?php $_parcLink = $_parc['link_guia'] ?: $_parc['site']; ?>
-        <?php if (!empty($_parcLink)): ?>
-        <a href="<?= esc_url_safe($_parcLink) ?>" target="_blank" rel="noopener" class="partner-link">Explore →</a>
-        <?php endif; ?>
+        <div class="partner-card__top">
+          <div class="partner-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+              <path d="M17 8C8 10 5.9 16.17 3.82 19.03L5.71 21L7 19C7.66 19.39 8.38 19.68 9.12 19.84C8.42 18.32 8.5 16.5 9.5 15C10.5 13.5 12 12.7 13.6 12.56C12.62 13.88 12.5 15.7 13.5 17C14.5 18.3 16.1 18.83 17.6 18.42C18.27 17.05 18.5 15.44 17.97 13.93C17.44 12.42 16.28 11.28 14.85 10.72C15.86 9.75 17.23 9.21 18.65 9.27L17 8Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="partner-tag-region">Centro-Oeste · Pantanal</div>
+        </div>
+
+        <h3>NEx – Natural Experience</h3>
+        <p class="partner-tagline">Connecting travelers with the heart of Brazil</p>
+
+        <div class="partner-divider"></div>
+
+        <p class="partner-desc-text">Based in Mato Grosso do Sul, NEx specializes in curated nature-based experiences across Bonito and the Pantanal — from crystal-clear rivers and underwater caves to wildlife safaris and conservation-focused journeys through South America's richest ecosystems.</p>
+
+        <div class="partner-footer">
+          <div class="partner-socials">
+            <a href="#" class="partner-social-btn" aria-label="Facebook" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" class="partner-social-btn" aria-label="Instagram" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="partner-social-btn" aria-label="LinkedIn" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="partner-social-btn" aria-label="YouTube" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+            </a>
+          </div>
+          <a href="https://bureaumundo.com/parceiro-brasil-dna/guia-nex-2026/" target="_blank" rel="noopener" class="partner-link">
+            Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </article>
-      <?php endforeach; ?>
+
+      <!-- Mato Grosso do Sul -->
+      <article class="partner-card" data-reveal data-reveal-delay="120">
+        <div class="partner-card__cover">
+          <img
+            src="https://observatorio3setor.org.br/wp-content/uploads/2024/10/AdobeStock_634722462-scaled.jpeg"
+            alt="Fauna do Pantanal, Mato Grosso do Sul"
+            loading="lazy"
+          >
+          <div class="partner-card__cover-overlay"></div>
+        </div>
+        <div class="partner-card__top">
+          <div class="partner-icon partner-icon--gold">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="partner-tag-region">Centro-Oeste · Pantanal &amp; Bonito</div>
+        </div>
+
+        <h3>Mato Grosso do Sul</h3>
+        <p class="partner-tagline">Where Nature Whispers Power</p>
+
+        <div class="partner-divider"></div>
+
+        <p class="partner-desc-text">One of South America's best-kept secrets — home to the Pantanal, the world's largest tropical wetland, bursting with jaguars, capybaras, and caimans. Bonito offers an underwater world of crystal rivers and caves. A living sanctuary of eco-tourism and natural wonder.</p>
+
+        <div class="partner-footer">
+          <div class="partner-socials">
+            <a href="#" class="partner-social-btn" aria-label="Facebook" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" class="partner-social-btn" aria-label="Instagram" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="partner-social-btn" aria-label="YouTube" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+            </a>
+          </div>
+          <a href="https://bureaumundo.com/parceiro-brasil-dna/guia-mato-grosso-do-sul-2026/" target="_blank" rel="noopener" class="partner-link">
+            Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>

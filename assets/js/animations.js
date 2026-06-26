@@ -145,3 +145,56 @@ export function initArrow() {
     .scroll-arrow:hover { color:var(--gold,#f9b000); }
   `);
 }
+
+export function initCounters() {
+   const els = $$(".count-up");
+   if (!els.length) return;
+
+   const animate = (el) => {
+      const target   = parseFloat(el.dataset.target || "0");
+      const decimals = parseInt(el.dataset.decimals || "0", 10);
+      const duration = 1400;
+      const start    = performance.now();
+
+      if (pRM()) { el.textContent = target.toFixed(decimals); return; }
+
+      const tick = (now) => {
+         const p     = Math.min((now - start) / duration, 1);
+         const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+         el.textContent = (target * eased).toFixed(decimals);
+         if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+   };
+
+   const obs = new IntersectionObserver(
+      (entries) => {
+         entries.forEach(({ isIntersecting, target: el }) => {
+            if (!isIntersecting) return;
+            animate(el);
+            obs.unobserve(el);
+         });
+      },
+      { threshold: 0.4 },
+   );
+   els.forEach((el) => obs.observe(el));
+}
+
+export function initSpotlightTilt() {
+   if (pRM() || isMobile()) return;
+   $$(".why-video__frame, .feel-video__frame").forEach((frame) => {
+      frame.style.willChange = "transform";
+      frame.addEventListener("mousemove", (e) => {
+         const r  = frame.getBoundingClientRect();
+         const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+         const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+         frame.style.transition = "transform .1s ease";
+         frame.style.transform  = `perspective(1100px) rotateX(${-dy * 4}deg) rotateY(${dx * 4}deg)`;
+      });
+      frame.addEventListener("mouseleave", () => {
+         frame.style.transition = "transform .6s cubic-bezier(.34,1.56,.64,1)";
+         frame.style.transform  = "";
+      });
+   });
+}
+
