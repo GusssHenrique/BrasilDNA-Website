@@ -54,9 +54,9 @@ require_once __DIR__ . '/includes/sidebar.php';
       <thead>
         <tr>
           <th>Parceiro</th>
-          <th>Título</th>
+          <th class="col-hide-mob">Título</th>
           <th>Status</th>
-          <th>Ordem</th>
+          <th class="col-hide-mob">Ordem</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -66,13 +66,13 @@ require_once __DIR__ . '/includes/sidebar.php';
             <td>
               <div class="adm-table__title"><?= htmlspecialchars($b['nome_parceiro']) ?></div>
             </td>
-            <td><?= htmlspecialchars($b['titulo'] ?? '—') ?></td>
+            <td class="col-hide-mob"><?= htmlspecialchars($b['titulo'] ?? '—') ?></td>
             <td>
               <span class="badge <?= $b['ativo'] ? 'badge-pub' : 'badge-draft' ?>">
                 <?= $b['ativo'] ? 'Ativo' : 'Inativo' ?>
               </span>
             </td>
-            <td><span class="adm-table__meta"><?= (int) $b['ordem'] ?></span></td>
+            <td class="col-hide-mob"><span class="adm-table__meta"><?= (int) $b['ordem'] ?></span></td>
             <td>
               <div class="adm-table__actions">
                 <a href="banner-form.php?id=<?= (int) $b['id'] ?>" class="a-edit">Editar</a>

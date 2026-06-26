@@ -314,7 +314,7 @@ $_totalPartners = count($destinos_home);
 
     <div class="news-grid">
       <?php foreach ($posts_home as $_pi => $_p):
-        $postLink = 'post.php?id=' . (int) $_p['id'];
+        $postLink = BASE_URL . 'pages/post.php?id=' . (int) $_p['id'];
         $postDate = !empty($_p['data_publicacao']) ? date('d/m/Y', strtotime($_p['data_publicacao'])) : '';
         $delay    = $_pi * 80;
       ?>
@@ -340,7 +340,7 @@ $_totalPartners = count($destinos_home);
     </div>
 
     <div class="section-cta" data-reveal>
-      <a href="news.php" class="btn btn-outline">See All Publications</a>
+      <a href="<?= BASE_URL ?>pages/news.php" class="btn btn-outline">See All Publications</a>
     </div>
   </div>
 </section>
@@ -362,7 +362,7 @@ $_totalPartners = count($destinos_home);
           $partner  = htmlspecialchars($b['nome_parceiro']);
           $activeClass = $idx === 0 ? ' is-active' : '';
         ?>
-        <a href="banner-click.php?id=<?= (int)$b['id'] ?>" class="partner-banner<?= $activeClass ?>" target="_blank" rel="noopener noreferrer" tabindex="<?= $idx === 0 ? '0' : '-1' ?>">
+        <a href="<?= BASE_URL ?>pages/banner-click.php?id=<?= (int)$b['id'] ?>" class="partner-banner<?= $activeClass ?>" target="_blank" rel="noopener noreferrer" tabindex="<?= $idx === 0 ? '0' : '-1' ?>">
           <?php if ($bgUrl || $bgVert): ?>
             <picture>
               <?php if ($bgVert): ?>
@@ -395,6 +395,7 @@ $_totalPartners = count($destinos_home);
       </div>
       <?php endif; ?>
     </div>
+    <div class="carousel-page-dots-mobile" id="bannerPageDots" aria-label="Páginas de banners"></div>
   </div>
 </section>
 <?php endif; ?>

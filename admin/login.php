@@ -3,7 +3,7 @@ require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
 
 if (estaLogado()) {
-    header('Location: index.php');
+    header('Location: painel.php');
     exit;
 }
 
@@ -24,18 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $admin = $stmt->fetch();
 
             if ($admin && password_verify($senha, $admin['senha'])) {
-                if ($admin['tipo'] !== 'admin') {
-                    $erro = 'Acesso negado. Use o painel de Super Admin.';
-                } else {
-                    session_regenerate_id(true);
-                    $_SESSION['admin_id']      = $admin['id'];
-                    $_SESSION['admin_nome']    = $admin['nome'];
-                    $_SESSION['admin_email']   = $admin['email'];
-                    $_SESSION['admin_tipo']    = $admin['tipo'];
-                    $_SESSION['last_activity'] = time();
-                    header('Location: index.php');
-                    exit;
-                }
+                session_regenerate_id(true);
+                $_SESSION['admin_id']      = $admin['id'];
+                $_SESSION['admin_nome']    = $admin['nome'];
+                $_SESSION['admin_email']   = $admin['email'];
+                $_SESSION['admin_tipo']    = $admin['tipo'];
+                $_SESSION['last_activity'] = time();
+                $destino = BASE_URL . 'admin/painel.php';
+                header('Location: ' . $destino);
+                exit;
             } else {
                 $erro = 'Email ou senha incorretos. Tente novamente.';
             }
@@ -57,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="adm-auth__card">
 
     <div class="adm-auth__logo"><?php include __DIR__ . '/../includes/brasildna-logo.php'; ?></div>
-    <div class="adm-auth__sub">Painel Administrativo</div>
+    <div class="adm-auth__sub">Painel de Acesso</div>
 
     <h1 class="adm-auth__title">Entrar</h1>
 

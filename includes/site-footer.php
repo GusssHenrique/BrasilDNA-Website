@@ -1,11 +1,12 @@
 <?php
+require_once __DIR__ . '/config.php';
 $v_js = file_exists(__DIR__ . '/../assets/main.js') ? filemtime(__DIR__ . '/../assets/main.js') : 1;
 ?>
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer">
   <div class="container footer-top">
     <div class="footer-brand">
-      <img src="assets/images/logo_brasilDNA_branco.png"
+      <img src="<?= BASE_URL ?>assets/images/logo_brasilDNA_branco.png"
            alt="Brasil DNA" class="footer-logo" height="40" loading="lazy">
       <p>Experience the Essence of Brazil.</p>
       <div class="social-links">
@@ -23,38 +24,38 @@ $v_js = file_exists(__DIR__ . '/../assets/main.js') ? filemtime(__DIR__ . '/../a
 
     <nav class="footer-nav">
       <h4>Navigate</h4>
-      <a href="index.php">Home</a>
-      <a href="about-us.php">About Us</a>
-      <a href="news.php">News</a>
-      <a href="index.php#clients">Destinations</a>
+      <a href="<?= BASE_URL ?>index.php">Home</a>
+      <a href="<?= BASE_URL ?>pages/about-us.php">About Us</a>
+      <a href="<?= BASE_URL ?>pages/news.php">News</a>
+      <a href="<?= BASE_URL ?>index.php#clients">Destinations</a>
     </nav>
 
     <div class="footer-presented">
       <h4>Initiative presented by</h4>
-      <img src="assets/images/globalvisioaccess.svg"
+      <img src="<?= BASE_URL ?>assets/images/globalvisioaccess.svg"
            alt="GVA — Global Vision Access" loading="lazy">
     </div>
   </div>
 
   <div class="footer-partners-bar">
     <div class="container footer-partners-row">
-      <img src="assets/images/Logotipo_Brasil.png" alt="Marca Brasil" loading="lazy">
+      <img src="<?= BASE_URL ?>assets/images/Logotipo_Brasil.png" alt="Marca Brasil" loading="lazy">
       <div class="logo-embratur">
-        <img src="assets/images/embratur.png" alt="" loading="lazy">
-        <span class="embratur-wordmark"></span>
+        <img src="<?= BASE_URL ?>assets/images/embratur.png" alt="" loading="lazy">
+        <!-- <span class="embratur-wordmark"></span> -->
       </div>
-      <img src="assets/images/Logotipo_Ministerio.png" alt="Ministério do Turismo" loading="lazy">
+      <img src="<?= BASE_URL ?>assets/images/Logotipo_Ministerio.png" alt="Ministério do Turismo" loading="lazy">
     </div>
   </div>
 
   <div class="footer-bottom">
     <div class="container painel">
       <p>&copy; <?= date('Y') ?> Brasil DNA. All rights reserved.</p>
-      <a href="admin/login.php">Administrative Panel</a>
+      <a href="<?= BASE_URL ?>admin/login.php">Administrative Panel</a>
     </div>
   </div>
 </footer>
 
-<script src="assets/main.js?v=<?= $v_js ?>" defer></script>
+<script type="module" src="<?= BASE_URL ?>assets/main.js?v=<?= $v_js ?>"></script>
 </body>
 </html>

@@ -36,13 +36,8 @@ try {
 $pageTitle   = 'Clientes';
 $paginaAtiva = 'clientes';
 
-if ($_SESSION['admin_tipo'] === 'super_admin') {
-    $adminBase = '../super-admin/';
-    require_once __DIR__ . '/../super-admin/includes/sidebar.php';
-} else {
-    $adminBase = '../admin/';
-    require_once __DIR__ . '/../admin/includes/sidebar.php';
-}
+$adminBase = '../admin/';
+require_once __DIR__ . '/../admin/includes/sidebar.php';
 ?>
 
 <div class="adm-page-head">
@@ -68,8 +63,8 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
           <th>Logo</th>
           <th>Título</th>
           <th>Tipo</th>
-          <th>Redes Sociais</th>
-          <th>Data</th>
+          <th class="col-hide-mob">Redes Sociais</th>
+          <th class="col-hide-mob">Data</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -78,8 +73,10 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
           <tr>
             <td>
               <?php if ($c['logo']): ?>
-                <img src="<?= htmlspecialchars('../' . $c['logo'], ENT_QUOTES, 'UTF-8') ?>"
-                     alt="Logo" style="height:40px;width:auto;object-fit:contain;border-radius:4px;">
+                <div style="width:72px;height:52px;background:#012a15;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px;">
+                  <img src="<?= htmlspecialchars('../' . $c['logo'], ENT_QUOTES, 'UTF-8') ?>"
+                       alt="Logo" style="max-height:40px;max-width:60px;width:auto;object-fit:contain;">
+                </div>
               <?php else: ?>
                 <span class="adm-table__meta">—</span>
               <?php endif; ?>
@@ -95,7 +92,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
                 <?= $badge ?>
               </span>
             </td>
-            <td>
+            <td class="col-hide-mob">
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <?php if ($c['facebook']): ?>
                   <a href="<?= htmlspecialchars($c['facebook'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="adm-table__meta" title="Facebook">FB</a>
@@ -117,7 +114,7 @@ if ($_SESSION['admin_tipo'] === 'super_admin') {
                 <?php endif; ?>
               </div>
             </td>
-            <td>
+            <td class="col-hide-mob">
               <span class="adm-table__meta">
                 <?= date('d/m/Y', strtotime($c['criado_em'])) ?>
               </span>

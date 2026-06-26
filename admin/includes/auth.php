@@ -5,10 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function estaLogado(): bool
 {
-    if (!isset($_SESSION['admin_id']) || ($_SESSION['admin_tipo'] ?? '') !== 'admin') {
-        return false;
-    }
-    // Session timeout: 2 horas de inatividade
+    if (!isset($_SESSION['admin_id'])) return false;
+    $tipo = $_SESSION['admin_tipo'] ?? '';
+    if ($tipo !== 'admin' && $tipo !== 'super_admin') return false;
     if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 7200)) {
         session_unset();
         session_destroy();
@@ -18,9 +17,22 @@ function estaLogado(): bool
     return true;
 }
 
+function ehSuperAdmin(): bool
+{
+    return ($_SESSION['admin_tipo'] ?? '') === 'super_admin';
+}
+
 function exigirLogin(): void
 {
     if (!estaLogado()) {
+        header('Location: login.php');
+        exit;
+    }
+}
+
+function exigirSuperAdmin(): void
+{
+    if (!estaLogado() || !ehSuperAdmin()) {
         header('Location: login.php');
         exit;
     }

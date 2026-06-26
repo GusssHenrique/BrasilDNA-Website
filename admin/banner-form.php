@@ -206,7 +206,7 @@ require_once __DIR__ . '/includes/sidebar.php';
       <div class="post-side-section">
         <div class="post-side-label">
           Banner Vertical
-          <span class="banner-size-hint">📱 Mobile — <strong>480 × 360 px</strong> (proporção 4:3)</span>
+          <span class="banner-size-hint">📱 Mobile — <strong>405 × 720 px</strong> (proporção 9:16)</span>
         </div>
         <?php if ($vImgVert): ?>
           <img id="vert-preview" src="<?= htmlspecialchars($vImgVert, ENT_QUOTES, 'UTF-8') ?>"

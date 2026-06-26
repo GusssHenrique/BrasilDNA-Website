@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 
 $id   = isset($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
 $post = null;
@@ -10,7 +10,7 @@ if ($id > 0) {
         $stmt->execute([':id' => $id]);
         $post = $stmt->fetch();
         if ($post) {
-            require_once __DIR__ . '/includes/stats.php';
+            require_once __DIR__ . '/../includes/stats.php';
             registrarStat($pdo, 'post', $id, 'cliques');
         }
     } catch (\PDOException $e) {
@@ -19,7 +19,7 @@ if ($id > 0) {
 }
 
 if (!$post) {
-    header('Location: news.php');
+    header('Location: ' . BASE_URL . 'pages/news.php');
     exit;
 }
 
@@ -33,7 +33,9 @@ $regionImages = [
 $defaultImg = 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1400&q=80';
 
 $featuredImg = !empty($post['imagem'])
-    ? htmlspecialchars($post['imagem'], ENT_QUOTES, 'UTF-8')
+    ? (str_starts_with($post['imagem'], 'http')
+        ? htmlspecialchars($post['imagem'], ENT_QUOTES, 'UTF-8')
+        : BASE_URL . htmlspecialchars($post['imagem'], ENT_QUOTES, 'UTF-8'))
     : ($regionImages[$post['regiao'] ?? ''] ?? $defaultImg);
 
 $rawDate  = !empty($post['data_publicacao']) ? $post['data_publicacao'] : ($post['criado_em'] ?? '');
@@ -51,7 +53,7 @@ $conteudo = $post['conteudo'] ?? '';
 
 $pageTitle   = htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') . ' — Brasil DNA';
 $currentPage = 'post';
-require_once __DIR__ . '/includes/site-header.php';
+require_once __DIR__ . '/../includes/site-header.php';
 ?>
 
 <!-- ===== POST CONTENT ===== -->
@@ -59,7 +61,7 @@ require_once __DIR__ . '/includes/site-header.php';
   <div class="container">
     <div class="post-inner">
 
-      <a href="news.php" class="post-back">
+      <a href="<?= BASE_URL ?>pages/news.php" class="post-back">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
         </svg>
@@ -94,7 +96,7 @@ require_once __DIR__ . '/includes/site-header.php';
       <?php endif; ?>
 
       <div class="post-footer-nav">
-        <a href="news.php" class="post-back">
+        <a href="<?= BASE_URL ?>pages/news.php" class="post-back">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
           </svg>
@@ -106,5 +108,5 @@ require_once __DIR__ . '/includes/site-header.php';
   </div>
 </section>
 
-<?php require_once __DIR__ . '/includes/site-footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/site-footer.php'; ?>
 

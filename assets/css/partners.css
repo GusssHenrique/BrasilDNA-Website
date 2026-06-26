@@ -1,0 +1,76 @@
+/* ============================================================
+   PARTNERS
+   ============================================================ */
+.partners {
+   background: var(--sand-deep);
+}
+.partners-row {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 28px;
+}
+.partner-card {
+   background: var(--white);
+   border-radius: var(--r-xl);
+   padding: 40px 36px;
+   box-shadow: var(--shadow-card);
+   transition:
+      transform 0.35s var(--ease-spring),
+      box-shadow 0.35s;
+}
+.partner-card:hover {
+   transform: translateY(-6px);
+   box-shadow: var(--shadow-green);
+}
+.partner-icon {
+   width: 80px;
+   height: 80px;
+   border-radius: var(--r-md);
+   background: var(--green-900);
+   color: #fff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-bottom: 20px;
+}
+.partner-card h3 {
+   font-size: 1.25rem;
+   margin-bottom: 6px;
+}
+.partner-since {
+   font-size: 0.8rem;
+   font-weight: 600;
+   color: var(--green-600);
+   text-transform: uppercase;
+   letter-spacing: 0.06em;
+   margin-bottom: 12px !important;
+}
+.partner-desc {
+   color: var(--ink-soft);
+   font-size: 0.95rem;
+   margin-bottom: 20px;
+}
+.partner-desc p {
+   margin: 0 0 0.75em;
+}
+.partner-desc p:last-child {
+   margin-bottom: 0;
+}
+.partner-card > p:last-of-type {
+   color: var(--ink-soft);
+   font-size: 0.95rem;
+   margin-bottom: 20px;
+}
+.partner-link {
+   font-weight: 700;
+   font-size: 0.9rem;
+   color: var(--red);
+   transition:
+      color 0.25s,
+      letter-spacing 0.25s;
+}
+.partner-link:hover {
+   color: var(--red-dark);
+   letter-spacing: 0.02em;
+}
+

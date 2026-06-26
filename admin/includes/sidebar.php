@@ -101,10 +101,34 @@ $userEmail   = $_SESSION['admin_email'] ?? '';
         </svg>
         Clientes
       </a>
+
+      <?php if (($_SESSION['admin_tipo'] ?? '') === 'super_admin'): ?>
+      <div class="adm-sidebar__label" style="margin-top:16px;">Sistema</div>
+
+      <a href="<?= $adminBase ?>parceiros.php" class="adm-sidebar__link <?= $paginaAtiva === 'parceiros' ? 'is-active' : '' ?>">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        Parceiros
+      </a>
+
+      <a href="<?= $adminBase ?>admins.php" class="adm-sidebar__link <?= $paginaAtiva === 'admins' ? 'is-active' : '' ?>">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        Admins
+      </a>
+      <?php endif; ?>
     </nav>
 
 
     <div class="adm-sidebar__bottom">
+      <a href="<?= BASE_URL ?>index.php" target="_blank" rel="noopener" class="adm-sidebar__ver-site">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+        Ver site
+      </a>
       <a href="<?= $adminBase ?>logout.php" class="adm-sidebar__sair">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>

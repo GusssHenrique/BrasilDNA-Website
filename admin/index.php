@@ -36,7 +36,7 @@ require_once __DIR__ . '/includes/sidebar.php';
         <tr>
           <th>Título</th>
           <th>Status</th>
-          <th>Data</th>
+          <th class="col-hide-mob">Data</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -64,7 +64,7 @@ require_once __DIR__ . '/includes/sidebar.php';
             <td>
               <span class="badge <?= $badgeClass ?>"><?= $badgeLabel ?></span>
             </td>
-            <td>
+            <td class="col-hide-mob">
               <span class="adm-table__meta"><?= $data ?></span>
             </td>
             <td>

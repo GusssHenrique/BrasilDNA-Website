@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/includes/conexao.php';
+require_once __DIR__ . '/../includes/conexao.php';
 
 $posts = [];
 try {
     $stmt  = $pdo->query('SELECT * FROM posts WHERE status = "publicado" ORDER BY data_publicacao IS NULL ASC, data_publicacao DESC');
     $posts = $stmt->fetchAll();
     if (!empty($posts)) {
-        require_once __DIR__ . '/includes/stats.php';
+        require_once __DIR__ . '/../includes/stats.php';
         foreach ($posts as $p) {
             registrarStat($pdo, 'post', (int) $p['id'], 'visualizacoes');
         }
@@ -26,7 +26,10 @@ $defaultImg = 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=70
 
 function postImage(array $post, array $map, string $default): string {
     $saved = $post['imagem'] ?? '';
-    if ($saved) return htmlspecialchars($saved, ENT_QUOTES, 'UTF-8');
+    if ($saved) {
+        $path = htmlspecialchars($saved, ENT_QUOTES, 'UTF-8');
+        return str_starts_with($saved, 'http') ? $path : BASE_URL . $path;
+    }
     return $map[$post['regiao'] ?? ''] ?? $default;
 }
 
@@ -37,7 +40,7 @@ function postDate(array $post): string {
 
 $pageTitle   = 'News & Inspiration — Brasil DNA';
 $currentPage = 'news';
-require_once __DIR__ . '/includes/site-header.php';
+require_once __DIR__ . '/../includes/site-header.php';
 ?>
 
 <!-- ===== HERO ===== -->
@@ -88,7 +91,7 @@ require_once __DIR__ . '/includes/site-header.php';
           $regiaoSlug  = 'region--' . strtolower(str_replace([' ', '-'], '-', $regiao));
         ?>
           <article class="news-card" data-region="<?= htmlspecialchars($regiao, ENT_QUOTES, 'UTF-8') ?>">
-            <a href="post.php?id=<?= (int) $post['id'] ?>" class="news-img-link">
+            <a href="<?= BASE_URL ?>pages/post.php?id=<?= (int) $post['id'] ?>" class="news-img-link">
               <img src="<?= $img ?>"
                    alt="<?= htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') ?>"
                    loading="<?= $i < 3 ? 'eager' : 'lazy' ?>">
@@ -108,11 +111,11 @@ require_once __DIR__ . '/includes/site-header.php';
                 </div>
               <?php endif; ?>
               <h3>
-                <a href="post.php?id=<?= (int) $post['id'] ?>">
+                <a href="<?= BASE_URL ?>pages/post.php?id=<?= (int) $post['id'] ?>">
                   <?= htmlspecialchars($post['titulo'], ENT_QUOTES, 'UTF-8') ?>
                 </a>
               </h3>
-              <a href="post.php?id=<?= (int) $post['id'] ?>" class="news-more">Read more →</a>
+              <a href="<?= BASE_URL ?>pages/post.php?id=<?= (int) $post['id'] ?>" class="news-more">Read more →</a>
             </div>
           </article>
         <?php endforeach; ?>
@@ -153,5 +156,5 @@ require_once __DIR__ . '/includes/site-header.php';
 }());
 </script>
 
-<?php require_once __DIR__ . '/includes/site-footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/site-footer.php'; ?>
 

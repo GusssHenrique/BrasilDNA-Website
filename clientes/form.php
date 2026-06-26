@@ -4,12 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/../includes/conexao.php';
 
-// Carrega auth do tipo correto para ter acesso às funções CSRF/sessão
-if (!empty($_SESSION['admin_tipo']) && $_SESSION['admin_tipo'] === 'super_admin') {
-    require_once __DIR__ . '/../super-admin/includes/auth.php';
-} else {
-    require_once __DIR__ . '/../admin/includes/auth.php';
-}
+require_once __DIR__ . '/../admin/includes/auth.php';
 
 if (empty($_SESSION['admin_id'])) {
     header('Location: ../admin/login.php');
@@ -165,13 +160,8 @@ $vImagemFundo = $cliente['imagem_fundo'] ?? '';
 $pageTitle   = $id !== null ? 'Editar Cliente' : 'Novo Cliente';
 $paginaAtiva = 'clientes';
 
-if ($_SESSION['admin_tipo'] === 'super_admin') {
-    $adminBase = '../super-admin/';
-    require_once __DIR__ . '/../super-admin/includes/sidebar.php';
-} else {
-    $adminBase = '../admin/';
-    require_once __DIR__ . '/../admin/includes/sidebar.php';
-}
+$adminBase = '../admin/';
+require_once __DIR__ . '/../admin/includes/sidebar.php';
 ?>
 
 <a href="index.php" class="post-back-link">
@@ -414,9 +404,5 @@ tinymce.init({
 </script>
 
 <?php
-if ($_SESSION['admin_tipo'] === 'super_admin') {
-    require_once __DIR__ . '/../super-admin/includes/layout-footer.php';
-} else {
-    require_once __DIR__ . '/../admin/includes/layout-footer.php';
-}
+require_once __DIR__ . '/../admin/includes/layout-footer.php';
 ?>

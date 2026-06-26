@@ -7,9 +7,9 @@
 
 $pageTitle   = 'About Us — Brasil DNA | The Concept & Initiative';
 $currentPage = 'about';
-require_once __DIR__ . '/includes/site-header.php';
+require_once __DIR__ . '/../includes/site-header.php';
 ?>
-<link rel="stylesheet" href="assets/about-us.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/about-us.css">
 
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
@@ -434,4 +434,4 @@ require_once __DIR__ . '/includes/site-header.php';
   </div>
 </section>
 
-<?php require_once __DIR__ . '/includes/site-footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/site-footer.php'; ?>

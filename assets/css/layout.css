@@ -1,0 +1,165 @@
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+.section {
+   padding: 100px 0;
+}
+
+/* ============================================================
+   GRIDS
+   ============================================================ */
+.grid-2 {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 72px;
+   align-items: center;
+}
+.grid-2--reverse {
+   direction: rtl;
+}
+.grid-2--reverse > * {
+   direction: ltr;
+}
+
+/* ============================================================
+   VIDEO FRAME
+   ============================================================ */
+.video-wrap {
+   position: relative;
+   padding-top: 56.25%;
+   border-radius: var(--r-xl);
+   overflow: hidden;
+   box-shadow: var(--shadow-green);
+   background: var(--ink);
+}
+.video-wrap iframe {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   border: none;
+}
+.video-caption {
+   margin-top: 14px;
+   font-size: 0.85rem;
+   color: var(--ink-soft);
+   text-align: center;
+   font-style: italic;
+}
+
+/* ============================================================
+   WHY TRAVEL
+   ============================================================ */
+.why {
+   background: var(--white);
+}
+.why-text h2 {
+   font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+   margin-bottom: 22px;
+}
+.why-text .label-tag {
+   margin-bottom: 14px;
+}
+.why-text p {
+   color: var(--ink-soft);
+   font-size: 1.02rem;
+}
+
+/* ============================================================
+   DNA CONCEPT
+   ============================================================ */
+.concept {
+   background: var(--green-900);
+   color: var(--white);
+   position: relative;
+   overflow: hidden;
+}
+.concept-bg {
+   position: absolute;
+   inset: 0;
+   background:
+      radial-gradient(ellipse 80% 60% at 15% 50%, rgba(3, 104, 48, 0.45), transparent),
+      radial-gradient(ellipse 50% 80% at 90% 20%, rgba(200, 16, 46, 0.15), transparent);
+   pointer-events: none;
+}
+.concept .section-head {
+   color: var(--white);
+}
+.concept .section-head h2 {
+   color: var(--white);
+}
+.concept .section-lead {
+   color: rgba(255, 255, 255, 0.75);
+}
+
+.pillars-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 20px;
+}
+.pillar-card {
+   background: rgba(255, 255, 255, 0.05);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   border-radius: var(--r-xl);
+   padding: 36px 28px;
+   transition:
+      background 0.3s,
+      border-color 0.3s,
+      transform 0.35s var(--ease-spring);
+   cursor: default;
+}
+.pillar-card:hover {
+   background: rgba(255, 255, 255, 0.1);
+   border-color: var(--gold);
+   transform: translateY(-6px);
+}
+.pillar-letter-wrap {
+   width: 56px;
+   height: 56px;
+   border-radius: 50%;
+   background: var(--red);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-bottom: 20px;
+   box-shadow: 0 8px 20px -6px rgba(200, 16, 46, 0.55);
+}
+.pillar-letter-wrap span {
+   font-family: var(--font-display);
+   font-size: 1.6rem;
+   font-weight: 900;
+   color: var(--white);
+   line-height: 1;
+}
+.pillar-card h3 {
+   font-size: 1.15rem;
+   color: var(--white);
+   margin-bottom: 12px;
+}
+.pillar-card p {
+   font-size: 0.92rem;
+   color: rgba(255, 255, 255, 0.7);
+   line-height: 1.7;
+   margin: 0;
+}
+.pillar-card em {
+   color: var(--gold-light);
+}
+
+/* ============================================================
+   FEEL BRASIL
+   ============================================================ */
+.feel {
+   background: var(--sand);
+}
+.feel-text h2 {
+   font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+   margin-bottom: 20px;
+}
+.feel-text p {
+   color: var(--ink-soft);
+}
+.feel-text .btn {
+   margin-top: 8px;
+}
+
