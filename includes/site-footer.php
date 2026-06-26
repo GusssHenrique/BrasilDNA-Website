@@ -44,7 +44,7 @@ $v_js = file_exists(__DIR__ . '/../assets/main.js') ? filemtime(__DIR__ . '/../a
         <img src="<?= BASE_URL ?>assets/images/embratur.png" alt="" loading="lazy">
         <!-- <span class="embratur-wordmark"></span> -->
       </div>
-      <img src="<?= BASE_URL ?>assets/images/Logotipo_Ministerio.png" alt="Ministério do Turismo" loading="lazy">
+      <img src="<?= BASE_URL ?>assets/images/ministerio-do-turismo.png" alt="Ministério do Turismo" loading="lazy">
     </div>
   </div>
 

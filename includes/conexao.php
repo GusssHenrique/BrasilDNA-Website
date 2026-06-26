@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-$host    = getenv('DB_HOST') ?: '127.0.0.1';
-$porta   = getenv('DB_PORT') ?: '3306';
-$banco   = getenv('DB_NAME') ?: 'brasildna';
-$usuario = getenv('DB_USER') ?: 'root';
-$senha   = getenv('DB_PASS') ?: '';
+$host = '127.0.0.1';
+$porta = '3306';
+$banco = 'brasildna';
+$usuario = 'root';
+$senha = '';
 
 try {
     $pdo = new PDO(
