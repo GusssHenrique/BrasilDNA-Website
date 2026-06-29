@@ -971,6 +971,8 @@ a { color: inherit; text-decoration: none; }
 
   .adm-main {
     margin-left: 0;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   .adm-content {
@@ -1035,6 +1037,21 @@ a { color: inherit; text-decoration: none; }
   }
 
   .post-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .painel-chart-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .painel-chart-legend {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .painel-breakdown-grid {
     grid-template-columns: 1fr;
   }
 

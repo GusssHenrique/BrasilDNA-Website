@@ -19,37 +19,31 @@
    user-select: none;
 }
 
-/* O track só serve de container — não anima mais */
+/* Track: flex para desktop e mobile */
 .banner-track {
-   position: relative;
+   display: flex;
+   gap: 12px;
    height: 100%;
+   transition: transform 0.4s ease;
 }
 
-/* Todos os slides empilhados no mesmo lugar */
+/* Desktop: 3 banners por página */
 .partner-banner {
-   position: absolute;
-   inset: 0;
+   flex: 0 0 calc(33.333% - 8px);
+   position: relative;
    display: flex;
    align-items: center;
    justify-content: space-between;
    gap: 24px;
-   border-radius: 0;
+   border-radius: 10px;
    overflow: hidden;
    background: #1a1a1a;
    padding: 0 40px;
    text-decoration: none;
-   width: 100%;
    height: 100%;
-   /* invisível por padrão */
-   opacity: 0;
-   pointer-events: none;
-   transition: opacity 0.6s ease;
-}
-
-/* Slide visível */
-.partner-banner.is-active {
    opacity: 1;
    pointer-events: all;
+   flex-shrink: 0;
 }
 
 .partner-banner:hover {
@@ -91,7 +85,7 @@
    transform: translateY(-50%) scale(0.96);
 }
 
-/* Bolinhas de página — mobile */
+/* Bolinhas de página */
 .carousel-page-dots-mobile {
    display: none;
    justify-content: center;
@@ -99,6 +93,7 @@
    gap: 8px;
    margin-top: 14px;
 }
+
 
 .carousel-page-dots-mobile.is-visible {
    display: flex;
@@ -122,16 +117,9 @@
    transform: scale(1.45);
 }
 
-/* Dots */
+/* Dots estáticos por banner — ocultos, usamos pageDots dinâmicos */
 .carousel-dots {
-   position: absolute;
-   bottom: 12px;
-   left: 50%;
-   transform: translateX(-50%);
-   display: flex;
-   gap: 7px;
-   z-index: 30;
-   pointer-events: all;
+   display: none;
 }
 
 .carousel-dot {
@@ -266,30 +254,50 @@
       height: auto;
    }
    .banner-track {
-      display: flex;
-      gap: 8px;
-      transition: transform 0.4s ease;
+      gap: 0;
    }
    .partner-banner {
-      position: relative;
-      inset: auto;
-      flex: 0 0 calc(33.333% - 5.34px);
-      width: calc(33.333% - 5.34px);
+      flex: 0 0 100%;
       height: auto;
-      aspect-ratio: 9 / 16;
-      opacity: 1;
-      pointer-events: all;
-      padding: 0;
-   }
-   .partner-banner.is-active {
-      opacity: 1;
-   }
-   .carousel-dots {
-      display: none;
+      aspect-ratio: 1 / 1;
+      padding: 16px;
+      border-radius: 10px;
    }
    .carousel-btn {
       width: 34px;
       height: 34px;
+   }
+}
+
+/* ============================================================
+   BANNER AD SLOTS — propaganda espalhada na página
+   ============================================================ */
+.banner-ad-slot {
+   padding: 28px 0;
+}
+
+.banner-ad {
+   display: block;
+   position: relative;
+   height: 120px;
+   border-radius: 10px;
+   overflow: hidden;
+   text-decoration: none;
+   background: #1a1a1a;
+   transition: filter 0.2s;
+}
+
+.banner-ad:hover {
+   filter: brightness(1.06);
+}
+
+@media (max-width: 700px) {
+   .banner-ad {
+      height: auto;
+      aspect-ratio: 1 / 1;
+   }
+   .banner-ad-slot {
+      padding: 16px 0;
    }
 }
 

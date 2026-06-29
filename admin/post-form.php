@@ -49,6 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erro = 'Falha ao salvar a imagem no servidor.';
             }
         }
+    } else {
+        $urlInput = trim($_POST['imagem_url'] ?? '');
+        if ($urlInput !== '' && filter_var($urlInput, FILTER_VALIDATE_URL)) {
+            $imagem = $urlInput;
+        }
     }
 
     if ($titulo === '') {
@@ -195,6 +200,11 @@ require_once __DIR__ . '/includes/sidebar.php';
           <span id="img-label">Enviar imagem</span>
         </label>
         <input type="file" id="imagem-upload" name="imagem_file" accept="image/*" style="display:none;">
+        <div style="margin-top:8px;">
+          <input class="adm-form__input" type="url" name="imagem_url" id="imagem-url"
+                 placeholder="Ou cole a URL da imagem (https://...)"
+                 value="<?= htmlspecialchars(filter_var($vImagem, FILTER_VALIDATE_URL) ? $vImagem : '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
       </div>
 
       <div class="post-side-section">
@@ -245,6 +255,12 @@ document.getElementById('imagem-upload').addEventListener('change', function() {
     label.textContent = file.name;
   };
   reader.readAsDataURL(file);
+});
+
+document.getElementById('imagem-url').addEventListener('input', function() {
+  var url = this.value.trim();
+  var preview = document.getElementById('img-preview');
+  if (url) { preview.src = url; preview.style.display = 'block'; }
 });
 
 tinymce.init({

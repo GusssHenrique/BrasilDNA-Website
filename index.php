@@ -42,6 +42,26 @@ try {
     $posts_home = [];
 }
 
+// Pool embaralhado para slots de propaganda
+$banners_pool = $banners_parceiros;
+shuffle($banners_pool);
+$_bannerAdIdx = 0;
+
+function renderBannerAd(array $b): void {
+    $bgUrl  = htmlspecialchars($b['imagem_url']          ?? '', ENT_QUOTES, 'UTF-8');
+    $bgVert = htmlspecialchars($b['imagem_vertical_url'] ?? '', ENT_QUOTES, 'UTF-8');
+    if (!$bgUrl && !$bgVert) return;
+    $link = BASE_URL . 'pages/banner-click.php?id=' . (int)$b['id'];
+    echo '<a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '" class="banner-ad" target="_blank" rel="noopener noreferrer">';
+    echo '<picture>';
+    if ($bgVert) echo '<source media="(max-width: 700px)" srcset="' . $bgVert . '">';
+    $src = $bgUrl ?: $bgVert;
+    echo '<img class="partner-banner__bg" src="' . $src . '" alt="" aria-hidden="true" loading="lazy">';
+    echo '</picture>';
+    echo '<div class="partner-banner__overlay"></div>';
+    echo '</a>';
+}
+
 $currentPage = 'home';
 require_once __DIR__ . '/includes/site-header.php';
 ?>
@@ -100,6 +120,10 @@ require_once __DIR__ . '/includes/site-header.php';
     </svg>
   </a>
 </section>
+
+<?php if (!empty($banners_pool)): $adB = $banners_pool[$_bannerAdIdx++ % count($banners_pool)]; ?>
+<div class="banner-ad-slot"><div class="container" data-reveal><?php renderBannerAd($adB); ?></div></div>
+<?php endif; ?>
 
 <!-- ===== WHY TRAVEL ===== -->
 <section class="section why" id="why">
@@ -359,96 +383,70 @@ require_once __DIR__ . '/includes/site-header.php';
 
     <div class="partners-row">
 
-      <!-- NEx – Natural Experience -->
-      <article class="partner-card" data-reveal>
-        <div class="partner-card__cover">
-          <img
-            src="https://bureaumundo.com/wp-content/uploads/2024/11/Abismo-Anhumas-Creditos-Site-Abismo-Anhumas-1.jpg"
-            alt="Caverna submersa no Abismo de Anhumas, MS"
-            loading="lazy"
-          >
-          <div class="partner-card__cover-overlay"></div>
-        </div>
-        <div class="partner-card__top">
-          <div class="partner-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
-              <path d="M17 8C8 10 5.9 16.17 3.82 19.03L5.71 21L7 19C7.66 19.39 8.38 19.68 9.12 19.84C8.42 18.32 8.5 16.5 9.5 15C10.5 13.5 12 12.7 13.6 12.56C12.62 13.88 12.5 15.7 13.5 17C14.5 18.3 16.1 18.83 17.6 18.42C18.27 17.05 18.5 15.44 17.97 13.93C17.44 12.42 16.28 11.28 14.85 10.72C15.86 9.75 17.23 9.21 18.65 9.27L17 8Z" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="partner-tag-region">Centro-Oeste · Pantanal</div>
-        </div>
+      <?php if (!empty($parceiros_home)): ?>
+        <?php foreach ($parceiros_home as $_pi => $_p): ?>
+          <article class="partner-card" data-reveal <?= $_pi > 0 ? 'data-reveal-delay="' . ($_pi * 120) . '"' : '' ?>>
+            <div class="partner-card__cover">
+              <?php if (!empty($_p['imagem_fundo'])): ?>
+                <img src="<?= htmlspecialchars($_p['imagem_fundo']) ?>" alt="<?= htmlspecialchars($_p['titulo']) ?>" loading="lazy">
+              <?php endif; ?>
+              <div class="partner-card__cover-overlay"></div>
+            </div>
+            <div class="partner-card__top">
+              <div class="partner-icon">
+                <?php if (!empty($_p['logo'])): ?>
+                  <img src="<?= htmlspecialchars($_p['logo']) ?>" alt="<?= htmlspecialchars($_p['titulo']) ?>" style="width:68px;height:68px;object-fit:contain;">
+                <?php else: ?>
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/></svg>
+                <?php endif; ?>
+              </div>
+              <?php if (!empty($_p['regiao'])): ?>
+                <div class="partner-tag-region"><?= htmlspecialchars($_p['regiao']) ?></div>
+              <?php endif; ?>
+            </div>
 
-        <h3>NEx – Natural Experience</h3>
-        <p class="partner-tagline">Connecting travelers with the heart of Brazil</p>
+            <h3><?= htmlspecialchars($_p['titulo']) ?></h3>
 
-        <div class="partner-divider"></div>
+            <div class="partner-divider"></div>
 
-        <p class="partner-desc-text">Based in Mato Grosso do Sul, NEx specializes in curated nature-based experiences across Bonito and the Pantanal — from crystal-clear rivers and underwater caves to wildlife safaris and conservation-focused journeys through South America's richest ecosystems.</p>
+            <?php if (!empty($_p['descricao'])): ?>
+              <div class="partner-desc-text"><?= $_p['descricao'] ?></div>
+            <?php endif; ?>
 
-        <div class="partner-footer">
-          <div class="partner-socials">
-            <a href="#" class="partner-social-btn" aria-label="Facebook" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-            </a>
-            <a href="#" class="partner-social-btn" aria-label="Instagram" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" class="partner-social-btn" aria-label="LinkedIn" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="#" class="partner-social-btn" aria-label="YouTube" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
-            </a>
-          </div>
-          <a href="https://bureaumundo.com/parceiro-brasil-dna/guia-nex-2026/" target="_blank" rel="noopener" class="partner-link">
-            Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <!-- Mato Grosso do Sul -->
-      <article class="partner-card" data-reveal data-reveal-delay="120">
-        <div class="partner-card__cover">
-          <img
-            src="https://observatorio3setor.org.br/wp-content/uploads/2024/10/AdobeStock_634722462-scaled.jpeg"
-            alt="Fauna do Pantanal, Mato Grosso do Sul"
-            loading="lazy"
-          >
-          <div class="partner-card__cover-overlay"></div>
-        </div>
-        <div class="partner-card__top">
-          <div class="partner-icon partner-icon--gold">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="partner-tag-region">Centro-Oeste · Pantanal &amp; Bonito</div>
-        </div>
-
-        <h3>Mato Grosso do Sul</h3>
-        <p class="partner-tagline">Where Nature Whispers Power</p>
-
-        <div class="partner-divider"></div>
-
-        <p class="partner-desc-text">One of South America's best-kept secrets — home to the Pantanal, the world's largest tropical wetland, bursting with jaguars, capybaras, and caimans. Bonito offers an underwater world of crystal rivers and caves. A living sanctuary of eco-tourism and natural wonder.</p>
-
-        <div class="partner-footer">
-          <div class="partner-socials">
-            <a href="#" class="partner-social-btn" aria-label="Facebook" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-            </a>
-            <a href="#" class="partner-social-btn" aria-label="Instagram" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" class="partner-social-btn" aria-label="YouTube" tabindex="-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
-            </a>
-          </div>
-          <a href="https://bureaumundo.com/parceiro-brasil-dna/guia-mato-grosso-do-sul-2026/" target="_blank" rel="noopener" class="partner-link">
-            Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </article>
+            <div class="partner-footer">
+              <div class="partner-socials">
+                <?php if (!empty($_p['facebook'])): ?>
+                  <a href="<?= htmlspecialchars($_p['facebook']) ?>" target="_blank" rel="noopener" class="partner-social-btn" aria-label="Facebook">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                  </a>
+                <?php endif; ?>
+                <?php if (!empty($_p['instagram'])): ?>
+                  <a href="<?= htmlspecialchars($_p['instagram']) ?>" target="_blank" rel="noopener" class="partner-social-btn" aria-label="Instagram">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                  </a>
+                <?php endif; ?>
+                <?php if (!empty($_p['linkedin'])): ?>
+                  <a href="<?= htmlspecialchars($_p['linkedin']) ?>" target="_blank" rel="noopener" class="partner-social-btn" aria-label="LinkedIn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                <?php endif; ?>
+                <?php if (!empty($_p['youtube'])): ?>
+                  <a href="<?= htmlspecialchars($_p['youtube']) ?>" target="_blank" rel="noopener" class="partner-social-btn" aria-label="YouTube">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+                  </a>
+                <?php endif; ?>
+              </div>
+              <?php if (!empty($_p['link_guia'])): ?>
+                <a href="<?= htmlspecialchars($_p['link_guia']) ?>" target="_blank" rel="noopener" class="partner-link" data-cliente-id="<?= (int) $_p['id'] ?>">
+                  Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              <?php endif; ?>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p style="color:var(--text-muted);padding:2rem 0;">Nenhum parceiro cadastrado ainda.</p>
+      <?php endif; ?>
 
     </div>
   </div>
@@ -496,6 +494,7 @@ $_totalPartners = count($destinos_home);
         <div class="client-card client-card--mosaic<?= $solid ? ' client-card--solid' : '' ?> client-card--<?= $sz ?>"
              role="button" tabindex="0"
              data-modal-trigger
+             data-id="<?= (int) $c['id'] ?>"
              data-name="<?= htmlspecialchars($c['titulo']) ?>"
              data-logo="<?= htmlspecialchars($c['logo'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
              data-desc="<?= htmlspecialchars($c['descricao'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
@@ -527,6 +526,10 @@ $_totalPartners = count($destinos_home);
 
 
 </section>
+
+<?php if (!empty($banners_pool)): $adB = $banners_pool[$_bannerAdIdx++ % count($banners_pool)]; ?>
+<div class="banner-ad-slot"><div class="container" data-reveal><?php renderBannerAd($adB); ?></div></div>
+<?php endif; ?>
 
 <!-- ===== NEWS ===== -->
 <section class="section news" id="news">
@@ -569,60 +572,10 @@ $_totalPartners = count($destinos_home);
   </div>
 </section>
 
-<!-- ===== PARTNER BANNERS ===== -->
-<?php if (!empty($banners_parceiros)): ?>
-<section class="partner-banners" id="partner-banners">
-  <div class="container">
-    <span class="label-tag" data-reveal>Partner Spotlight</span>
-    <div class="banner-carousel" id="bannerCarousel">
-      <div class="banner-track">
-        <?php foreach ($banners_parceiros as $idx => $b):
-          $logoUrl  = htmlspecialchars($b['logo_url']             ?? '', ENT_QUOTES, 'UTF-8');
-          $bgUrl    = htmlspecialchars($b['imagem_url']           ?? '', ENT_QUOTES, 'UTF-8');
-          $bgVert   = htmlspecialchars($b['imagem_vertical_url']  ?? '', ENT_QUOTES, 'UTF-8');
-          $titulo   = htmlspecialchars($b['titulo']       ?? '');
-          $subtexto = htmlspecialchars($b['subtexto']     ?? '');
-          $btnTxt   = htmlspecialchars($b['botao_texto']  ?? 'Learn More');
-          $partner  = htmlspecialchars($b['nome_parceiro']);
-          $activeClass = $idx === 0 ? ' is-active' : '';
-        ?>
-        <a href="<?= BASE_URL ?>pages/banner-click.php?id=<?= (int)$b['id'] ?>" class="partner-banner<?= $activeClass ?>" target="_blank" rel="noopener noreferrer" tabindex="<?= $idx === 0 ? '0' : '-1' ?>">
-          <?php if ($bgUrl || $bgVert): ?>
-            <picture>
-              <?php if ($bgVert): ?>
-                <source media="(max-width: 768px)" srcset="<?= $bgVert ?>">
-              <?php endif; ?>
-              <?php if ($bgUrl): ?>
-                <img class="partner-banner__bg" src="<?= $bgUrl ?>" alt="" aria-hidden="true" loading="lazy">
-              <?php elseif ($bgVert): ?>
-                <img class="partner-banner__bg" src="<?= $bgVert ?>" alt="" aria-hidden="true" loading="lazy">
-              <?php endif; ?>
-            </picture>
-          <?php endif; ?>
-          <div class="partner-banner__overlay"></div>
-
-        </a>
-        <?php endforeach; ?>
-      </div>
-
-      <?php if (count($banners_parceiros) > 1): ?>
-      <button class="carousel-btn carousel-btn--prev" aria-label="Banner anterior">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="carousel-btn carousel-btn--next" aria-label="Próximo banner">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <div class="carousel-dots" role="tablist" aria-label="Banners de parceiros">
-        <?php foreach ($banners_parceiros as $i => $b): ?>
-        <button class="carousel-dot<?= $i === 0 ? ' is-active' : '' ?>" role="tab" aria-label="Banner <?= $i + 1 ?>" aria-selected="<?= $i === 0 ? 'true' : 'false' ?>"></button>
-        <?php endforeach; ?>
-      </div>
-      <?php endif; ?>
-    </div>
-    <div class="carousel-page-dots-mobile" id="bannerPageDots" aria-label="Páginas de banners"></div>
-  </div>
-</section>
+<?php if (!empty($banners_pool)): $adB = $banners_pool[$_bannerAdIdx++ % count($banners_pool)]; ?>
+<div class="banner-ad-slot"><div class="container" data-reveal><?php renderBannerAd($adB); ?></div></div>
 <?php endif; ?>
+<!-- PARTNER BANNERS CAROUSEL REMOVIDO — slots de propaganda espalhados na página -->
 
 <!-- ===== NEWSLETTER ===== -->
 <!-- <section class="newsletter" id="newsletter">
@@ -689,4 +642,24 @@ $_totalPartners = count($destinos_home);
   </div>
 </div>
 
+<script>
+document.addEventListener('click', function(e) {
+  var base = window.SITE_BASE || '/';
+  var fd, id;
+
+  // Modal destinos
+  var card = e.target.closest('[data-modal-trigger]');
+  if (card && card.dataset.id) {
+    fd = new FormData(); fd.append('id', card.dataset.id);
+    fetch(base + 'pages/cliente-click.php', { method: 'POST', body: fd });
+  }
+
+  // Link Explore parceiros
+  var link = e.target.closest('[data-cliente-id]');
+  if (link && link.dataset.clienteId) {
+    fd = new FormData(); fd.append('id', link.dataset.clienteId);
+    fetch(base + 'pages/cliente-click.php', { method: 'POST', body: fd });
+  }
+});
+</script>
 <?php require_once __DIR__ . '/includes/site-footer.php'; ?>

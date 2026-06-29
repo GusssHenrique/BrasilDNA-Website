@@ -56,6 +56,7 @@ $v_js = file_exists(__DIR__ . '/../assets/main.js') ? filemtime(__DIR__ . '/../a
   </div>
 </footer>
 
+<script>window.SITE_BASE = '<?= BASE_URL ?>';</script>
 <script type="module" src="<?= BASE_URL ?>assets/main.js?v=<?= $v_js ?>"></script>
 </body>
 </html>

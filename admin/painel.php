@@ -76,13 +76,15 @@ try {
             $serieClicksPost[]   = (int)($serieMap['post'][$key]['clicks']    ?? 0);
         }
     } else {
+        $chartDays   = max($days, 2);
+        $chartInicio = date('Y-m-d', strtotime("-" . ($chartDays - 1) . " days"));
         $stmtS = $pdo->prepare("SELECT tipo, data, SUM(visualizacoes) AS views, SUM(cliques) AS clicks FROM stats_diario WHERE data BETWEEN :i AND :f GROUP BY tipo, data");
-        $stmtS->execute([':i' => $inicio, ':f' => $hoje]);
+        $stmtS->execute([':i' => $chartInicio, ':f' => $hoje]);
         $serieRaw = $stmtS->fetchAll();
         $serieMap = [];
         foreach ($serieRaw as $row) $serieMap[$row['tipo']][$row['data']] = $row;
 
-        for ($i = $days - 1; $i >= 0; $i--) {
+        for ($i = $chartDays - 1; $i >= 0; $i--) {
             $d = date('Y-m-d', strtotime("-{$i} days"));
             $labels[]            = date('d/m', strtotime($d));
             $serieViewsBanner[]  = (int)($serieMap['banner'][$d]['views']   ?? 0);

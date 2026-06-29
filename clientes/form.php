@@ -225,7 +225,7 @@ require_once __DIR__ . '/../admin/includes/sidebar.php';
       </div>
 
       <!-- Imagem de fundo do card -->
-      <div class="adm-form__group" id="campo-imagem-fundo" style="<?= $vTipo === 'parceiro' ? 'display:none;' : '' ?>">
+      <div class="adm-form__group" id="campo-imagem-fundo">
         <label class="adm-form__label">Imagem de fundo do card</label>
         <?php if ($vImagemFundo): ?>
           <img id="fundo-preview" src="<?= htmlspecialchars('../' . $vImagemFundo, ENT_QUOTES, 'UTF-8') ?>"
@@ -343,7 +343,6 @@ require_once __DIR__ . '/../admin/includes/sidebar.php';
   function toggleTipo() {
     var isParceiro = document.querySelector('input[name="tipo"]:checked').value === 'parceiro';
     campoRegiao.style.display  = isParceiro ? 'none' : '';
-    campoFundo.style.display   = isParceiro ? 'none' : '';
     campoIframe.style.display  = isParceiro ? 'none' : '';
   }
   radios.forEach(function(r) { r.addEventListener('change', toggleTipo); });

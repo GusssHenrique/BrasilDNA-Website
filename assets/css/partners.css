@@ -134,8 +134,8 @@
 
 /* ── Icon ── */
 .partner-icon {
-   width: 64px;
-   height: 64px;
+   width: 80px;
+   height: 80px;
    border-radius: var(--r-md);
    background: var(--green-900);
    color: var(--gold);

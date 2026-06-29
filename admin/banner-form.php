@@ -60,9 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return 'uploads/banners/' . $filename;
     };
 
-    if ($res = $doUpload('logo_file', 2, 'logo_'))      $logo    = $res;
-    if (empty($erro) && $res = $doUpload('bg_file', 5, 'bg_'))        $imagem  = $res;
+    if ($res = $doUpload('logo_file', 2, 'logo_'))                    $logo    = $res;
+    if (empty($erro) && $res = $doUpload('bg_file',   5, 'bg_'))      $imagem  = $res;
     if (empty($erro) && $res = $doUpload('vert_file', 5, 'vert_'))    $imgVert = $res;
+
+    // URL como alternativa ao upload
+    if (empty($erro) && empty($_FILES['bg_file']['tmp_name'])) {
+        $bgUrl = trim($_POST['bg_url'] ?? '');
+        if ($bgUrl !== '' && filter_var($bgUrl, FILTER_VALIDATE_URL)) $imagem = $bgUrl;
+    }
+    if (empty($erro) && empty($_FILES['vert_file']['tmp_name'])) {
+        $vertUrl = trim($_POST['vert_url'] ?? '');
+        if ($vertUrl !== '' && filter_var($vertUrl, FILTER_VALIDATE_URL)) $imgVert = $vertUrl;
+    }
 
     if (empty($erro)) {
         try {
@@ -200,13 +210,18 @@ require_once __DIR__ . '/includes/sidebar.php';
           <span id="bg-label">Enviar banner horizontal</span>
         </label>
         <input type="file" id="bg-upload" name="bg_file" accept="image/*" style="display:none;">
+        <div style="margin-top:8px;">
+          <input class="adm-form__input" type="url" name="bg_url" id="bg-url"
+                 placeholder="Ou cole a URL do banner (https://...)"
+                 value="<?= htmlspecialchars(filter_var($vImagem, FILTER_VALIDATE_URL) ? $vImagem : '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
       </div>
 
       <!-- Banner Vertical (mobile) -->
       <div class="post-side-section">
         <div class="post-side-label">
-          Banner Vertical
-          <span class="banner-size-hint">📱 Mobile — <strong>405 × 720 px</strong> (proporção 9:16)</span>
+          Banner Mobile (quadrada)
+          <span class="banner-size-hint">📱 Mobile — <strong>600 × 600 px</strong> (quadrada, proporção 1:1)</span>
         </div>
         <?php if ($vImgVert): ?>
           <img id="vert-preview" src="<?= htmlspecialchars($vImgVert, ENT_QUOTES, 'UTF-8') ?>"
@@ -221,6 +236,11 @@ require_once __DIR__ . '/includes/sidebar.php';
           <span id="vert-label">Enviar banner vertical</span>
         </label>
         <input type="file" id="vert-upload" name="vert_file" accept="image/*" style="display:none;">
+        <div style="margin-top:8px;">
+          <input class="adm-form__input" type="url" name="vert_url" id="vert-url"
+                 placeholder="Ou cole a URL do banner mobile (https://...)"
+                 value="<?= htmlspecialchars(filter_var($vImgVert, FILTER_VALIDATE_URL) ? $vImgVert : '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
         <p style="font-size:11px;color:var(--text-sec);margin-top:6px;">
           Se não enviado, o banner horizontal será usado no mobile também.
         </p>
@@ -265,6 +285,17 @@ function bindUploadPreview(inputId, previewId, labelId) {
 bindUploadPreview('logo-upload', 'logo-preview', 'logo-label');
 bindUploadPreview('bg-upload',   'bg-preview',   'bg-label');
 bindUploadPreview('vert-upload', 'vert-preview', 'vert-label');
+
+document.getElementById('bg-url').addEventListener('input', function() {
+  var url = this.value.trim();
+  var preview = document.getElementById('bg-preview');
+  if (url) { preview.src = url; preview.style.display = 'block'; }
+});
+document.getElementById('vert-url').addEventListener('input', function() {
+  var url = this.value.trim();
+  var preview = document.getElementById('vert-preview');
+  if (url) { preview.src = url; preview.style.display = 'block'; }
+});
 </script>
 
 <?php require_once __DIR__ . '/includes/layout-footer.php'; ?>

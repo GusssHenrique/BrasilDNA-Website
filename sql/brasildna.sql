@@ -108,10 +108,10 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 -- ALTER TABLE `clientes` CHANGE `video` `imagem_fundo` VARCHAR(500) NULL;
 
 -- ------------------------------------------------------------
---  Tabela: stats_diario  (analytics diário de banners e clientes)
+--  Tabela: stats_diario  (analytics diário de banners, clientes e posts)
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stats_diario` (
-  `tipo`          ENUM('banner','cliente') NOT NULL,
+  `tipo`          ENUM('banner','cliente','post') NOT NULL,
   `referencia_id` INT UNSIGNED             NOT NULL,
   `data`          DATE                     NOT NULL,
   `visualizacoes` INT UNSIGNED             NOT NULL DEFAULT 0,
@@ -120,4 +120,4 @@ CREATE TABLE IF NOT EXISTS `stats_diario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Para bancos já existentes:
--- CREATE TABLE IF NOT EXISTS `stats_diario` ...  (execute o bloco acima)
+-- ALTER TABLE `stats_diario` MODIFY COLUMN `tipo` ENUM('banner','cliente','post') NOT NULL;
