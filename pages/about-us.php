@@ -89,7 +89,7 @@ require_once __DIR__ . '/../includes/site-header.php';
 
     <div class="pillar-deep-media" data-reveal>
       <div class="pillar-deep-badge" style="background:var(--red);">A</div>
-      <img src="https://images.unsplash.com/photo-1583330517353-2e0e60d80b65?w=1000&q=80"
+      <img src="https://bureaumundo.com/wp-content/uploads/2026/05/Bahia-Brasil-DNA-2026-2.png?w=1000&q=80"
            alt="Sorriso caloroso e hospitalidade brasileira" loading="lazy">
       <p class="pillar-deep-quote">"Hospitality is a natural expression of everyday life."</p>
     </div>
@@ -140,7 +140,7 @@ require_once __DIR__ . '/../includes/site-header.php';
 
     <div class="pillar-deep-media" data-reveal>
       <div class="pillar-deep-badge" style="background:var(--gold);color:var(--ink);">G</div>
-      <img src="https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=1000&q=80"
+      <img src="https://bureaumundo.com/wp-content/uploads/2025/09/Moqueca_de_camarao-Foto_Rosilda_Cruz-97-1-scaled.jpg?w=1000&q=80"
            alt="Gastronomia brasileira colorida e diversa" loading="lazy">
       <p class="pillar-deep-quote">"A perfect marriage of nourishment and narrative."</p>
     </div>
@@ -191,7 +191,7 @@ require_once __DIR__ . '/../includes/site-header.php';
 
     <div class="pillar-deep-media" data-reveal>
       <div class="pillar-deep-badge" style="background:var(--green-700);">C</div>
-      <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=1000&q=80"
+      <img src="https://bureaumundo.com/wp-content/uploads/2026/06/Sp-Aparecida-do-Norte.jpg?w=1000&q=80"
            alt="Cultura e arte de rua brasileira vibrante" loading="lazy">
       <p class="pillar-deep-quote">"History meets innovation, diversity is identity."</p>
     </div>
@@ -242,7 +242,7 @@ require_once __DIR__ . '/../includes/site-header.php';
 
     <div class="pillar-deep-media" data-reveal>
       <div class="pillar-deep-badge" style="background:var(--blue-flag);">T</div>
-      <img src="https://images.unsplash.com/photo-1591267990439-3b5e0a99fbb6?w=1000&q=80"
+      <img src="https://bureaumundo.com/wp-content/uploads/2024/11/Abismo-Anhumas-Creditos-Site-Abismo-Anhumas-1.jpg?w=1000&q=80"
            alt="Pantanal e biodiversidade dos tesouros naturais do Brasil" loading="lazy">
       <p class="pillar-deep-quote">"Nature's masterpiece, boundless and alive."</p>
     </div>
@@ -396,12 +396,7 @@ require_once __DIR__ . '/../includes/site-header.php';
     </div>
     <div data-reveal data-reveal-delay="100">
       <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/K7XSoVAnq8E"
-          title="Brasil DNA — What do people who visit Brazil have to say?"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/yffDJtjn3y8?si=tbeb-FCOYYbWdEC-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
       <p class="video-caption">What do people who visit Brazil have to say?</p>
     </div>
