@@ -39,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([':token' => $token, ':exp' => $expires, ':id' => $admin['id']]);
 
             $baseUrl  = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-            $resetUrl = $baseUrl . '/admin/reset-senha.php?token=' . $token;
+            $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+            $adminPath = rtrim($scriptDir, '/');
+            $resetUrl = $baseUrl . $adminPath . '/reset-senha.php?token=' . $token;
 
             $mail = new PHPMailer(true);
             try {

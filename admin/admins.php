@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/../includes/conexao.php';
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/../vendor/phpmailer/src/Exception.php';
+require_once __DIR__ . '/../vendor/phpmailer/src/PHPMailer.php';
+require_once __DIR__ . '/../vendor/phpmailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 exigirSuperAdmin();
 
@@ -30,7 +36,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $hash = password_hash($senha, PASSWORD_DEFAULT);
                 $pdo->prepare('INSERT INTO admins (nome, email, senha, tipo) VALUES (:n, :e, :s, :t)')
                     ->execute([':n' => $nome, ':e' => $email, ':s' => $hash, ':t' => $tipoNovo]);
-                $msg     = 'Admin criado com sucesso.';
+
+                /* Envia email de boas-vindas */
+                $tipoLabel = $tipoNovo === 'super_admin' ? 'Super Admin' : 'Admin';
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host       = 'mail.brasildna.com';
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'contact@brasildna.com';
+                    $mail->Password   = 'BrasilDNA@2025';
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                    $mail->Port       = 465;
+                    $mail->CharSet    = 'UTF-8';
+
+                    $mail->setFrom('contact@brasildna.com', 'Brasil DNA');
+                    $mail->addAddress($email, $nome);
+                    $mail->Subject = 'Seu acesso ao painel Brasil DNA foi criado';
+                    $mail->isHTML(true);
+                    $mail->Body = "
+                        <p>Olá, <strong>{$nome}</strong>!</p>
+                        <p>Seu acesso ao painel administrativo do <strong>Brasil DNA</strong> foi criado.</p>
+                        <p><strong>Email:</strong> {$email}<br>
+                        <strong>Senha:</strong> {$senha}<br>
+                        <strong>Perfil:</strong> {$tipoLabel}</p>
+                        <p>Acesse o painel em: <a href=\"https://brasildna.com/admin/login.php\">brasildna.com/admin</a></p>
+                        <p>Recomendamos alterar sua senha após o primeiro acesso.</p>
+                    ";
+                    $mail->AltBody = "Olá {$nome}, seu acesso foi criado.\nEmail: {$email}\nSenha: {$senha}\nPerfil: {$tipoLabel}";
+                    $mail->send();
+                } catch (Exception $e) { /* falha silenciosa */ }
+
+                $msg     = 'Admin criado com sucesso. Email de boas-vindas enviado.';
                 $msgTipo = 'ok';
             }
         }
