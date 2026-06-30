@@ -7,12 +7,6 @@ export function initHeader() {
    if (!header) return;
 
    injectStyle("header-styles", `
-    .site-header {
-      transition: transform .35s cubic-bezier(.25,.8,.25,1),
-                  background .4s cubic-bezier(.25,.8,.25,1),
-                  padding .35s, box-shadow .35s;
-    }
-    .site-header.is-hidden { transform: translateY(-100%); }
 
     @media (max-width: 768px) {
       .nav-overlay {
@@ -63,20 +57,17 @@ export function initHeader() {
    overlay.className = "nav-overlay";
    document.body.appendChild(overlay);
 
-   let lastY = 0;
-   const onScroll = () => {
-      const y = window.scrollY;
-      header.classList.toggle("scrolled", y > 60);
-      if (y > 200) {
-         header.classList.toggle("is-hidden", y > lastY + 4);
-         if (y < lastY - 4) header.classList.remove("is-hidden");
-      } else {
-         header.classList.remove("is-hidden");
-      }
-      lastY = y;
+   let rafId = null;
+
+   const handleScroll = () => {
+      header.classList.toggle("scrolled", window.scrollY > 60);
+      rafId = null;
    };
-   window.addEventListener("scroll", onScroll, { passive: true });
-   onScroll();
+
+   window.addEventListener("scroll", () => {
+      if (!rafId) rafId = requestAnimationFrame(handleScroll);
+   }, { passive: true });
+   handleScroll();
 
    function closeNav() {
       toggle?.setAttribute("aria-expanded", "false");

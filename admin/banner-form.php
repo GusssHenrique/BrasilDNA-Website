@@ -116,9 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $vNome    = $_POST['nome_parceiro'] ?? ($banner['nome_parceiro'] ?? '');
 $vLink    = $_POST['link_url']      ?? ($banner['link_url']      ?? '');
 $vAtivo   = isset($_POST['ativo'])  ? (int) $_POST['ativo'] : (int) ($banner['ativo'] ?? 1);
-$vLogo    = $banner['logo_url']            ?? '';
-$vImagem  = $banner['imagem_url']          ?? '';
-$vImgVert = $banner['imagem_vertical_url'] ?? '';
+$fixPath  = fn($p) => $p && !str_starts_with($p, 'http') && !str_starts_with($p, '/') ? '../' . $p : $p;
+$vLogo    = $fixPath($banner['logo_url']            ?? '');
+$vImagem  = $fixPath($banner['imagem_url']          ?? '');
+$vImgVert = $fixPath($banner['imagem_vertical_url'] ?? '');
 
 $pageTitle   = $id !== null ? 'Editar Banner' : 'Novo Banner';
 $paginaAtiva = 'banners';

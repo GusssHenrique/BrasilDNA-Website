@@ -365,8 +365,8 @@
    position: relative;
    z-index: 1;
    display: grid;
-   grid-template-columns: 380px 1fr;
-   max-width: 860px;
+   grid-template-columns: 480px 1fr;
+   max-width: 960px;
    width: 100%;
    min-height: 420px;
    border-radius: var(--r-xl);
